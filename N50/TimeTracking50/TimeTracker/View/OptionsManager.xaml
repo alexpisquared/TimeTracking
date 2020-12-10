@@ -1,0 +1,221 @@
+﻿<lnk:WindowBase xmlns:lnk="clr-namespace:AAV.WPF.Base;assembly=AAV.WPF" x:Name="wnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+								xmlns:Models="clr-namespace:Db.TimeTrack.DbModel;assembly=Db.TimeTrack" 
+                mc:Ignorable="d" x:Class="TimeTracker.View.OptionsManager" xmlns:w="clr-namespace:TimeTracker.View"
+								Title="Options" Height="1000" Width="900" Loaded="Window_Loaded" Style="{StaticResource WindowStyle_Aav0}">
+  <WindowChrome.WindowChrome>
+    <WindowChrome CaptionHeight="0" ResizeBorderThickness="15" />
+  </WindowChrome.WindowChrome>
+  <lnk:WindowBase.Resources>
+    <!--
+    <CollectionViewSource x:Key="defaultSettingViewSource"    d:DesignSource="{d:DesignInstance {x:Type Models:DefaultSetting}, CreateList=True}"   />
+		<CollectionViewSource x:Key="invoicerViewSource"          d:DesignSource="{d:DesignInstance {x:Type Models:Invoicer}, CreateList=True}"         />
+		<CollectionViewSource x:Key="invoiceeViewSource"          d:DesignSource="{d:DesignInstance {x:Type Models:Invoicee}, CreateList=True}"         />
+		<CollectionViewSource x:Key="lkuJobCategoryViewSource"    d:DesignSource="{d:DesignInstance {x:Type Models:lkuJobCategory}, CreateList=True}"   />
+		<CollectionViewSource x:Key="lkuPayPeriodModeViewSource"  d:DesignSource="{d:DesignInstance {x:Type Models:lkuPayPeriodMode}, CreateList=True}" />-->
+    <CollectionViewSource x:Key="defaultSettingViewSource"    />
+    <CollectionViewSource x:Key="invoicerViewSource"          />
+    <CollectionViewSource x:Key="invoiceeViewSource"          />
+    <CollectionViewSource x:Key="lkuJobCategoryViewSource"    />
+    <CollectionViewSource x:Key="lkuPayPeriodModeViewSource"  />
+
+    <Style TargetType="Button">
+      <Setter Property="Margin" Value="3" />
+    </Style>
+    <Style TargetType="ComboBox">
+      <Setter Property="Margin" Value="3" />
+    </Style>
+    <Style TargetType="DatePicker">
+      <Setter Property="Margin" Value="3" />
+    </Style>
+    <Style TargetType="TextBox">
+      <Setter Property="Margin" Value="3" />
+    </Style>
+    <Style x:Key="th" TargetType="TextBlock">
+      <Setter Property="Margin" Value="3" />
+      <Setter Property="Foreground" Value="#00f" />
+      <Setter Property="FontSize" Value="36" />
+      <Setter Property="VerticalAlignment" Value="Bottom" />
+    </Style>
+    <Style TargetType="Label">
+      <Setter Property="Margin" Value="3" />
+      <Setter Property="Foreground" Value="#777" />
+      <Setter Property="HorizontalAlignment" Value="Left" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <RadialGradientBrush x:Key="RadialBrush1" GradientOrigin="-0.3,-0.3" Center="-0.3,-0.3" RadiusX="1.3" RadiusY="1.5">
+      <GradientStop Color="#E0E7ff" />
+      <GradientStop Color="#f0faff" Offset="1"/>
+    </RadialGradientBrush>
+
+  </lnk:WindowBase.Resources>
+  <Border Background="#26a" CornerRadius="1" Padding="1">
+    <Grid DataContext="{StaticResource defaultSettingViewSource}" >
+      <Grid.RowDefinitions>
+        <RowDefinition Height="60"/>
+        <RowDefinition Height="206"/>
+        <RowDefinition Height="60"/>
+        <RowDefinition />
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="23*"/>
+        <ColumnDefinition Width="343*"/>
+        <ColumnDefinition Width="38*"/>
+        <ColumnDefinition Width="23*"/>
+        <ColumnDefinition Width="365*"/>
+        <ColumnDefinition Width="2*"/>
+      </Grid.ColumnDefinitions>
+
+      <Grid Grid.Column="0" Grid.RowSpan="3" Grid.Row="0" Grid.ColumnSpan="3" Background="{DynamicResource RadialBrush1}" />
+      <Grid Grid.Column="3" Grid.RowSpan="5" Grid.Row="0" Grid.ColumnSpan="3" Background="{DynamicResource RadialBrush1}" />
+      <Grid Grid.Column="0" Grid.RowSpan="3" Grid.Row="2" Grid.ColumnSpan="3" Background="{DynamicResource RadialBrush1}" />
+      <Grid Grid.Column="0" Grid.RowSpan="1" Grid.Row="4" Grid.ColumnSpan="6" Background="#26a" />
+
+      <Grid Grid.Column="4" DataContext="{StaticResource invoiceeViewSource}" Margin="10" Grid.RowSpan="3" Grid.Row="1" >
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Company Name:" Grid.Column="0"  Grid.Row="0" />
+        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding CompanyName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+
+        <Label Content="Address Details:" Grid.Column="0"  Grid.Row="1" />
+        <TextBox Grid.Column="1"  Grid.Row="1" Text="{Binding AddressDetails, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"   AcceptsReturn="True" Height="110" />
+
+        <Label Content="Corp Rate:" Grid.Column="0"  Grid.Row="2" />
+        <TextBox Grid.Column="1"  Grid.Row="2" Text="{Binding CorpRate, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+        <Label Content="Email Address:" Grid.Column="0"  Grid.Row="3" />
+        <TextBox Grid.Column="1"  Grid.Row="3" Text="{Binding InvoiceEmail, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+        <Label Content="Email Body:" Grid.Column="0"  Grid.Row="4" />
+        <TextBox Grid.Column="1"  Grid.Row="4" Text="{Binding EmailBody, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" AcceptsReturn="True" Height="99" TextWrapping="Wrap"  />
+
+        <Label Content="Pay Period Mode:" Grid.Column="0"  Grid.Row="5" />
+        <ComboBox Grid.Column="1"                          Grid.Row="5" DisplayMemberPath="Name"  Height="Auto" ItemsSource="{Binding Source={StaticResource lkuPayPeriodModeViewSource}}"   SelectedValuePath="Id" SelectedValue="{Binding PayPeriodMode}" 
+                  SelectionChanged="ComboBox_SelectionChanged">
+          <ComboBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <VirtualizingStackPanel/>
+            </ItemsPanelTemplate>
+          </ComboBox.ItemsPanel>
+        </ComboBox>
+
+        <Label Content="Hours per Day:"     Grid.Column="0"  Grid.Row="7" />
+        <TextBox Grid.Column="1"                             Grid.Row="7" Text="{Binding HoursPerPeriod, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+
+        <Label Content="Pay Period Length:" Grid.Column="0"  Grid.Row="8" />
+        <TextBox Grid.Column="1"                             Grid.Row="8" Text="{Binding PayPeriodLength, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+
+        <Label Content="Pay Period Start:" Grid.Column="0"  Grid.Row="9" />
+        <TextBox Grid.Column="1"                            Grid.Row="9" Text="{Binding PayPeriodStart, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+
+        <Label Content="Start Date:" Grid.Column="0"  Grid.Row="10" />
+        <DatePicker Grid.Column="1"                   Grid.Row="10" SelectedDate="{Binding StartDate, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+
+        <Label Content="Last Date:" Grid.Column="0"   Grid.Row="11" />
+        <DatePicker Grid.Column="1"                   Grid.Row="11" SelectedDate="{Binding LasttDate, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+
+        <Label Content="WebUsername:" Grid.Column="0" Grid.Row="12" />
+        <TextBox Grid.Column="1"                      Grid.Row="12" Text="{Binding WebUsername, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+
+        <Label Content="WebPassword:" Grid.Column="0" Grid.Row="13" />
+        <PasswordBox Grid.Column="1"                      Grid.Row="13" w:PasswordHelper.Attach="True" w:PasswordHelper.Password="{Binding WebPassword, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+
+        <Label Content="Notes:" Grid.Column="0"       Grid.Row="14" />
+        <TextBox Grid.Column="1"                      Grid.Row="14" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+
+      </Grid>
+
+      <Grid  Grid.Column="1"  Margin="10,0,10,10" Grid.Row="3" >
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Current Invoicee:" Grid.Column="0"  Grid.Row="0" />
+        <ComboBox  Grid.Column="1" DisplayMemberPath="CompanyName"  Height="Auto" ItemsSource="{Binding Source={StaticResource invoiceeViewSource}}" Grid.Row="0"   SelectedValuePath="Id" SelectedValue="{Binding CurrentInvoiceeId}">
+          <ComboBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <VirtualizingStackPanel/>
+            </ItemsPanelTemplate>
+          </ComboBox.ItemsPanel>
+        </ComboBox>
+        <Label Content="Day Start Hour:" Grid.Column="0"  Grid.Row="2" />
+        <TextBox  Grid.Column="1"  Grid.Row="2" Text="{Binding DayStartHour, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+        <Label Content="Default Job Category:" Grid.Column="0"  Grid.Row="3" />
+        <ComboBox  Grid.Column="1" DisplayMemberPath="Name"  Height="Auto" ItemsSource="{Binding Source={StaticResource lkuJobCategoryViewSource}}" Grid.Row="3"   SelectedValuePath="Id" SelectedValue="{Binding DefaultJobCategoryId}">
+          <ComboBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <VirtualizingStackPanel/>
+            </ItemsPanelTemplate>
+          </ComboBox.ItemsPanel>
+        </ComboBox>
+        <Label Content="HST Percent:" Grid.Column="0"  Grid.Row="4" />
+        <TextBox  Grid.Column="1"  Grid.Row="4" Text="{Binding HstPercent, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+        <Label Content="Invoice Sub Folder:" Grid.Column="0"  Grid.Row="5" />
+        <TextBox  Grid.Column="1"  Grid.Row="5" Text="{Binding InvoiceSubFolder, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+        <Label Content="Lunch Start Hour:" Grid.Column="0"  Grid.Row="6" />
+        <TextBox  Grid.Column="1"  Grid.Row="6" Text="{Binding LunchStartHour, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+        <Label Content="Notes:" Grid.Column="0"  Grid.Row="7" />
+        <TextBox  Grid.Column="1"  Grid.Row="7" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+      </Grid>
+
+      <Grid  Grid.Column="1" DataContext="{StaticResource invoicerViewSource}"  Margin="10,10,10,0" VerticalAlignment="Top" Grid.Row="1" Height="182">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Content="Company Name:" Grid.Column="0"  Grid.Row="0" />
+        <TextBox  Grid.Column="1"  Grid.Row="0" Text="{Binding CompanyName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+
+        <Label Content="Address Details:" Grid.Column="0"  Grid.Row="1" />
+        <TextBox  Grid.Column="1"  Grid.Row="1" Text="{Binding AddressDetails, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  AcceptsReturn="True" Height="110" />
+        <Label Content="Email Address:"   Grid.Column="0"  Grid.Row="2" />
+        <TextBox  Grid.Column="1"  Grid.Row="2" Text="{Binding InvoiceEmail, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+      </Grid>
+
+      <TextBlock Style="{StaticResource th}" Grid.Column="1" Text="Invoicer (me)" Grid.ColumnSpan="3" Margin="3,0,3,3" Height="48" />
+      <TextBlock Style="{StaticResource th}" Grid.Column="1" Text="Defaults" Grid.ColumnSpan="3" Grid.Row="2" Margin="3,0,3,3" Height="48" />
+      <TextBlock Style="{StaticResource th}" Grid.Column="4" Text="Invoicee (agency)" Margin="3,0,3,3" Height="48" />
+
+      <StackPanel Grid.Row="4" Grid.ColumnSpan="6" Orientation="Horizontal" Margin="3" HorizontalAlignment="Right" >
+        <TextBlock Text="{Binding InfoMsg}" FontSize="16" Foreground="#777" Margin="6" FontWeight="Bold" />
+        <Label Content=" " />
+        <Button IsEnabled="True"  Click="btnSave_Click" Content=" _OK "     IsDefault="True" />
+        <Button IsEnabled="True"  Click="btnQuit_Click" Content=" _Cancel " IsCancel="True"  />
+      </StackPanel>
+
+    </Grid>
+  </Border>
+</lnk:WindowBase>

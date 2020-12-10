@@ -13,12 +13,12 @@ namespace AAV.Sys.AsLink
     public static string DbNameFind(string conStr) => conStr?.Split(';').ToList().FirstOrDefault(r => r.Split('=')[0].Equals("initial catalog", StringComparison.OrdinalIgnoreCase) || r.Split('=')[0].Equals("AttachDbFilename", StringComparison.OrdinalIgnoreCase))?.Split('=')[1];
 
 
-    public static string ConStr(string dbName, string dbgRLs, DbLocation dbLocation)
+    public static string ConStr(string dbName, string dbgRLs, DbLocation dbLocation, string username, string password)
     {
       switch (dbLocation)
       {
         case DbLocation.Azure:
-          return $"data source=sqs.database.windows.net;initial catalog={dbName}{dbgRLs};persist security info=True;user id=azuresqluser;password=\";lkj;lkj99\";MultipleActiveResultSets=True;App=EntityFramework";
+          return $"data source=sqs.database.windows.net;initial catalog={dbName}{dbgRLs};persist security info=True;user id={username};password=\"{password}\";MultipleActiveResultSets=True;App=EntityFramework";
         case DbLocation.Local:
           var dbpathfilename = OneDrive.Folder($@"Public\AppData\TimeTrack\{dbName}{dbgRLs}.mdf");
           Debug.Assert(File.Exists(dbpathfilename));

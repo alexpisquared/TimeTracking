@@ -1,0 +1,239 @@
+﻿<lnk:WindowBase xmlns:lnk="clr-namespace:AAV.WPF.Base;assembly=AAV.WPF" x:Name="wnd" Title="Time Tracker - V0.1" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        mc:Ignorable="d" x:Class="TimeTracker.View.FromTillCtgrTaskNote" Loaded="Window_Loaded" 
+        xmlns:Models="clr-namespace:Db.TimeTrack.DbModel" 
+				xmlns:AsLink="clr-namespace:AsLink" WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResizeWithGrip" Background="#01000000"
+				Height="600" Width="520" >
+  <WindowChrome.WindowChrome>
+    <WindowChrome CaptionHeight="0" ResizeBorderThickness="15" />
+  </WindowChrome.WindowChrome>
+  <lnk:WindowBase.Resources>
+    <!--<CollectionViewSource x:Key="timeIntervalViewSource" d:DesignSource="{d:DesignInstance {x:Type Models:TimeInterval}, CreateList=True}"/>-->
+
+    <Style TargetType="Button">
+      <Setter Property="Margin" Value="3" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style TargetType="Menu">
+      <Setter Property="Margin" Value="3" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style TargetType="Label">
+      <Setter Property="Margin" Value="3" />
+      <Setter Property="Foreground" Value="#777" />
+    </Style>
+
+    <LinearGradientBrush x:Key="LightGrayGradientBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+      <GradientStop Color="#fbfbfb"/>
+      <GradientStop Color="#e9eaeb" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="TitleBarBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+      <GradientStop Color="#FF01BDF5" Offset="0"/>
+      <GradientStop Color="#FF00AbEC" Offset="0.332"/>
+      <GradientStop Color="#FF004987" Offset="1"/>
+    </LinearGradientBrush>
+
+    <Style TargetType="{x:Type DataGrid}" >
+      <Setter Property="AutoGenerateColumns" Value="False" />
+      <Setter Property="EnableRowVirtualization" Value="True" />
+      <Setter Property="GridLinesVisibility"     Value="Vertical" />
+      <Setter Property="VerticalGridLinesBrush"  Value="#FFE6D9D9" />
+      <Setter Property="HeadersVisibility"       Value="Column" />
+      <Setter Property="Margin"                  Value="6" />
+      <Setter Property="AlternatingRowBackground" Value="#eee" />
+      <Setter Property="Background"  Value="Transparent" />
+      <Setter Property="BorderBrush" Value="Transparent" />
+      <!--<EventSetter Event="MouseDoubleClick" Handler="btnOKClk" />-->
+    </Style>
+    <Style x:Key="CenterAlignStyle" TargetType="{x:Type TextBlock}">
+      <Setter Property="TextAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="RightAlignStyle" TargetType="{x:Type TextBlock}">
+      <Setter Property="TextAlignment" Value="Right"  />
+      <Setter Property="Margin" Value="6 0"  />
+    </Style>
+    <Style x:Key="LeftAlignStyle" TargetType="{x:Type TextBlock}">
+      <Setter Property="TextAlignment" Value="Left" />
+    </Style>
+    <Style x:Key="k1" TargetType="{x:Type TextBlock}">
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding Path=InvoiceId}" Value="{x:Null}">
+          <Setter Property="Foreground" Value="Red"/>
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+    <Style x:Key="k2" TargetType="{x:Type DataGridCell}">
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding Path=InvoiceId}" Value="2">
+          <Setter Property="IsEnabled" Value="False"/>
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+    <Style TargetType="DataGridRow">
+      <Setter Property="Background" Value="{Binding WorkedHours, Converter={AsLink:WorkedHrs}}" />
+      <Setter Property="Foreground" Value="#aaa" />
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding Path=InvoiceId}" Value="{x:Null}">
+          <Setter Property="Foreground" Value="Black" />
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+
+  </lnk:WindowBase.Resources>
+
+  <Border Background="#26a" CornerRadius="2" Padding="1">
+
+    <Grid x:Name="ctrlPnl1" IsEnabled="False" >
+      <Grid.LayoutTransform>
+        <ScaleTransform ScaleX="{Binding ZV, ElementName=wnd, FallbackValue=1}" ScaleY="{Binding ZV, ElementName=wnd, FallbackValue=1}" />
+      </Grid.LayoutTransform>
+      <Grid.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+          <GradientStop Color="#fff" Offset="0"/>
+          <GradientStop Color="#eee" Offset="1"/>
+        </LinearGradientBrush>
+      </Grid.Background>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+
+      <Grid Grid.Row="0" Background="{DynamicResource PageTopHeaderBrush}" Height="65">
+        <TextBlock Foreground="#1000" FontSize="66" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,-6,25,3" Text="AAV pro" FontFamily="SketchFlow Print" RenderTransformOrigin="0.5,0.5"  >
+          <TextBlock.RenderTransform>
+            <TransformGroup>
+              <ScaleTransform/>
+              <SkewTransform/>
+              <RotateTransform Angle="-9.17"/>
+              <TranslateTransform/>
+            </TransformGroup>
+          </TextBlock.RenderTransform>
+        </TextBlock>
+        <StackPanel Orientation="Horizontal" >
+          <Image HorizontalAlignment="Left" Margin="14" Source="/TimeTracker;component/Dollar (1).ico" />
+          <TextBlock Foreground="#fff" FontSize="32" VerticalAlignment="Center" Margin="0,8,6,14" Text="{Binding Title, FallbackValue=1234}" FontWeight="SemiBold" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0" >
+          <TextBlock Text="123" Foreground="#2ef" x:Name="CurVer" FontSize="10"/>
+          <Button Click="on___"	Margin="2" Content="X" FontFamily="Arial" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Right" Height="22" Width="22" Foreground="#d00" ToolTip="Close" />
+        </StackPanel>
+      </Grid>
+      <Grid Grid.Row="1" Background="{DynamicResource TopMenuBrush}" Grid.ColumnSpan="12" />
+      <Grid Grid.Row="4" Background="#000" />
+
+      <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0" HorizontalAlignment="Left" >
+        <Label Content="Pay Period:" Margin="0 5 0 0" Foreground="#fff" />
+        <TextBlock Text="{Binding PayPrdBgn, StringFormat='{}{0:MMM dd}', FallbackValue='May 23'}" FontSize="16" Foreground="#fff" Margin="6" FontWeight="Bold"  />
+        <TextBlock Text="-" FontSize="16" Foreground="#fff" Margin="6"  />
+        <TextBlock Text="{Binding PayPrdEnd, StringFormat='{}{0:MMM dd}', FallbackValue='May 23'}" FontSize="16" Foreground="#fff" Margin="6" FontWeight="Bold"  />
+        <Button Content=" _,&lt;&lt; " Click="onPrevPrd" />
+        <Button Content=" _.&gt;&gt; " Click="onNextPrd" />
+
+        <Menu>
+          <MenuItem Header="_More.." Height="20" >
+            <MenuItem Header="_Check 4 changes"			  Click="onChkDb"				  		/>
+            <MenuItem Header="_Save "							    Click="onSavDb"				      />
+            <MenuItem Header="_Delete Un-Invoiced"	  Click="onDeletePeriodFree"  />
+            <MenuItem Header="Delete period All!!!"	  Click="onDeletePeriod_ALL"  />
+            <MenuItem Header="Custom _Range" >
+              <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0" HorizontalAlignment="Left" >
+                <DatePicker SelectedDate="{Binding PayPrdBgn, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=LostFocus}" FontSize="16" ToolTip="Custom period start"	Margin="0,2" />
+                <TextBlock Text=" - " FontSize="16" Foreground="#333" Margin="3"  />
+                <DatePicker SelectedDate="{Binding PayPrdEnd, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=LostFocus}" FontSize="16" ToolTip="Custom period end"		Margin="0,2" />
+                <MenuItem Header=" S_et " Click="setCustClk" />
+              </StackPanel>
+            </MenuItem>
+            <MenuItem Header="_More" >
+              <MenuItem Header="_Excel "						  Click="btnUnderConst2Clk"		/>
+              <MenuItem Header="_Infer from usage "   Click="onInfer"							/>
+              <MenuItem Header="_Monthly Report "		  Click="btnUnderConstrClk"		/>
+              <MenuItem Header="_Settings "					  Click="onShowOptionMgr"			/>
+              <Separator/>
+              <MenuItem Header="Web (hays)"				    Click="onShowHaysBrwsr"			/>
+              <!--
+            <MenuItem Header="_Bold" IsCheckable="True"              Checked="Bold_Checked"              Unchecked="Bold_Unchecked"/>
+            <MenuItem Header="_Italic" IsCheckable="True"            Checked="Italic_Checked"            Unchecked="Italic_Unchecked"/>
+            <Separator/>
+            <MenuItem Header="I_ncrease Font Size"              Click="IncreaseFontClk"/>
+            <MenuItem Header="_Decrease Font Size"              Click="DecreaseFontClk"/>
+            <MenuItem Header="_Edit">
+              <MenuItem Command="ApplicationCommands.Copy"/>
+              <MenuItem Command="ApplicationCommands.Cut"/>
+              <MenuItem Command="ApplicationCommands.Paste"/>
+            </MenuItem>-->
+            </MenuItem>
+          </MenuItem>
+        </Menu>
+      </StackPanel>
+      <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="8 0" HorizontalAlignment="Right">
+        <TextBlock Text="{Binding UnInvdHrs, StringFormat='{}{0:N2}', FallbackValue=12}" FontSize="13" Foreground="#fff" FontWeight="Bold" ToolTip="Total Un-Invoiced Hours" />
+        <TextBlock Text="/"                                                              FontSize="13" Foreground="#fff" FontWeight="Normal" ToolTip="Total Un-Invoiced Hours" />
+        <TextBlock Text="{Binding InvcedHrs, StringFormat='{}{0:N2}', FallbackValue=12}" FontSize="13" Foreground="#fff" FontWeight="Bold" ToolTip="Total Un-Invoiced Hours" />
+        <TextBlock Text="hr"                                                             FontSize="13" Foreground="#fff" FontWeight="Normal" ToolTip="Total Un-Invoiced Hours" />
+      </StackPanel>
+
+      <!--<Grid DataContext="{StaticResource timeIntervalViewSource}" Grid.Row="2">-->
+      <Grid Grid.Row="2">
+        <DataGrid x:Name="timeDg1" ItemsSource="{Binding}" Grid.Row="1" AddingNewItem="onAddingNewItem" SelectionChanged="onDgSelctnChngd" IsSynchronizedWithCurrentItem="False" >
+          <DataGrid.Columns>
+
+            <DataGridTemplateColumn Header="Invoice">
+              <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                  <Grid>
+                    <Rectangle Fill="{Binding WorkedOn, Converter={AsLink:WeekdaysTo6Colors IsGrayScale=True}}" Margin="-1" />
+                    <TextBlock Text="{Binding InvoiceId}" Background="{Binding WorkedOn, Converter={AsLink:WeekdaysTo6Colors IsGrayScale=True}}" Margin="-1" HorizontalAlignment="Center" />
+                  </Grid>
+                </DataTemplate>
+              </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Header="Date">
+              <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                  <Grid>
+                    <Rectangle Fill="{Binding WorkedOn, Converter={AsLink:WeekdaysTo6Colors IsGrayScale=True}}" Margin="-1" />
+                    <TextBlock Text="{Binding WorkedOn, StringFormat='{}  {0:yyyy-MM-dd ddd }'}" Foreground="{Binding WorkedOn, Converter={AsLink:WeekDayToForeColorConverter}}" Background="{Binding WorkedOn, Converter={AsLink:WeekdaysTo6Colors IsGrayScale=True}}" Margin="-1" />
+                  </Grid>
+                </DataTemplate>
+              </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+
+            <DataGridTextColumn     Header="Hours"      Binding="{Binding WorkedHours, StringFormat='{}{0:N1}'}" ElementStyle="{StaticResource CenterAlignStyle}" FontWeight="Bold" />
+
+            <DataGridTextColumn     Header="Note"       Binding="{Binding Note}"						Width="*"    />
+
+            <!--<DataGridTemplateColumn Width="Auto" Header="Date">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<DatePicker Width="100"     SelectedDate="{Binding WorkedOn, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" HorizontalAlignment="Right"/>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+
+						<DataGridTextColumn Width="Auto" Header="Hrs33"        Binding="{Binding WorkedHours}"    ElementStyle="{StaticResource k1}"  />
+						<DataGridTemplateColumn Width="Auto" Header="Hours">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<TextBox Text="{Binding WorkedHours, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" IsEnabled="{Binding InvoiceId, Converter={AsLink:Equals InvertValue=False}}" />
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+            <DataGridTextColumn Width="Auto" Header="Started at"   Binding="{Binding HourStarted , StringFormat='{}{0:N2}'}"	ElementStyle="{StaticResource RightAlignStyle}"		ToolTipService.ToolTip="Time in hours day/task started." />
+            -->
+            <!--<DataGridTextColumn Width="Auto" Header="Job Category" Binding="{Binding JobCategoryId}" Foreground="Black" />
+						<DataGridTextColumn Width="Auto" Header="Task Id"      Binding="{Binding TaskItemId}"    Foreground="Black" ElementStyle="{StaticResource RightAlignStyle}" />-->
+          </DataGrid.Columns>
+        </DataGrid>
+      </Grid>
+
+      <TextBlock  Grid.Row="3" Text="{Binding InfoMessg}" FontSize="12" Foreground="#fff" Margin="6 -1" FontWeight="SemiBold" />
+      <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="3" HorizontalAlignment="Right" x:Name="ctrlPnl2" IsEnabled="False">
+        <Label Content=" " />
+        <Button Click="onAdd8hrDays"	Content=" _Add Time "	IsDefault="{Binding IsDfltAdd,  Converter={AsLink:Bool InvertValue=False}}" Width="69" />
+        <Button Click="onInvoice"			Content=" _Invoice "	IsDefault="{Binding IsDfltAdd,  Converter={AsLink:Bool InvertValue=True}}"  Width="69" />
+      </StackPanel>
+    </Grid>
+  </Border>
+</lnk:WindowBase>
