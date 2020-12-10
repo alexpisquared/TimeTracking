@@ -7,11 +7,101 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\c\AsLink\AppSettings.cs" Link="Common\AppSettings.cs" />
+    <Compile Include="..\..\..\..\..\c\AsLink\ConverterEx.cs" Link="Common\ConverterEx.cs" />
+    <Compile Include="..\..\..\..\..\c\AsLink\Logger.Min.cs" Link="Common\Logger.Min.cs" />
+    <Compile Include="..\..\..\..\..\c\AsLink\Serializer.cs" Link="Common\Serializer.cs" />
+    <Compile Include="..\..\..\..\..\c\AsLink\Serializer.String.cs" Link="Common\Serializer.String.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Fody" Version="6.3.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="PropertyChanged.Fody" Version="3.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="..\..\..\..\..\c\AsLink\Themes\Common.xaml" Link="AsLink\Common.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net6.0\AAV.Sys\AAV.Sys.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net6.0\AAV.WPF\AAV.WPF.csproj" />
+    <ProjectReference Include="..\AAV.Common.MVVM\AAV.Common.MVVM.csproj" />
+    <ProjectReference Include="..\AAV.Common.UI\AAV.Common.UI.csproj" />
+    <ProjectReference Include="..\Db.EventLog\Db.EventLog.csproj" />
+    <ProjectReference Include="..\Db.TimeTrack\Db.TimeTrack.csproj" />
+    <ProjectReference Include="..\InvoiceCreator.PDF\InvoiceCreator.PDF.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="View\FallbackEditor.xaml.cs">
+      <DependentUpon>FallbackEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="View\FromTillCtgrTaskNote.xaml.cs">
+      <DependentUpon>FromTillCtgrTaskNote.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="View\HaysBrowser.xaml.cs">
+      <DependentUpon>HaysBrowser.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="View\InvoicePreview.xaml.cs">
+      <DependentUpon>InvoicePreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="View\MainSwitchboard.xaml.cs">
+      <DependentUpon>MainSwitchboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="View\OptionsManager.xaml.cs">
+      <DependentUpon>OptionsManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="View\TimesheetPreview.xaml.cs">
+      <DependentUpon>TimesheetPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="View\Window2-XamlToImage.xaml.cs">
+      <DependentUpon>Window2-XamlToImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="View\XpsViewer.xaml.cs">
+      <DependentUpon>XpsViewer.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="View\FallbackEditor.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\FromTillCtgrTaskNote.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\HaysBrowser.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\InvoicePreview.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\MainSwitchboard.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\OptionsManager.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\TimesheetPreview.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\Window2-XamlToImage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\XpsViewer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

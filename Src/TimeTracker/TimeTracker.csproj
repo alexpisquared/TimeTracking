@@ -141,9 +141,6 @@
     <Compile Include="AsLink\EvLogMngr.cs" />
     <Compile Include="AsLink\EvLogMngrBase.cs" />
     <Compile Include="AsLink\EvOfIntEnum.cs" />
-    <Compile Include="C:\c\AsLink\BMO\ToDo.cs">
-      <Link>Common\ToDo.cs</Link>
-    </Compile>
     <Compile Include="AsLink\DBInitializerDevOp.cs" />
     <Compile Include="AsLink\zMediaQADB.cs" />
     <Compile Include="C:\c\AsLink\AppSettings.cs">
