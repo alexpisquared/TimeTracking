@@ -1,0 +1,379 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props" Condition="Exists('..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9C7222EE-0BEF-4FE8-B154-D061D2AF93DF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TimeTracker</RootNamespace>
+    <AssemblyName>TimeTracker</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <PublishUrl>\\shares\Onyx\2WeeksStore\AlexPi\TimeTrack\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Unc</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>32</ApplicationRevision>
+    <ApplicationVersion>19.4.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;Ofc13, TDD_</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Dollar %281%29.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>241397DCF38DD0C3D0FD27904A3A0A99A5F0FD62</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>TimeTracker_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Accessibility" />
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 11.0\Visual Studio Tools for Office\PIA\Common\Microsoft.mshtml.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="PropertyChanged, Version=2.5.13.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
+      <HintPath>..\packages\PropertyChanged.Fody.2.5.13\lib\net452\PropertyChanged.dll</HintPath>
+    </Reference>
+    <Reference Include="ReachFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Speech" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="AsLink\EvLogMngr.cs" />
+    <Compile Include="AsLink\EvLogMngrBase.cs" />
+    <Compile Include="AsLink\EvOfIntEnum.cs" />
+    <Compile Include="C:\c\AsLink\BMO\ToDo.cs">
+      <Link>Common\ToDo.cs</Link>
+    </Compile>
+    <Compile Include="AsLink\DBInitializerDevOp.cs" />
+    <Compile Include="AsLink\zMediaQADB.cs" />
+    <Compile Include="C:\c\AsLink\AppSettings.cs">
+      <Link>Common\AppSettings.cs</Link>
+    </Compile>
+    <Compile Include="C:\c\AsLink\ConverterEx.cs">
+      <Link>Common\ConverterEx.cs</Link>
+    </Compile>
+    <Compile Include="C:\c\AsLink\Logger.Min.cs">
+      <Link>Common\Logger.Min.cs</Link>
+    </Compile>
+    <Compile Include="C:\c\AsLink\Serializer.cs">
+      <Link>Common\Serializer.cs</Link>
+    </Compile>
+    <Compile Include="C:\c\AsLink\Serializer.String.cs">
+      <Link>Common\Serializer.String.cs</Link>
+    </Compile>
+    <Compile Include="AsLink\HolidayProcessor.cs" />
+    <Compile Include="AsLink\DBInitializer.cs" />
+    <Compile Include="AsLink\Emailer.cs" />
+    <Compile Include="AsLink\XamlToXps.cs" />
+    <Compile Include="Converters\TTConverters.cs" />
+    <Compile Include="DevOpStartup.Wpf.cs" />
+    <Compile Include="View\FallbackEditor.xaml.cs">
+      <DependentUpon>FallbackEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainSwitchboard.xaml.cs">
+      <DependentUpon>MainSwitchboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Window2-XamlToImage.xaml.cs">
+      <DependentUpon>Window2-XamlToImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\XpsViewer.xaml.cs">
+      <DependentUpon>XpsViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="VwMdl\TimesheetPreviewVM.cs" />
+    <Compile Include="View\FromTillCtgrTaskNote.xaml.cs">
+      <DependentUpon>FromTillCtgrTaskNote.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\HaysBrowser.xaml.cs">
+      <DependentUpon>HaysBrowser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TimesheetPreview.xaml.cs">
+      <DependentUpon>TimesheetPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\InvoicePreview.xaml.cs">
+      <DependentUpon>InvoicePreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\OptionsManager.xaml.cs">
+      <DependentUpon>OptionsManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Window1.xaml.cs">
+      <DependentUpon>Window1.xaml</DependentUpon>
+    </Compile>
+    <Page Include="C:\c\AsLink\Themes\Common.xaml">
+      <Link>AsLink\Common.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\FallbackEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FromTillCtgrTaskNote.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HaysBrowser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainSwitchboard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TimesheetPreview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\InvoicePreview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\OptionsManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Window1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Window2-XamlToImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\XpsViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\DataSources\TimeTracker.Models.DefaultSetting.datasource" />
+    <None Include="Properties\DataSources\TimeTracker.Models.Invoice.datasource" />
+    <None Include="Properties\DataSources\TimeTracker.Models.Invoicee.datasource" />
+    <None Include="Properties\DataSources\TimeTracker.Models.Invoicer.datasource" />
+    <None Include="Properties\DataSources\TimeTracker.Models.lkuJobCategory.datasource" />
+    <None Include="Properties\DataSources\TimeTracker.Models.lkuPayPeriodMode.datasource" />
+    <None Include="Properties\DataSources\TimeTracker.Models.TaskCategory.datasource" />
+    <None Include="Properties\DataSources\TimeTracker.Models.TaskItem.datasource" />
+    <None Include="Properties\DataSources\TimeTracker.Models.TimeInterval.datasource" />
+    <None Include="Properties\DataSources\TimeTracker.Models.TimePerDay.datasource" />
+    <None Include="Properties\DataSources\TimeTracker.Models.Track1Simple.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="TimeTracker_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Dollar %281%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\ROSS - Timesheet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\AAV.Shared\Src\AsLink\CsProj\AAV.Common.MVVM\AAV.Common.MVVM.csproj">
+      <Project>{175d8a5c-519d-4a1f-8b6e-d822a0717680}</Project>
+      <Name>AAV.Common.MVVM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\AAV.Shared\Src\AsLink\CsProj\AAV.Common.UI\AAV.Common.UI.csproj">
+      <Project>{62e489f8-ccae-4984-a19d-03abb8eb1854}</Project>
+      <Name>AAV.Common.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\AAV.Shared\Src\Net4.8\AAV.WPF\AAV.WPF.4.8.csproj">
+      <Project>{1ce2c02f-5fa8-41ca-ac2e-ba91ab283a02}</Project>
+      <Name>AAV.WPF.4.8</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\AAV.Shared\Src\Net6.0\AAV.Sys\AAV.Sys.csproj">
+      <Project>{de491577-f6ba-45bf-b766-03b83fceaada}</Project>
+      <Name>AAV.Sys</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Db.EventLog\Db.EventLog.csproj">
+      <Project>{1c3d27f8-20b8-4d22-9f41-87787a7bc614}</Project>
+      <Name>Db.EventLog</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Db.TimeTrack\Db.TimeTrack.csproj">
+      <Project>{c705dd8d-fd1b-48bf-bd9c-ee3cdf998ee0}</Project>
+      <Name>Db.TimeTrack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InvoiceCreator.PDF\InvoiceCreator.PDF.csproj">
+      <Project>{a83c6bc4-33ee-41a6-9567-5d701071cd8c}</Project>
+      <Name>InvoiceCreator.PDF</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Sign-re.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Sign-re0.png" />
+    <Resource Include="Assets\Sign-re1.png" />
+    <Resource Include="Assets\Sign-re2.png" />
+    <Resource Include="Assets\Sign-re3.png" />
+    <Resource Include="Assets\Sign-re4.png" />
+    <Resource Include="Assets\Sign-re5.png" />
+    <Resource Include="Assets\Sign-re6.png" />
+    <Resource Include="Assets\Sign-re7.png" />
+    <Resource Include="Assets\Sign-re8.png" />
+    <Resource Include="Assets\Sign-re9.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Fody.3.2.13\build\Fody.targets" Condition="Exists('..\packages\Fody.3.2.13\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.3.2.13\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.3.2.13\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
