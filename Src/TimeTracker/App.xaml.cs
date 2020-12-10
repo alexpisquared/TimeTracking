@@ -28,7 +28,7 @@ namespace TimeTracker
         Current.DispatcherUnhandledException += UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;                                                                                                              // /**/ await Task.Delay(333);
         EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotFocusEvent, new RoutedEventHandler((s, re) => { (s as TextBox)?.SelectAll(); })); //tu: TextBox                                                     // /**/ await Task.Delay(333);
         Tracer.SetupTracingOptions("TimeTracker", new TraceSwitch("OnlyUsedWhenInConfig", "This is the trace for all               messages... but who cares?   See ScrSvr for a model.") { Level = TraceLevel.Verbose });  // /**/ await Task.Delay(333);
-        //ShutdownMode = ShutdownMode.OnExplicitShutdown;
+        ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
 #if !!TDD
       TimeTracker.Common.Emailer.PerpAndShow("trgEmail", "subj", "body", "hardcopy");

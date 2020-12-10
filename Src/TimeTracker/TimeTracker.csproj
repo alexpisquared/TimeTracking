@@ -303,9 +303,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\ROSS - Timesheet.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\AAV.Shared\Src\AsLink\CsProj\AAV.Common.MVVM\AAV.Common.MVVM.csproj">
       <Project>{175d8a5c-519d-4a1f-8b6e-d822a0717680}</Project>
       <Name>AAV.Common.MVVM</Name>
@@ -337,21 +334,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Sign-re.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Sign-re0.png" />
-    <Resource Include="Assets\Sign-re1.png" />
-    <Resource Include="Assets\Sign-re2.png" />
-    <Resource Include="Assets\Sign-re3.png" />
-    <Resource Include="Assets\Sign-re4.png" />
-    <Resource Include="Assets\Sign-re5.png" />
-    <Resource Include="Assets\Sign-re6.png" />
-    <Resource Include="Assets\Sign-re7.png" />
-    <Resource Include="Assets\Sign-re8.png" />
-    <Resource Include="Assets\Sign-re9.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.3.2.13\build\Fody.targets" Condition="Exists('..\packages\Fody.3.2.13\build\Fody.targets')" />
