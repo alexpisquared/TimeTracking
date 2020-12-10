@@ -10,7 +10,7 @@ namespace Db.TimeTrack.DbModel
   {
     public static A0DbContext Create() => new A0DbContext();
 
-    A0DbContext() : base(SqlConStrHelper.ConStr("TimeTrackDb", _dbgRls, dbLocation)) { }
+    A0DbContext() : base(SqlConStrHelper.ConStr("TimeTrackDb", _dbgRls, dbLocation, "haha", "haha")) { }
 
     const string _dbgRls =
 #if DEBUG

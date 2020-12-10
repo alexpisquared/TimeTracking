@@ -65,7 +65,7 @@ namespace TimeTracker.Common
                         Port = 443
                     };
 
-                    //mailClient.Credentials = //new NetworkCredential("alex.pigida@sciex.com", "LKJlkj`123");
+                    //mailClient.Credentials = //new NetworkCredential("alex.pigida@sciex.com", "Use the other one from ...kj`123");
                     //    new NetworkCredential().GetCredential(mailClient.Host, 25, "Basic");
 #else
           //tu: add to App.cfg: <system.net><mailSettings><smtp deliveryMethod="Network" from="test@foo.com"><!--userName="pigida@aei.ca" password="oldSimple"--><!--port="25"--><network host="mail.aei.ca" defaultCredentials="true"/></smtp></mailSettings></system.net>
