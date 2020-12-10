@@ -198,9 +198,6 @@
     <Compile Include="View\OptionsManager.xaml.cs">
       <DependentUpon>OptionsManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
-    </Compile>
     <Page Include="C:\c\AsLink\Themes\Common.xaml">
       <Link>AsLink\Common.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
@@ -231,10 +228,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\OptionsManager.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Window1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

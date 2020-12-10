@@ -1,5 +1,6 @@
 ﻿<lnk:WindowBase xmlns:lnk="clr-namespace:AAV.WPF.Base;assembly=AAV.WPF" x:Name="wnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-								xmlns:Models="clr-namespace:Db.TimeTrack.DbModel" mc:Ignorable="d" x:Class="TimeTracker.View.OptionsManager" xmlns:w="clr-namespace:TimeTracker.View"
+								xmlns:Models="clr-namespace:Db.TimeTrack.DbModel;assembly=Db.TimeTrack" 
+                mc:Ignorable="d" x:Class="TimeTracker.View.OptionsManager" xmlns:w="clr-namespace:TimeTracker.View"
 								Title="Options" Height="1000" Width="900" Loaded="Window_Loaded" Style="{StaticResource WindowStyle_Aav0}">
   <WindowChrome.WindowChrome>
     <WindowChrome CaptionHeight="0" ResizeBorderThickness="15" />

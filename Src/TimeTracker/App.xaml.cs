@@ -1,4 +1,5 @@
-﻿using AAV.Sys.Helpers;
+﻿using AAV.WPF.Ext;
+using AAV.Sys.Helpers;
 using AAV.WPF.Helpers;
 using System;
 using System.Diagnostics;
@@ -21,11 +22,13 @@ namespace TimeTracker
 
     protected override async void OnStartup(StartupEventArgs e)
     {
-      Application.Current.DispatcherUnhandledException += UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;
-      EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotFocusEvent, new RoutedEventHandler((s, re) => { (s as TextBox)?.SelectAll(); })); //tu: TextBox
-      Tracer.SetupTracingOptions("TimeTracker", new TraceSwitch("OnlyUsedWhenInConfig", "This is the trace for all               messages... but who cares?   See ScrSvr for a model.") { Level = TraceLevel.Verbose });
-      ShutdownMode = ShutdownMode.OnExplicitShutdown;
-      base.OnStartup(e);
+      try
+      {
+        base.OnStartup(e);                                                                                                                                                                                                  // /**/ await Task.Delay(333);
+        Current.DispatcherUnhandledException += UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;                                                                                                              // /**/ await Task.Delay(333);
+        EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotFocusEvent, new RoutedEventHandler((s, re) => { (s as TextBox)?.SelectAll(); })); //tu: TextBox                                                     // /**/ await Task.Delay(333);
+        Tracer.SetupTracingOptions("TimeTracker", new TraceSwitch("OnlyUsedWhenInConfig", "This is the trace for all               messages... but who cares?   See ScrSvr for a model.") { Level = TraceLevel.Verbose });  // /**/ await Task.Delay(333);
+        //ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
 #if !!TDD
       TimeTracker.Common.Emailer.PerpAndShow("trgEmail", "subj", "body", "hardcopy");
@@ -44,12 +47,15 @@ namespace TimeTracker
             sender.Stop();
 #endif
 #else
-      new MainSwitchboard(true, e.Args.ToList().Contains("-audible"), "-scheduler -audible").ShowDialog();
+        Bpr.BeepClk();
+        new MainSwitchboard(true, e.Args.ToList().Contains("-audible"), "-scheduler -audible").ShowDialog();
 
-      Bpr.BeepEnd6();
-      App.Current.Shutdown();
+        Bpr.BeepEnd6();
+        App.Current.Shutdown();
 #endif
-      await Task.Yield();
+        await Task.Yield();
+      }
+      catch(Exception ex) { ex.Pop(); }
     }
   }
 }
