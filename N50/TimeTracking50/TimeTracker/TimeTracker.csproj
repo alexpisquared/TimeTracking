@@ -4,7 +4,12 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Dollar.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Dollar.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\..\..\..\..\c\AsLink\AppSettings.cs" Link="Common\AppSettings.cs" />
@@ -45,6 +50,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Microsoft.mshtml">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\PublicAssemblies\Microsoft.mshtml.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Dollar.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Update="View\FallbackEditor.xaml.cs">
       <DependentUpon>FallbackEditor.xaml</DependentUpon>
     </Compile>
@@ -72,6 +92,13 @@
     <Compile Update="View\XpsViewer.xaml.cs">
       <DependentUpon>XpsViewer.xaml</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
