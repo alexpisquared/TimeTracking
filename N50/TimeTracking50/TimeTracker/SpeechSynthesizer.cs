@@ -1,15 +1,19 @@
-﻿using System;
+﻿using SpeechSynthLib;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace TimeTracker
 {
   public class SpeechSynthesizer
   {
+    SpeechSynth _synth;
+
     public int Rate { get; set; }
     public int Volume { get; set; }
 
-    public void SpeakAsyncCancelAll() => throw new NotImplementedException();
-    public void Speak(string msg) => throw new NotImplementedException();
-    public void SpeakAsync(string msg) => throw new NotImplementedException();
-    public void SelectVoiceByHints(object gender) => throw new NotImplementedException();
+    public void SpeakAsyncCancelAll() => _synth = new SpeechSynth();
+    public void Speak(string msg) => _synth.SpeakAsync(msg).Wait();
+    public void SpeakAsync(string msg) => Task.Run(async () => await  _synth.SpeakAsync(msg));
+    public void SelectVoiceByHints(object gender) => Trace.WriteLine($" throw new NotImplementedException(); {gender}");
   }
 }
