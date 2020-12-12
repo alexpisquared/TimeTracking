@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using TimeTracker.View;
+using SpeechSynthLib.Adapter;
 
 namespace TimeTracker
 {

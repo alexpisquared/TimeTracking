@@ -38,6 +38,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net6.0\AAV.Sys\AAV.Sys.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net6.0\AAV.WPF\AAV.WPF.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net6.0\SpeechSynthLib\SpeechSynthLib.csproj" />
     <ProjectReference Include="..\AAV.Common.MVVM\AAV.Common.MVVM.csproj" />
     <ProjectReference Include="..\AAV.Common.UI\AAV.Common.UI.csproj" />
     <ProjectReference Include="..\Db.EventLog\Db.EventLog.csproj" />

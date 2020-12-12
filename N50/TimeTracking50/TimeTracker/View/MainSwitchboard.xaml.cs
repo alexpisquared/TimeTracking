@@ -28,7 +28,7 @@ namespace TimeTracker.View
 
       _keepSaying = keepSaying;
 
-      Title = $"Time Tracker - {VerHelper.CurVerStr(".NET 4.8")}";
+      Title = $"Time Tracker - {VerHelper.CurVerStr(".Net 5.0")}";
 
       KeyDown += (s, e) =>
       {
@@ -47,7 +47,7 @@ namespace TimeTracker.View
 
       Loaded += (s, e) => { Task.Run(() => { while (_keepSaying) App.SpeakSynch(msg); }); };
 
-      CurVer.Text = $"{A0DbContext.Create().ServerDatabase()}\n{VerHelper.CurVerStr(".NET 4.8")}";
+      CurVer.Text = $"{A0DbContext.Create().ServerDatabase()}\n{VerHelper.CurVerStr(".Net 5.0")}";
 
       DataContext = this;
     }
