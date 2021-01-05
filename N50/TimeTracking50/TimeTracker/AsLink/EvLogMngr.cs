@@ -103,6 +103,7 @@ namespace AsLink
     static void add1stLast(DateTime a, DateTime b, SortedList<DateTime, int> lst, string path)
     {
       return; // no events found
+
       (var min, var max) = get1rstLastEvents(qryAll(path, a, b));
       if (min == DateTime.MaxValue)
         return; // no events found
@@ -136,11 +137,11 @@ namespace AsLink
         {
           //32 Debug.Write($" *** ev time: {ev.TimeCreated.Value:y-MM-dd HH:mm:ss.fff} - {evOfIntFlag}={(EvOfIntFlag)evOfIntFlag,}:"); Debug.Assert(!lst.ContainsKey(ev.TimeCreated.Value), $" -- already added {ev.TimeCreated.Value} - {evOfIntFlag}");
 
-          if (lst.Any(r => r.Value == evOfIntFlag) && (ev.TimeCreated.Value - lst.Where(r => r.Value == evOfIntFlag).Max(r => r.Key)).TotalSeconds < 60) // if same last one is < 60 sec ago.
+          if (lst.Any(r => r.Value == evOfIntFlag) && ev.TimeCreated.HasValue && (ev.TimeCreated.Value - lst.Where(r => r.Value == evOfIntFlag).Max(r => r.Key)).TotalSeconds < 60) // if same last one is < 60 sec ago.
           {
             //32 Debug.WriteLine($" -- IGNORING  to allow power-offs (which are out of order in ev.log!!!) to flag the actual state.");
           }
-          else
+          else if (ev.TimeCreated.HasValue)
           {
             //32 Debug.WriteLine($" -- LOGGING.");
             lst.Add(ev.TimeCreated.Value, evOfIntFlag);
@@ -149,14 +150,14 @@ namespace AsLink
       }
     }
 
-    static EventRecord read(this EventLogReader reader) { try { return reader.ReadEvent(); } catch (Exception ex) { ex.Log(); return null; } }
+    static EventRecord? read(this EventLogReader reader) { try { return reader.ReadEvent(); } catch (Exception ex) { ex.Log(); return null; } }
 
     static (DateTime min, DateTime max) get1rstLastEvents(string qry)
     {
       var lst = new List<DateTime>();
       using (var reader = GetELReader(qry))
       {
-        for (var ev = reader.read(); ev != null; ev = reader.read())
+        for (var ev = reader.read(); ev != null && ev.TimeCreated != null; ev = reader.read())
           lst.Add(ev.TimeCreated.Value);
       }
 
@@ -184,7 +185,7 @@ namespace AsLink
 
       using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, apl1hr)))
       {
-        for (var er = (EventLogRecord)reader.read(); null != er; er = (EventLogRecord)reader.read())
+        for (var er = (EventLogRecord?)reader.read(); null != er; er = (EventLogRecord?)reader.read())
         {
           //77 Debug.Write($"\n {er.TimeCreated}  {er.TaskDisplayName}    {er.ProviderName}");
 
@@ -256,14 +257,12 @@ namespace AsLink
       var apl1hr = $@"<QueryList><Query Id='0' Path='{_aavLogName}'><Select Path='{_aavLogName}'>*[System[Provider[@Name='{_aavSource}'] and (Level=4 or Level=0) and ( (EventID = {_ssrDn})  and TimeCreated[@SystemTime&gt;='{hr00ofTheDate.ToUniversalTime():o}'] and TimeCreated[@SystemTime&lt;='{hr24ofTheDate.ToUniversalTime():o}'] )]]</Select></Query></QueryList>";
       try
       {
-        using (var reader = new EventLogReader(new EventLogQuery(_aavLogName, PathType.LogName, apl1hr)))
-        {
-          for (var er = (EventLogRecord)reader.read(); null != er; er = (EventLogRecord)reader.read())
-            if (rv > er.TimeCreated.Value)
-              rv = er.TimeCreated.Value;
-        }
+        using var reader = new EventLogReader(new EventLogQuery(_aavLogName, PathType.LogName, apl1hr));
+        for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
+          if (rv > er.TimeCreated.Value)
+            rv = er.TimeCreated.Value;
       }
-      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod().ToString()); }
+      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
       return rv;
     }
@@ -277,12 +276,12 @@ namespace AsLink
       {
         using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, sleeps)))
         {
-          for (var er = (EventLogRecord)reader.read(); null != er; er = (EventLogRecord)reader.read())
+          for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
             if (rv > er.TimeCreated.Value)
               rv = er.TimeCreated.Value;
         }
       }
-      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod().ToString()); }
+      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
       return rv;
     }
@@ -294,12 +293,12 @@ namespace AsLink
       {
         using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, /*qryBootUpsOnly*/qryBootUpTmChg(hr00ofTheDate, hr24ofTheDate)))) //sep 2018
         {
-          for (var er = (EventLogRecord)reader.read(); null != er; er = (EventLogRecord)reader.read())
+          for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
             if (rv > er.TimeCreated.Value)
               rv = er.TimeCreated.Value;
         }
       }
-      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod().ToString()); }
+      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
       return rv;
     }
@@ -311,14 +310,14 @@ namespace AsLink
       {
         using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, qryBootUpsOnly(hr00ofTheDate, hr24ofTheDate))))
         {
-          for (var er = (EventLogRecord)reader.read(); null != er; er = (EventLogRecord)reader.read())
+          for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
           {
             if (!ignoreReboots)
             {
               var bootUpTime = er.TimeCreated.Value;
               using (var reader2 = new EventLogReader(new EventLogQuery("System", PathType.LogName, BootDnWithin5min(bootUpTime))))
               {
-                if ((EventLogRecord)reader2.read() != null) // this is a reboot - ignore it since it is not a session start.
+                if ((EventLogRecord?)reader2.read() != null) // this is a reboot - ignore it since it is not a session start.
                   continue;
               }
             }
@@ -328,7 +327,7 @@ namespace AsLink
           }
         }
       }
-      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod().ToString()); }
+      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
       return rv;
     }
@@ -398,8 +397,8 @@ Kernel-General 12 - up
             const string key = "ScreenSaveTimeOut";
             if (_ssto == -1)
             {
-              if (!int.TryParse(Registry.GetValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", key, 299).ToString(), out _ssto) || _ssto == 299)
-                if (!int.TryParse(Registry.GetValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Control Panel\Desktop", key, 298).ToString(), out _ssto))
+              if (!int.TryParse(Registry.GetValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", key, 299)?.ToString(), out _ssto) || _ssto == 299)
+                if (!int.TryParse(Registry.GetValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Control Panel\Desktop", key, 298)?.ToString(), out _ssto))
                   _ssto = 300;
 
               ////https://docs.microsoft.com/en-us/dotnet/api/microsoft.win32.registrykey.getvalue?view=netframework-4.8
@@ -408,7 +407,7 @@ Kernel-General 12 - up
               //Console.WriteLine("  Expanded: \"{0}\"", registryKey.GetValue(key));
             }
           }
-          catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod().ToString()); _ssto = 299; }
+          catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); _ssto = 299; }
         }
 
         return _ssto;
@@ -428,12 +427,12 @@ Kernel-General 12 - up
        {
          using (var reader = new EventLogReader(new EventLogQuery(_aavLogName, PathType.LogName, apl1hr)))
          {
-           for (EventLogRecord er = (EventLogRecord)reader.read(); null != er; er = (EventLogRecord)reader.read())
+           for (EventLogRecord er = (EventLogRecord?)reader.read(); null != er; er = (EventLogRecord?)reader.read())
              if (rv < er.TimeCreated.Value)
                rv = er.TimeCreated.Value;
          }
        }
-       catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod().ToString()); }
+       catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
        return rv.AddSeconds(-Sstopgp); // actually - earlier.
      }
@@ -448,12 +447,12 @@ Kernel-General 12 - up
        {
          using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, enteringSleep)))
          {
-           for (EventLogRecord er = (EventLogRecord)reader.read(); null != er; er = (EventLogRecord)reader.read())
+           for (EventLogRecord er = (EventLogRecord?)reader.read(); null != er; er = (EventLogRecord?)reader.read())
              if (rv < er.TimeCreated.Value)
                rv = er.TimeCreated.Value;
          }
        }
-       catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod().ToString()); }
+       catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
        return rv;
      }
@@ -468,12 +467,12 @@ Kernel-General 12 - up
       {
         using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, qry)))
         {
-          for (var er = (EventLogRecord)reader.read(); null != er; er = (EventLogRecord)reader.read())
+          for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
             if (rv < er.TimeCreated.Value)
               rv = er.TimeCreated.Value;
         }
       }
-      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod().ToString()); }
+      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
       return rv;
     }
@@ -488,12 +487,12 @@ Kernel-General 12 - up
       {
         using (var reader = new EventLogReader(new EventLogQuery(_aavLogName, PathType.LogName, qryScrSvr(_ssrUp, hr00ofTheDate, hr24ofTheDate))))
         {
-          for (var er = (EventLogRecord)reader.read(); null != er; er = (EventLogRecord)reader.read())
+          for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
             if (rv < er.TimeCreated.Value)
               rv = er.TimeCreated.Value;
         }
       }
-      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod().ToString()); }
+      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
       return rv.AddSeconds(-Ssto); // actually - earlier.
     }
@@ -505,12 +504,12 @@ Kernel-General 12 - up
       {
         using (var reader = new EventLogReader(new EventLogQuery(_aavLogName, PathType.LogName, qryScrSvr(_ssrDn, hr00ofTheDate, hr24ofTheDate))))
         {
-          for (var er = (EventLogRecord)reader.read(); null != er; er = (EventLogRecord)reader.read())
+          for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
             if (rv < er.TimeCreated.Value)
               rv = er.TimeCreated.Value;
         }
       }
-      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod().ToString()); }
+      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
       return rv;
     }
@@ -525,12 +524,12 @@ Kernel-General 12 - up
       {
         using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, enteringSleep)))
         {
-          for (var er = (EventLogRecord)reader.read(); null != er; er = (EventLogRecord)reader.read())
+          for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
             if (rv < er.TimeCreated.Value)
               rv = er.TimeCreated.Value;
         }
       }
-      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod().ToString()); }
+      catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
       return rv;
     }
@@ -547,7 +546,7 @@ Kernel-General 12 - up
 
       using (var reader = new EventLogReader(new EventLogQuery(_aavLogName, PathType.LogName, apl1hr)))
       {
-        for (var er = (EventLogRecord)reader.read(); null != er; er = (EventLogRecord)reader.read())
+        for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
         {
           if (er.TimeCreated.Value > hr24ofTheDate)
           {
@@ -602,7 +601,7 @@ Kernel-General 12 - up
 
       using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, sleeps)))
       {
-        for (var er = (EventLogRecord)reader.read(); null != er; er = (EventLogRecord)reader.read())
+        for (var er = (EventLogRecord?)reader.read(); null != er; er = (EventLogRecord?)reader.read())
         {
           if (er.Properties[0] == null || !(er.Properties[0].Value is DateTime) || er.Properties[1] == null || !(er.Properties[1].Value is DateTime)) throw new Exception("Not a datetime !!! (AP)");
 
@@ -675,10 +674,10 @@ Kernel-General 12 - up
 
           return rv;
         }
-        catch (Exception ex) { MessageBox.Show(ermsg + ex, MethodInfo.GetCurrentMethod().ToString()); }
+        catch (Exception ex) { MessageBox.Show(ermsg + ex, MethodInfo.GetCurrentMethod()?.ToString()); }
 
         try { return new DailyBoundaries(trg).DayStart; }
-        catch (Exception ex) { MessageBox.Show(ex.ToString(), MethodInfo.GetCurrentMethod().ToString()); }
+        catch (Exception ex) { MessageBox.Show(ex.ToString(), MethodInfo.GetCurrentMethod()?.ToString()); }
 
         return DateTime.Today.AddHours(9);
       }
@@ -706,10 +705,10 @@ Kernel-General 12 - up
 
           return trg.Date;
         }
-        catch (Exception ex) { MessageBox.Show(ermsg + ex, MethodInfo.GetCurrentMethod().ToString()); }
+        catch (Exception ex) { MessageBox.Show(ermsg + ex, MethodInfo.GetCurrentMethod()?.ToString()); }
 
         try { return new DailyBoundaries(trg).DayFinish; }
-        catch (Exception ex) { MessageBox.Show(ex.ToString(), MethodInfo.GetCurrentMethod().ToString()); }
+        catch (Exception ex) { MessageBox.Show(ex.ToString(), MethodInfo.GetCurrentMethod()?.ToString()); }
 
         return DateTime.Today.AddHours(18);
       }
@@ -735,7 +734,7 @@ Kernel-General 12 - up
               break;
           }
         }
-        catch (Exception ex) { MessageBox.Show(ex.ToString(), MethodInfo.GetCurrentMethod().ToString()); }
+        catch (Exception ex) { MessageBox.Show(ex.ToString(), MethodInfo.GetCurrentMethod()?.ToString()); }
 
         return rv0;
       }
