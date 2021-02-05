@@ -45,7 +45,7 @@ namespace TimeTracker.View
 
       setDf(Settings.Default.LastBtnNo);
 
-      Loaded += (s, e) => { Task.Run(() => { while (_keepSaying) App.SpeakSynch(msg); }); };
+      Loaded += (s, e) => { Task.Run(async () => { while (_keepSaying) await App.SpeakSynch(msg); }); };
 
       CurVer.Text = $"{A0DbContext.Create().ServerDatabase()}\n{VerHelper.CurVerStr(".Net 5.0")}";
 
@@ -90,9 +90,6 @@ namespace TimeTracker.View
     void pre() { _keepSaying = false; Hide(); }                                     //  ctrlPanelOnMarket.IsEnabled = false; WindowState = WindowState.Minimized; scrooves up focusing on the new window.   Hide(); - invokes Close */ }
     void post() { Bpr.BeepClk(); new MainSwitchboard(false, false).ShowDialog(); }  //  ctrlPanelOnMarket.IsEnabled = true;  WindowState = WindowState.Normal; Show(); }//Task.Factory.StartNew(() => Thread.Sleep(100)).ContinueWith(_ => { Close(); }, TaskScheduler.FromCurrentSynchronizationContext()); }
 
-    private void wnd_Loaded(object sender, RoutedEventArgs e)
-    {
-      Bpr.Begin1Async();
-    }
+    void wnd_Loaded(object sender, RoutedEventArgs e) => Bpr.BeepOk();
   }
 }

@@ -1,6 +1,7 @@
-﻿using AAV.WPF.Ext;
-using AAV.Sys.Helpers;
+﻿using AAV.Sys.Helpers;
+using AAV.WPF.Ext;
 using AAV.WPF.Helpers;
+using SpeechSynthLib.Adapter;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -8,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using TimeTracker.View;
-using SpeechSynthLib.Adapter;
 
 namespace TimeTracker
 {
@@ -17,8 +17,8 @@ namespace TimeTracker
     public static DateTime Today = DateTime.Today;
     public static DateTime AppStartAt = DateTime.Now;
     static SpeechSynthesizer _synth = null; public static SpeechSynthesizer Synth { get { if (_synth == null) { _synth = new SpeechSynthesizer(); _synth.SpeakAsyncCancelAll(); _synth.Rate = 6; _synth.Volume = 25; /*_synth.SelectVoiceByHints(gender: VoiceGender.Female); */ } return _synth; } }
-    public static void SpeakSynch(string msg) => Synth.Speak(msg);
-    public static void SpeakAsync(string msg) { Synth.SpeakAsyncCancelAll(); Synth.SpeakAsync(msg); }
+    public static async Task SpeakSynch(string msg) => await Synth.Speak(msg);
+    public static void SpeakAsync(string msg) { Synth.SpeakAsyncCancelAll(); Synth.SpeakFaF(msg); }
 
     protected override async void OnStartup(StartupEventArgs e)
     {

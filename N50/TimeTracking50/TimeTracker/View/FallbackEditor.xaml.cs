@@ -16,7 +16,7 @@ namespace TimeTracker.View
 {
   public partial class FallbackEditor : Window
   {
-    private readonly string _text;
+    readonly string _text;
 
     public FallbackEditor(string text)
     {

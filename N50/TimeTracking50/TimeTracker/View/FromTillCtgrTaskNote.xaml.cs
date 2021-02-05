@@ -429,7 +429,7 @@ namespace TimeTracker.View
     void onDeletePeriodFree(object s, RoutedEventArgs e) { _db.TimePerDays.Local.Where(r => PayPrdBgn <= r.WorkedOn && r.WorkedOn <= PayPrdEnd && r.InvoiceId == null).ToList().ForEach(dl => _db.Entry(dl).State = EntityState.Deleted); /*//tu: use State - not: SelectedFeed.DnLds.Remove(dl);*/      reconfirm(); }
     void onDeletePeriod_ALL(object s, RoutedEventArgs e) { _db.TimePerDays.Local.Where(r => PayPrdBgn <= r.WorkedOn && r.WorkedOn <= PayPrdEnd).ToList().ForEach(dl => _db.Entry(dl).State = EntityState.Deleted); /*//tu: use State - not: SelectedFeed.DnLds.Remove(dl);*/      reconfirm(); }
 
-    private void reconfirm()
+    void reconfirm()
     {
       if (MessageBox.Show(_db.GetDbChangesReport(), "Save?", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
       {
