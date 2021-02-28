@@ -207,7 +207,7 @@ namespace TimeTracker
             Settings.Invoicer.FromEmail,
             Invoicee.TimesheetEmail,
                 $"Timesheet for the period {DaySatDate:MMMM d} - {DayFriDate:MMMM d} ",
-            string.Format(Invoicee.EmailBody, DaySatDate, DayFriDate, "timesheet", "Yuvraj"),
+            string.Format(Invoicee.InvoiceEmailBody, DaySatDate, DayFriDate, "timesheet", "Yuvraj"),
             new string[] { hardcopy });
 
         DayFri.Note +=
@@ -230,7 +230,7 @@ namespace TimeTracker
         XamlToXps.Export(new Uri(hardcopy, UriKind.Absolute), printArea as FrameworkElement); //review XPS: FixedViewer.Document = new XpsDocument(filename, FileAccess.Read).GetFixedDocumentSequence();
 
         var subj = $"Timesheet for the period {DaySatDate:MMMM d} - {DayFriDate:MMMM d} ";
-        var body = string.Format(Invoicee.EmailBody, DaySatDate, DayFriDate, "timesheet", "Yuvraj");
+        var body = string.Format(Invoicee.InvoiceEmailBody, DaySatDate, DayFriDate, "timesheet", "Yuvraj");
 
         try
         {

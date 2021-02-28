@@ -90,9 +90,6 @@ namespace TimeTracker.View
     void pre() { _keepSaying = false; Hide(); }                                     //  ctrlPanelOnMarket.IsEnabled = false; WindowState = WindowState.Minimized; scrooves up focusing on the new window.   Hide(); - invokes Close */ }
     void post() { Bpr.BeepClk(); new MainSwitchboard(false, false).ShowDialog(); }  //  ctrlPanelOnMarket.IsEnabled = true;  WindowState = WindowState.Normal; Show(); }//Task.Factory.StartNew(() => Thread.Sleep(100)).ContinueWith(_ => { Close(); }, TaskScheduler.FromCurrentSynchronizationContext()); }
 
-    private void wnd_Loaded(object sender, RoutedEventArgs e)
-    {
-      Bpr.Begin1Async();
-    }
+    private void wnd_Loaded(object sender, RoutedEventArgs e) => Bpr.Begin1FaF();
   }
 }

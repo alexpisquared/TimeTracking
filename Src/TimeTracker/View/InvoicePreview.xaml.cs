@@ -101,7 +101,7 @@ namespace TimeTracker.View
           hardcopyPDF);
 
         //2.		Email a letter with the attachment to the current invoicee
-        var body = string.Format(InvoiceE.EmailBody, Invoice.PeriodFrom, Invoice.PeriodUpTo, "invoice", "·") + generateTimeTrackReport(_db, PayPrdBgn, PayPrdEnd);
+        var body = string.Format(InvoiceE.InvoiceEmailBody, Invoice.PeriodFrom, Invoice.PeriodUpTo, "invoice", "·") + generateTimeTrackReport(_db, PayPrdBgn, PayPrdEnd);
         var emailed = Emailer.PerpAndShow(InvoiceE.InvoiceEmail, $"Invoice #{InvoiceNo} for the period {Invoice.PeriodFrom:MMMM d} - {Invoice.PeriodUpTo:MMMM d} ", body, hardcopyPDF); //DayFri.Note += string.Format("\n (timesheet {0} to {1} on {2:MMMd HH:mm})", exitCode == 0 ? "sent" : "sending failed", Invoicee.TimesheetEmail, App.AppStartAt);
 
         var isSuccess = emailed.exitCode == 0;

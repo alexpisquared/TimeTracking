@@ -126,7 +126,7 @@ namespace InvoiceCreator.PDF
         again:
         try { doc.Save(filename); } catch (Exception ex) { Console.Write(ex.Message); System.Threading.Thread.Sleep(333); goto again; }
 
-        Process.Start(filename);
+        try { _ = Process.Start(@"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe", $"\"{filename}\""); } catch (Exception ex2) { _ = ex2.Log(filename); }
       }
       catch (Exception ex) { ex.Log(); }
     }

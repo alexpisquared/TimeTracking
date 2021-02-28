@@ -5,7 +5,7 @@ using System.Security.Principal;
 
 namespace AsLink
 {
-  [Obsolete("Use C:\g\AAV.Shared\Src\AsLink\PlatformNeutral\EvLogHelperBase.cs")]
+  [Obsolete(@"Use C:\g\AAV.Shared\Src\AsLink\PlatformNeutral\EvLogHelperBase.cs")] // why 2
   public static partial class EvLogHelper
   {
     const string _app = "Application", _sec = "Security", _sys = "System", _aavSource = "AavSource", _aavLogName = "AavNewLog";

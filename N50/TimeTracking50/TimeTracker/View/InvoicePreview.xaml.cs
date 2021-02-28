@@ -1,5 +1,6 @@
 ﻿using AAV.Sys.Ext;
 using AAV.Sys.Helpers;
+using AAV.WPF.Ext;
 using AsLink;
 using Db.TimeTrack.DbModel;
 using System;
@@ -100,14 +101,23 @@ namespace TimeTracker.View
           $"${GrdTotal:N2}",
           hardcopyPDF);
 
-        //2.		Email a letter with the attachment to the current invoicee
-        var body = string.Format(InvoiceE.EmailBody, Invoice.PeriodFrom, Invoice.PeriodUpTo, "invoice", "·") + generateTimeTrackReport(_db, PayPrdBgn, PayPrdEnd);
-        var emailed = Emailer.PerpAndShow(InvoiceE.InvoiceEmail, $"Invoice #{InvoiceNo} for the period {Invoice.PeriodFrom:MMMM d} - {Invoice.PeriodUpTo:MMMM d} ", body, hardcopyPDF); //DayFri.Note += string.Format("\n (timesheet {0} to {1} on {2:MMMd HH:mm})", exitCode == 0 ? "sent" : "sending failed", Invoicee.TimesheetEmail, App.AppStartAt);
+        var times = generateTimeTrackReport(_db, PayPrdBgn, PayPrdEnd);
 
-        var isSuccess = emailed.exitCode == 0;
+        //2a.		Email a letter with the attachment to the current Timesheet approver
+        if (!string.IsNullOrEmpty(InvoiceE.TimesheetEmail))
+        {
+          var bodyTimesheet = string.Format(InvoiceE.TimesheetEmailBody, Invoice.PeriodFrom, Invoice.PeriodUpTo, PayPrdHrs) + times;
+          var (exitCode1, errMsg1) = Emailer.PerpAndShow(InvoiceE.TimesheetEmail, $"Alex Pigida – Approval of hours for the period from {Invoice.PeriodFrom:MMMM d, yyyy} through {Invoice.PeriodUpTo:MMMM d, yyyy}. ", bodyTimesheet);
+        }
+
+        //2b.		Email a letter with the attachment to the current invoicee
+        var bodyInvoice = string.Format(InvoiceE.InvoiceEmailBody, Invoice.PeriodFrom, Invoice.PeriodUpTo, "invoice", "·") + times;
+        var (exitCode, errMsg) = Emailer.PerpAndShow(InvoiceE.InvoiceEmail, $"Invoice #{InvoiceNo} for the period {Invoice.PeriodFrom:MMMM d} - {Invoice.PeriodUpTo:MMMM d} ", bodyInvoice, hardcopyPDF); //DayFri.Note += string.Format("\n (timesheet {0} to {1} on {2:MMMd HH:mm})", exitCode == 0 ? "sent" : "sending failed", Invoicee.TimesheetEmail, App.AppStartAt);
+
+        var isSuccess = exitCode == 0;
 
         Invoice.IsSubmitted = isSuccess;
-        Invoice.Notes = $"{(isSuccess ? "Sent" : $"sending failed ({emailed.errMsg})")} to {Invoice.Invoicee.InvoiceEmail} at {App.AppStartAt}. \n\n\n" + Invoice.Notes;
+        Invoice.Notes = $"{(isSuccess ? "Sent" : $"sending failed ({errMsg})")} to {Invoice.Invoicee.InvoiceEmail} at {App.AppStartAt}. \n\n\n" + Invoice.Notes;
         if (Invoice.Notes.Length >= 512)
           Invoice.Notes = Invoice.Notes.Substring(0, 512 - 1);
 
@@ -116,7 +126,7 @@ namespace TimeTracker.View
 
         Close();
       }
-      catch (Exception ex) { ex.Log(); }
+      catch (Exception ex) { ex.Pop(); }
     }
 
     string generateTimeTrackReport(A0DbContext db, DateTime payPrdBgn, DateTime payPrdEnd)
@@ -126,7 +136,9 @@ namespace TimeTracker.View
       {
         const string line = "\t\t----------------\t---------";
 
-        report.AppendLine($"\t\t\t Timesheet    ");
+        report.AppendLine($"───────────────────────────────────────────────────────────────");
+        report.AppendLine($"\t\t\t     Timesheet ");
+        report.AppendLine($"\t\t       (expediency-copy)");
         report.AppendLine($"\t\t      Date   \t\t Hours");
         report.AppendLine(line);
         var days = db.TimePerDays.Local.Where(r => payPrdBgn <= r.WorkedOn && r.WorkedOn <= payPrdEnd).OrderBy(r => r.WorkedOn);
@@ -147,6 +159,7 @@ namespace TimeTracker.View
         }
         report.AppendLine(line);
         report.AppendLine($"\t\t     Total: \t\t{days.Sum(r => r.WorkedHours),7:N2}");
+        report.AppendLine($"───────────────────────────────────────────────────────────────");
       }
       catch (Exception ex) { ex.Log(); }
 

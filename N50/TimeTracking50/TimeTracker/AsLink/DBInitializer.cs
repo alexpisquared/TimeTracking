@@ -59,7 +59,7 @@ namespace TimeTracker.Common
 				//402 - 1500 Don Mills Rd
 				//North York ON M3B 3K4",
 				//					InvoiceEmail = "tester@livingstonintl.com",
-				//					EmailBody =
+				//					InvoiceEmailBody =
 				//@"Dear Sirs,  
 				//Attached please find the invoice for the period from {0:MMMM d, yyyy} through {1:MMMM d, yyyy}.
 				//Best regards, 
@@ -82,7 +82,7 @@ namespace TimeTracker.Common
 				//for invoicing
 				//goes here",
 				//					InvoiceEmail = "tester@microsoft.com",
-				//					EmailBody = @"Dear Sirs,  
+				//					InvoiceEmailBody = @"Dear Sirs,  
 				//Attached please find the invoice for the period from {0:MMMM d, yyyy} through {1:MMMM d, yyyy}.
 				//Best regards, 
 				// 
@@ -103,7 +103,7 @@ namespace TimeTracker.Common
 				//for invoicing
 				//goes here",
 				//					InvoiceEmail = "tester@live.com",
-				//					EmailBody = @"Dear Sirs,  
+				//					InvoiceEmailBody = @"Dear Sirs,  
 				//Attached please find the invoice for the period from {0:MMMM d, yyyy} through {1:MMMM d, yyyy}.
 				//Best regards, 
 				// 

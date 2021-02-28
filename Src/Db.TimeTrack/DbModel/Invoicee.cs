@@ -42,7 +42,7 @@ namespace Db.TimeTrack.DbModel
 
     [Required]
     [StringLength(2000)]
-    public string EmailBody { get; set; }
+    public string InvoiceEmailBody { get; set; }
 
     [Column(TypeName = "money")]
     public decimal CorpRate { get; set; }

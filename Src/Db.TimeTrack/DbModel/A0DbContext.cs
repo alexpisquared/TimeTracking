@@ -81,7 +81,7 @@ namespace Db.TimeTrack.DbModel
           .IsUnicode(false);
 
       modelBuilder.Entity<Invoicee>()
-          .Property(e => e.EmailBody)
+          .Property(e => e.InvoiceEmailBody)
           .IsUnicode(false);
 
       modelBuilder.Entity<Invoicee>()
