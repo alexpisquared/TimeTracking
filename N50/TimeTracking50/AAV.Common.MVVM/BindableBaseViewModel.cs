@@ -50,7 +50,7 @@ namespace MVVM.Common
         {
           if (view != null)
           {
-            if (Application.Current.Dispatcher.CheckAccess()) // if on UI thread							
+            if (Application.Current == null || Application.Current.Dispatcher.CheckAccess()) // if on UI thread							
               view.Close();
             else
               await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => view.Close()));
@@ -73,7 +73,7 @@ namespace MVVM.Common
       //  {
       //    if (view != null)
       //    {
-      //      if (Application.Current.Dispatcher.CheckAccess()) // if on UI thread							
+      //      if (Application.Current == null || Application.Current.Dispatcher.CheckAccess()) // if on UI thread							
       //        view.Close();
       //      else
       //        await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => view.Close()));
@@ -138,7 +138,7 @@ namespace MVVM.Common
     {
       try
       {
-        if (Application.Current.Dispatcher.CheckAccess()) // if on UI thread
+        if (Application.Current == null || Application.Current.Dispatcher.CheckAccess()) // if on UI thread
           vMdl.AutoExec();
         else
           Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => //todo: rejoin properly to the UI thread (Oct 2017)
@@ -150,7 +150,7 @@ namespace MVVM.Common
     {
       try
       {
-        if (Application.Current.Dispatcher.CheckAccess()) // if on UI thread
+        if (Application.Current == null || Application.Current.Dispatcher.CheckAccess()) // if on UI thread
           await vMdl.AutoExecAsync();
         else
           await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(async () => //todo: rejoin properly to the UI thread (Oct 2017)
