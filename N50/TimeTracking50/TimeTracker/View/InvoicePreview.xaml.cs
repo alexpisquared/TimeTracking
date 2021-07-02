@@ -114,6 +114,13 @@ namespace TimeTracker.View
         var bodyInvoice = string.Format(InvoiceE.InvoiceEmailBody, Invoice.PeriodFrom, Invoice.PeriodUpTo, "invoice", "·") + times;
         var (exitCode, errMsg) = Emailer.PerpAndShow(InvoiceE.InvoiceEmail, $"Invoice #{InvoiceNo} for the period {Invoice.PeriodFrom:MMMM d} - {Invoice.PeriodUpTo:MMMM d} ", bodyInvoice, hardcopyPDF); //DayFri.Note += string.Format("\n (timesheet {0} to {1} on {2:MMMd HH:mm})", exitCode == 0 ? "sent" : "sending failed", Invoicee.TimesheetEmail, App.AppStartAt);
 
+        try
+        {
+          var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"CI\SL");
+          Process.Start(new ProcessStartInfo("Explorer.exe", dir));
+        }
+        catch (Exception ex) { ex.Pop(); }
+
         var isSuccess = exitCode == 0;
 
         Invoice.IsSubmitted = isSuccess;
@@ -193,9 +200,11 @@ namespace TimeTracker.View
       try
       {
         var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), e.Uri.OriginalString);
-        Process.Start(new ProcessStartInfo(dir)); e.Handled = true;
+        Process.Start(new ProcessStartInfo(dir)); 
+        
+        e.Handled = true;
       }
-      catch (Exception ex) { ex.Log(); }
+      catch (Exception ex) { ex.Pop(); }
     }
 
     void movePayPrd(int dd)

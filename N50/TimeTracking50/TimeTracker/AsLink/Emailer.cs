@@ -136,7 +136,7 @@ namespace TimeTracker.Common
         File.WriteAllText(tempFile, $"{trgEmail}\n{subj}\n{hardcopy}\n{body}");
         var psi = new ProcessStartInfo("NOTEPAD.EXE", tempFile)
         {
-          UseShellExecute = true, // to pick up OUT LOOK.exe from the path!!!
+          UseShellExecute = true, // to pick up OUTLOOK.exe from the path!!!
           WorkingDirectory = workingDirectory
         };
 
