@@ -319,10 +319,10 @@ namespace TimeTracker
 
       try
       {
-        var i = 1;
+        var i = 0;
         do
         {
-          filename = $"{dir}\\{docname} {prefx} - {ttlHours:0#.#} hr{(i == 0 ? "" : $" - ({i})")}.";
+          filename = $"{dir}\\{docname} {prefx} - {ttlHours:0#.#} hr - Alex Pigida{(i == 0 ? "" : $" - ({i})")}.";
 #if DEBUG
           filename += "DEBUG.";
 #endif
