@@ -45,7 +45,7 @@ namespace TimeTracker.View
 
       setDf(Settings.Default.LastBtnNo);
 
-      Loaded += (s, e) => { Task.Run(async () => { while (_keepSaying) await App.SpeakSynch(msg); }); };
+      Loaded += (s, e) => { Task.Run(async () => { while (_keepSaying) { await App.SpeakAsync(msg); await Task.Delay(2500); } }); };
 
       CurVer.Text = $"{A0DbContext.Create().ServerDatabase()}\n{VerHelper.CurVerStr(".Net 5.0")}";
 

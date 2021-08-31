@@ -17,8 +17,8 @@ namespace TimeTracker
     public static DateTime Today = DateTime.Today;
     public static DateTime AppStartAt = DateTime.Now;
     static SpeechSynthesizer _synth = null; public static SpeechSynthesizer Synth { get { if (_synth == null) { _synth = new SpeechSynthesizer(); _synth.SpeakAsyncCancelAll(); _synth.Rate = 6; _synth.Volume = 25; /*_synth.SelectVoiceByHints(gender: VoiceGender.Female); */ } return _synth; } }
-    public static async Task SpeakSynch(string msg) => await Synth.Speak(msg);
-    public static void SpeakAsync(string msg) { Synth.SpeakAsyncCancelAll(); Synth.SpeakFaF(msg); }
+    public static async Task SpeakAsync(string msg) => await Synth.SpeakAsync(msg);
+    public static void SpeakFaF(string msg) { Synth.SpeakAsyncCancelAll(); Synth.SpeakFaF(msg); }
 
     protected override async void OnStartup(StartupEventArgs e)
     {

@@ -59,7 +59,7 @@ namespace TimeTracker.View
       Properties.Settings.Default.InvcVw = AppSettings.SaveSizePosition(this, Properties.Settings.Default.InvcVw); Properties.Settings.Default.Save();
 
       InfoMsg = FromTillCtgrTaskNote.DbSaveOr(_db, e);
-      App.SpeakAsync(InfoMsg);
+      App.SpeakFaF(InfoMsg);
     }
     async void onSubmit(object sender, RoutedEventArgs e)
     {
@@ -129,7 +129,7 @@ namespace TimeTracker.View
           Invoice.Notes = Invoice.Notes.Substring(0, 512 - 1);
 
         InfoMsg = await _db.TrySaveReportAsync() + " rows saved";
-        App.SpeakAsync(InfoMsg);
+        App.SpeakFaF(InfoMsg);
 
         Close();
       }

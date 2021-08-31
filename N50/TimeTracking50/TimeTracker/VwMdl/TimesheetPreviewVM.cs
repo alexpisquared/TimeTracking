@@ -60,7 +60,7 @@ namespace TimeTracker
 
       Bpr.Beep2of2();
     }
-    protected override Task ClosingVM() { if (_skipDbSave) App.SpeakAsync("Skipped saving to DB."); else onDbSave(); return null; }
+    protected override Task ClosingVM() { if (_skipDbSave) App.SpeakFaF("Skipped saving to DB."); else onDbSave(); return null; }
     void setWeeklyDefaultHours(DateTime today)
     {
       //return; //todo: remove duplication on every period change clisk event: 
@@ -196,7 +196,7 @@ namespace TimeTracker
       {
         IsBusy = true; Bpr.Beep1of2();
 
-        App.SpeakAsync("Wait... Sending email could take a while...");
+        App.SpeakFaF("Wait... Sending email could take a while...");
 
         _week.ToList().ForEach(r => r.IsLocked = true);
 
@@ -288,7 +288,7 @@ namespace TimeTracker
     }
 
     void onDbQuit() { _skipDbSave = true; CloseAppCmd.Execute(null); }
-    void onDbSave() { IsBusy = true; Bpr.BeepClk(); Appender = InfoMsg = _db.TrySaveReport().report; App.SpeakAsync(InfoMsg); IsBusy = false; }
+    void onDbSave() { IsBusy = true; Bpr.BeepClk(); Appender = InfoMsg = _db.TrySaveReport().report; App.SpeakFaF(InfoMsg); IsBusy = false; }
     void onMovePrd(int sevenDays)
     {
       IsBusy = true;

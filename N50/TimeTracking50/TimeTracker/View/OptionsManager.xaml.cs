@@ -111,7 +111,7 @@ namespace TimeTracker.View
     void btnSave_Click(object sender, RoutedEventArgs e) { correctAndSaveToDb(); Close(); }
     void btnQuit_Click(object sender, RoutedEventArgs e) { Close(); }
 
-    void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) { App.SpeakAsync("Do not forget to adjust the pay period length."); }
+    void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) { App.SpeakFaF("Do not forget to adjust the pay period length."); }
   }
 
 
