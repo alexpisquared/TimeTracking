@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace AsLink
 {
-  public static partial class EvLogHelper
+  public static partial class EvLogHelper //2021-09: let's keep this one evolving as is 
   {
     const int _ssrUp = 7101, _ssrDn = 7102, _bootUp_12 = 12, _bootDn_13 = 13, _syTime_01 = 1; // when waking from hibernation: 12 is nowhere to be seen, 1 is there.
 
@@ -26,13 +26,13 @@ namespace AsLink
         var eois = _.Result;
         if (eois.Any())
         {
-          if (eois.Count() == 1)
+          if (eois.Count == 1)
           {
             var start = eois.First().Key;
             if ((DateTime.Now - trgDate).TotalHours < 24) // if today
               rv = (DateTime.Now - start).TotalHours;
           }
-          else if (eois.Count() > 1)
+          else if (eois.Count > 1)
           {
             var finalEvent = eois.Last().Key;
             var lastScvrUp = DateTime.Now;
@@ -78,21 +78,21 @@ namespace AsLink
       return rv;
     }
 
-    public static SortedList<DateTime, int> GetEoisForTheDay(DateTime trgDate) => GetAllUpDnEvents(trgDate, trgDate.AddDays(.999999));
-    public static SortedList<DateTime, int> GetAllUpDnEvents(DateTime a, DateTime b)
+    public static SortedList<DateTime, int> GetEoisForTheDay(DateTime trgDate) => GetAllEventsOfInterest(trgDate, trgDate.AddDays(.999999));
+    public static SortedList<DateTime, int> GetAllEventsOfInterest(DateTime a, DateTime b)
     {
       var lst = new SortedList<DateTime, int>();
 
       try
       {
-        collect(lst, qryBootAndWakeUps(a, b), (int)EvOfIntFlag.BootAndWakeUps);
-        collect(lst, qryShutAndSleepDn(a, b), (int)EvOfIntFlag.ShutAndSleepDn);
-        collect(lst, qryScrSvr(_ssrDn, a, b), (int)EvOfIntFlag.ScreenSaverrDn);
-        collect(lst, qryScrSvr(_ssrUp, a, b), (int)EvOfIntFlag.ScreenSaverrUp);
+        Collect(lst, QryBootAndWakeUps(a, b), (int)EvOfIntFlag.BootAndWakeUps);
+        Collect(lst, QryShutAndSleepDn(a, b), (int)EvOfIntFlag.ShutAndSleepDn);
+        Collect(lst, QryScrSvr(_ssrDn, a, b), (int)EvOfIntFlag.ScreenSaverrDn);
+        Collect(lst, QryScrSvr(_ssrUp, a, b), (int)EvOfIntFlag.ScreenSaverrUp);
 
         foreach (var path in _paths)
         {
-          add1stLast(a, b, lst, path);
+          Add1stLast(a, b, lst, path);
         }
       }
       catch (Exception ex) { ex.Pop(); }
@@ -100,11 +100,11 @@ namespace AsLink
       return lst;
     }
 
-    static void add1stLast(DateTime a, DateTime b, SortedList<DateTime, int> lst, string path)
+    static void Add1stLast(DateTime a, DateTime b, SortedList<DateTime, int> lst, string path)
     {
-      return; // no events found
+      //????????return; // no events found
 
-      (var min, var max) = get1rstLastEvents(qryAll(path, a, b));
+      (var min, var max) = Get1rstLastEvents(qryAll(path, a, b));
       if (min == DateTime.MaxValue)
         return; // no events found
 
@@ -129,42 +129,40 @@ namespace AsLink
       }
     }
 
-    static void collect(SortedList<DateTime, int> lst, string qry, int evOfIntFlag)
+    static void Collect(SortedList<DateTime, int> lst, string qry, int evOfIntFlag)
     {
-      using (var reader = GetELReader(qry))
+      using var reader = GetEventLogReader(qry);
+      for (var ev = reader.ReadEventSafe(); ev != null; ev = reader.ReadEventSafe())
       {
-        for (var ev = reader.read(); ev != null; ev = reader.read())
-        {
-          //32 Debug.Write($" *** ev time: {ev.TimeCreated.Value:y-MM-dd HH:mm:ss.fff} - {evOfIntFlag}={(EvOfIntFlag)evOfIntFlag,}:"); Debug.Assert(!lst.ContainsKey(ev.TimeCreated.Value), $" -- already added {ev.TimeCreated.Value} - {evOfIntFlag}");
+        //32 Debug.Write($" *** ev time: {ev.TimeCreated.Value:y-MM-dd HH:mm:ss.fff} - {evOfIntFlag}={(EvOfIntFlag)evOfIntFlag,}:"); Debug.Assert(!lst.ContainsKey(ev.TimeCreated.Value), $" -- already added {ev.TimeCreated.Value} - {evOfIntFlag}");
 
-          if (lst.Any(r => r.Value == evOfIntFlag) && ev.TimeCreated.HasValue && (ev.TimeCreated.Value - lst.Where(r => r.Value == evOfIntFlag).Max(r => r.Key)).TotalSeconds < 60) // if same last one is < 60 sec ago.
-          {
-            //32 Debug.WriteLine($" -- IGNORING  to allow power-offs (which are out of order in ev.log!!!) to flag the actual state.");
-          }
-          else if (ev.TimeCreated.HasValue)
-          {
-            //32 Debug.WriteLine($" -- LOGGING.");
-            lst.Add(ev.TimeCreated.Value, evOfIntFlag);
-          }
+        if (lst.Any(r => r.Value == evOfIntFlag) && ev.TimeCreated.HasValue && (ev.TimeCreated.Value - lst.Where(r => r.Value == evOfIntFlag).Max(r => r.Key)).TotalSeconds < 60) // if same last one is < 60 sec ago.
+        {
+          //32 Debug.WriteLine($" -- IGNORING  to allow power-offs (which are out of order in ev.log!!!) to flag the actual state.");
+        }
+        else if (ev.TimeCreated.HasValue)
+        {
+          //32 Debug.WriteLine($" -- LOGGING.");
+          lst.Add(ev.TimeCreated.Value, evOfIntFlag);
         }
       }
     }
 
-    static EventRecord? read(this EventLogReader reader) { try { return reader.ReadEvent(); } catch (Exception ex) { ex.Log(); return null; } }
+    static EventRecord? ReadEventSafe(this EventLogReader reader) { try { return reader.ReadEvent(); } catch (Exception ex) { ex.Log(); return null; } }
 
-    static (DateTime min, DateTime max) get1rstLastEvents(string qry)
+    static (DateTime min, DateTime max) Get1rstLastEvents(string qry)
     {
       var lst = new List<DateTime>();
-      using (var reader = GetELReader(qry))
+      using (var reader = GetEventLogReader(qry))
       {
-        for (var ev = reader.read(); ev != null && ev.TimeCreated != null; ev = reader.read())
+        for (var ev = reader.ReadEventSafe(); ev != null && ev.TimeCreated != null; ev = reader.ReadEventSafe())
           lst.Add(ev.TimeCreated.Value);
       }
 
       return lst.Count < 1 ? (DateTime.MaxValue, DateTime.MinValue) : (lst.Min(), lst.Max());
     }
 
-    static EventLogReader GetELReader(string qry, string path = "System") => new EventLogReader(new EventLogQuery(path, PathType.LogName, qry));
+    static EventLogReader GetEventLogReader(string qry, string path = "System") => new(new EventLogQuery(path, PathType.LogName, qry));
 
 
     public static TimeSpan CurrentSessionDuration() // lengthy operation: 100 ms.
@@ -172,7 +170,7 @@ namespace AsLink
       var lastWakeTime = GetDaysLastWakeBoot(DateTime.Today);
       var lastSsDnTime = GetDaysLastSsDnTime(DateTime.Today);
       var lastSsUpTime = GetDaysLastSsUpTime(DateTime.Today);
-      var lastBootTime = GetDaysLastBootUpTime(DateTime.Today);
+      var lastBootTime = GetDaysLastBootTime(DateTime.Today);
 
       var lastUp = DateTime.FromOADate(Math.Max(lastBootTime.ToOADate(), Math.Max(lastWakeTime.ToOADate(), lastSsDnTime.ToOADate())));
 
@@ -183,16 +181,14 @@ namespace AsLink
     {
       var apl1hr = $@"<QueryList><Query Id='0' Path='System'><Select Path='System'>*[System[TimeCreated[timediff(@SystemTime) &lt;= 299000000]]]</Select></Query></QueryList>";
 
-      using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, apl1hr)))
+      using var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, apl1hr));
+      for (var er = (EventLogRecord?)reader.ReadEventSafe(); null != er; er = (EventLogRecord?)reader.ReadEventSafe())
       {
-        for (var er = (EventLogRecord?)reader.read(); null != er; er = (EventLogRecord?)reader.read())
-        {
-          //77 Debug.Write($"\n {er.TimeCreated}  {er.TaskDisplayName}    {er.ProviderName}");
+        //77 Debug.Write($"\n {er.TimeCreated}  {er.TaskDisplayName}    {er.ProviderName}");
 
-          for (var i = 0; i < er.Properties.Count; i++)
-          {
-            Debug.Write($"\t {er.Properties[i].Value} ");
-          }
+        for (var i = 0; i < er.Properties.Count; i++)
+        {
+          Debug.Write($"\t {er.Properties[i].Value} ");
         }
       }
     }
@@ -210,7 +206,7 @@ namespace AsLink
 
     public static DateTime GetDays1rstGenUp(DateTime hr00ofTheDate)
     {
-      var t = new[] { GetDays1rstBootUpTime(hr00ofTheDate), GetDays1rstSsDnTime(hr00ofTheDate), GetDays1rstWakeTime(hr00ofTheDate) };
+      var t = new[] { GetDays1rstBootTime(hr00ofTheDate), GetDays1rstSsDnTime(hr00ofTheDate), GetDays1rstWakeTime(hr00ofTheDate) };
 
 
       if (t.Count(r => r == hr00ofTheDate) == 3) return hr00ofTheDate; // never off
@@ -258,7 +254,7 @@ namespace AsLink
       try
       {
         using var reader = new EventLogReader(new EventLogQuery(_aavLogName, PathType.LogName, apl1hr));
-        for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
+        for (var er = (EventLogRecord?)reader.ReadEventSafe(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.ReadEventSafe())
           if (rv > er.TimeCreated.Value)
             rv = er.TimeCreated.Value;
       }
@@ -274,57 +270,49 @@ namespace AsLink
 
       try
       {
-        using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, sleeps)))
-        {
-          for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
-            if (rv > er.TimeCreated.Value)
-              rv = er.TimeCreated.Value;
-        }
+        using var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, sleeps));
+        for (var er = (EventLogRecord?)reader.ReadEventSafe(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.ReadEventSafe())
+          if (rv > er.TimeCreated.Value)
+            rv = er.TimeCreated.Value;
       }
       catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
       return rv;
     }
-    public static DateTime GetDays1rstBootUpTime(DateTime hr00ofTheDate)
+    public static DateTime GetDays1rstBootTime(DateTime hr00ofTheDate)
     {
       var hr24ofTheDate = hr00ofTheDate.AddDays(1);
       var rv = hr24ofTheDate;
       try
       {
-        using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, /*qryBootUpsOnly*/qryBootUpTmChg(hr00ofTheDate, hr24ofTheDate)))) //sep 2018
-        {
-          for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
-            if (rv > er.TimeCreated.Value)
-              rv = er.TimeCreated.Value;
-        }
+        using var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, /*qryBootUpsOnly*/qryBootUpTmChg(hr00ofTheDate, hr24ofTheDate))); //sep 2018
+        for (var er = (EventLogRecord?)reader.ReadEventSafe(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.ReadEventSafe())
+          if (rv > er.TimeCreated.Value)
+            rv = er.TimeCreated.Value;
       }
       catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
       return rv;
     }
-    public static DateTime GetDaysLastBootUpTime(DateTime hr00ofTheDate, bool ignoreReboots = true)
+    public static DateTime GetDaysLastBootTime(DateTime hr00ofTheDate, bool ignoreReboots = true)
     {
       var hr24ofTheDate = hr00ofTheDate.AddDays(1);
       var rv = hr00ofTheDate;
       try
       {
-        using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, qryBootUpsOnly(hr00ofTheDate, hr24ofTheDate))))
+        using var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, qryBootUpsOnly(hr00ofTheDate, hr24ofTheDate)));
+        for (var er = (EventLogRecord?)reader.ReadEventSafe(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.ReadEventSafe())
         {
-          for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
+          if (!ignoreReboots)
           {
-            if (!ignoreReboots)
-            {
-              var bootUpTime = er.TimeCreated.Value;
-              using (var reader2 = new EventLogReader(new EventLogQuery("System", PathType.LogName, BootDnWithin5min(bootUpTime))))
-              {
-                if ((EventLogRecord?)reader2.read() != null) // this is a reboot - ignore it since it is not a session start.
-                  continue;
-              }
-            }
-
-            if (rv < er.TimeCreated.Value)
-              rv = er.TimeCreated.Value;
+            var bootUpTime = er.TimeCreated.Value;
+            using var reader2 = new EventLogReader(new EventLogQuery("System", PathType.LogName, BootDnWithin5min(bootUpTime)));
+            if ((EventLogRecord?)reader2.ReadEventSafe() != null) // this is a reboot - ignore it since it is not a session start.
+              continue;
           }
+
+          if (rv < er.TimeCreated.Value)
+            rv = er.TimeCreated.Value;
         }
       }
       catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
@@ -333,20 +321,20 @@ namespace AsLink
     }
 
     static string BootDnWithin5min(DateTime bootUpTime, int min = -5) => $@"<QueryList><Query Id='0' Path='System'><Select Path='System'>*[System[Provider[@Name='Microsoft-Windows-Kernel-General'] and (Level=4 or Level=0) and (EventID={_bootDn_13}) and TimeCreated[@SystemTime&gt;='{bootUpTime.AddMinutes(min).ToUniversalTime():o}'] and TimeCreated[@SystemTime&lt;='{bootUpTime.ToUniversalTime():o}']]]</Select></Query></QueryList>";
-    static string qryScrSvr(int upOrDn, DateTime a, DateTime b) => $@"<QueryList><Query Id='0' Path='{_aavLogName}'><Select Path='{_aavLogName}'>*[System[Provider[@Name='{_aavSource}'] and (Level=4 or Level=0) and ( EventID={upOrDn} and TimeCreated[@SystemTime&gt;='{a.ToUniversalTime():o}'] and TimeCreated[@SystemTime&lt;='{b.ToUniversalTime():o}'] )]]</Select></Query></QueryList>";
+    static string QryScrSvr(int upOrDn, DateTime a, DateTime b) => $@"<QueryList><Query Id='0' Path='{_aavLogName}'><Select Path='{_aavLogName}'>*[System[Provider[@Name='{_aavSource}'] and (Level=4 or Level=0) and ( EventID={upOrDn} and TimeCreated[@SystemTime&gt;='{a.ToUniversalTime():o}'] and TimeCreated[@SystemTime&lt;='{b.ToUniversalTime():o}'] )]]</Select></Query></QueryList>";
     static string qryBootUpsOnly(DateTime a, DateTime b) => $@"<QueryList><Query Id='0' Path='System'><Select Path='System'>*[System[Provider[@Name='Microsoft-Windows-Kernel-General'] and (Level=4 or Level=0) and (EventID={_bootUp_12}) and TimeCreated[@SystemTime&gt;='{a.ToUniversalTime():o}'] and TimeCreated[@SystemTime&lt;='{b.ToUniversalTime():o}']]]</Select></Query></QueryList>";
     static string qryBootUpTmChg(DateTime a, DateTime b) => $@"<QueryList><Query Id='0' Path='System'><Select Path='System'>*[System[Provider[@Name='Microsoft-Windows-Kernel-General'] and (Level=4 or Level=0) and (EventID={_bootUp_12} or EventID={_syTime_01}) and TimeCreated[@SystemTime&gt;='{a.ToUniversalTime():o}'] and TimeCreated[@SystemTime&lt;='{b.ToUniversalTime():o}']]]</Select></Query></QueryList>";
     static string qryPowerUpsDns(DateTime a, DateTime b) => $@"<QueryList><Query Id='0' Path='System'><Select Path='System'>*[System[Provider[@Name='Microsoft-Windows-Kernel-General' or @Name='Microsoft-Windows-Kernel-Power'] and TimeCreated[@SystemTime&gt;='{a.ToUniversalTime():o}' and @SystemTime&lt;='{b.ToUniversalTime():o}']]]</Select></Query></QueryList>";
     static string qryAll(string path, DateTime a, DateTime b) => $@"<QueryList><Query Id='0' Path='{path}'><Select Path='{path}'>*[System[TimeCreated[@SystemTime&gt;='{a.ToUniversalTime():o}' and @SystemTime&lt;='{b.ToUniversalTime():o}']]]</Select></Query></QueryList>";
 
-    static string qryBootAndWakeUps(DateTime a, DateTime b) =>
+    static string QryBootAndWakeUps(DateTime a, DateTime b) =>
 //Both wake and boot up:           Kernel-General 12 - up   	OR      Power-TroubleShooter 1 
 $@"<QueryList><Query Id='0' Path='System'><Select Path='System'>*[System[ (
 (Provider[@Name='Microsoft-Windows-Kernel-General'] and (EventID={_bootUp_12} or EventID={_syTime_01})) or 
 (Provider[@Name='Microsoft-Windows-Power-Troubleshooter'] and EventID={_syTime_01}) )  
 and TimeCreated[@SystemTime&gt;='{a.ToUniversalTime():o}'] and TimeCreated[@SystemTime&lt;='{b.ToUniversalTime():o}'] ]] </Select></Query></QueryList>";//   <QueryList><Query Id='0' Path='System'><Select Path='System'>*[System[ Provider[@Name='Microsoft-Windows-Kernel-General'] and (Level=4 or Level=0) and (EventID={_bootUp}) and TimeCreated[@SystemTime&gt;='{a.ToUniversalTime():o}'] and TimeCreated[@SystemTime&lt;='{b.ToUniversalTime():o}'] ]]</Select></Query></QueryList>";
 
-    static string qryShutAndSleepDn(DateTime a, DateTime b) =>
+    static string QryShutAndSleepDn(DateTime a, DateTime b) =>
 //Both sleep and shut down:
 $@"<QueryList><Query Id='0' Path='System'><Select Path='System'>*[System[ (
 (Provider[@Name='User32'] and EventID=1074) or
@@ -384,7 +372,6 @@ Kernel-General 12 - up
 </QueryList>
 
 */
-
 
     static int _ssto = -1; public static int Ssto // ScreenSaveTimeOut 
     {
@@ -427,7 +414,7 @@ Kernel-General 12 - up
        {
          using (var reader = new EventLogReader(new EventLogQuery(_aavLogName, PathType.LogName, apl1hr)))
          {
-           for (EventLogRecord er = (EventLogRecord?)reader.read(); null != er; er = (EventLogRecord?)reader.read())
+           for (EventLogRecord er = (EventLogRecord?)reader.ReadEventSafe(); null != er; er = (EventLogRecord?)reader.ReadEventSafe())
              if (rv < er.TimeCreated.Value)
                rv = er.TimeCreated.Value;
          }
@@ -447,7 +434,7 @@ Kernel-General 12 - up
        {
          using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, enteringSleep)))
          {
-           for (EventLogRecord er = (EventLogRecord?)reader.read(); null != er; er = (EventLogRecord?)reader.read())
+           for (EventLogRecord er = (EventLogRecord?)reader.ReadEventSafe(); null != er; er = (EventLogRecord?)reader.ReadEventSafe())
              if (rv < er.TimeCreated.Value)
                rv = er.TimeCreated.Value;
          }
@@ -462,15 +449,13 @@ Kernel-General 12 - up
     {
       var hr24ofTheDate = hr00ofTheDate.AddDays(1);
       var rv = hr00ofTheDate;
-      var qry = qryBootAndWakeUps(hr00ofTheDate, hr24ofTheDate);
+      var qry = QryBootAndWakeUps(hr00ofTheDate, hr24ofTheDate);
       try
       {
-        using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, qry)))
-        {
-          for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
-            if (rv < er.TimeCreated.Value)
-              rv = er.TimeCreated.Value;
-        }
+        using var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, qry));
+        for (var er = (EventLogRecord?)reader.ReadEventSafe(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.ReadEventSafe())
+          if (rv < er.TimeCreated.Value)
+            rv = er.TimeCreated.Value;
       }
       catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
@@ -485,12 +470,10 @@ Kernel-General 12 - up
 
       try
       {
-        using (var reader = new EventLogReader(new EventLogQuery(_aavLogName, PathType.LogName, qryScrSvr(_ssrUp, hr00ofTheDate, hr24ofTheDate))))
-        {
-          for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
-            if (rv < er.TimeCreated.Value)
-              rv = er.TimeCreated.Value;
-        }
+        using var reader = new EventLogReader(new EventLogQuery(_aavLogName, PathType.LogName, QryScrSvr(_ssrUp, hr00ofTheDate, hr24ofTheDate)));
+        for (var er = (EventLogRecord?)reader.ReadEventSafe(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.ReadEventSafe())
+          if (rv < er.TimeCreated.Value)
+            rv = er.TimeCreated.Value;
       }
       catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
@@ -502,12 +485,10 @@ Kernel-General 12 - up
       var rv = hr00ofTheDate;
       try
       {
-        using (var reader = new EventLogReader(new EventLogQuery(_aavLogName, PathType.LogName, qryScrSvr(_ssrDn, hr00ofTheDate, hr24ofTheDate))))
-        {
-          for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
-            if (rv < er.TimeCreated.Value)
-              rv = er.TimeCreated.Value;
-        }
+        using var reader = new EventLogReader(new EventLogQuery(_aavLogName, PathType.LogName, QryScrSvr(_ssrDn, hr00ofTheDate, hr24ofTheDate)));
+        for (var er = (EventLogRecord?)reader.ReadEventSafe(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.ReadEventSafe())
+          if (rv < er.TimeCreated.Value)
+            rv = er.TimeCreated.Value;
       }
       catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
@@ -522,12 +503,10 @@ Kernel-General 12 - up
       var enteringSleep = $@"<QueryList><Query Id='0' Path='System'><Select Path='System'>*[System[(EventID=42 and TimeCreated[@SystemTime&gt;='{hr00ofTheDate.ToUniversalTime():o}'] and TimeCreated[@SystemTime&lt;='{hr24ofTheDate.ToUniversalTime():o}'] )]]</Select></Query></QueryList>";
       try
       {
-        using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, enteringSleep)))
-        {
-          for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
-            if (rv < er.TimeCreated.Value)
-              rv = er.TimeCreated.Value;
-        }
+        using var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, enteringSleep));
+        for (var er = (EventLogRecord?)reader.ReadEventSafe(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.ReadEventSafe())
+          if (rv < er.TimeCreated.Value)
+            rv = er.TimeCreated.Value;
       }
       catch (Exception ex) { MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); }
 
@@ -546,7 +525,7 @@ Kernel-General 12 - up
 
       using (var reader = new EventLogReader(new EventLogQuery(_aavLogName, PathType.LogName, apl1hr)))
       {
-        for (var er = (EventLogRecord?)reader.read(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.read())
+        for (var er = (EventLogRecord?)reader.ReadEventSafe(); null != er && er.TimeCreated.HasValue; er = (EventLogRecord?)reader.ReadEventSafe())
         {
           if (er.TimeCreated.Value > hr24ofTheDate)
           {
@@ -601,7 +580,7 @@ Kernel-General 12 - up
 
       using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, sleeps)))
       {
-        for (var er = (EventLogRecord?)reader.read(); null != er; er = (EventLogRecord?)reader.read())
+        for (var er = (EventLogRecord?)reader.ReadEventSafe(); null != er; er = (EventLogRecord?)reader.ReadEventSafe())
         {
           if (er.Properties[0] == null || !(er.Properties[0].Value is DateTime) || er.Properties[1] == null || !(er.Properties[1].Value is DateTime)) throw new Exception("Not a datetime !!! (AP)");
 
@@ -610,7 +589,7 @@ Kernel-General 12 - up
 
           if (prevWaken == DateTime.MinValue && sleepAt > hr00ofTheDate) //ie: worked past midnight
           {
-            ttlwd += (sleepAt - GetDays1rstBootUpTime(hr00ofTheDate));
+            ttlwd += (sleepAt - GetDays1rstBootTime(hr00ofTheDate));
           }
 
           //if (wakenTime > hr00ofTheDate)
@@ -644,7 +623,7 @@ Kernel-General 12 - up
 
     public static class FuzzyLogic
     {
-      static readonly EventLog _eventLog = new EventLog("System");//, "R9-N35FM");
+      static readonly EventLog _eventLog = new("System");//, "R9-N35FM");
 
       public static DateTime FirstPowerOnTimeForTheDay(DateTime trg)
       {
@@ -785,7 +764,7 @@ Kernel-General 12 - up
 
         var logReader = new EventLogReader(new EventLogQuery(logName, PathType.LogName, queryString));
         var l = new List<EventRecord>();
-        for (var er = logReader.read(); null != er; er = logReader.read())
+        for (var er = logReader.ReadEventSafe(); null != er; er = logReader.ReadEventSafe())
           l.Add(er);
 
         sw.Stop();
@@ -801,7 +780,7 @@ Kernel-General 12 - up
         var logReader = new EventLogReader(new EventLogQuery(logName, PathType.LogName, queryString));
         var i = 0;
         var l = new List<DateTime?>();
-        for (var er = logReader.read(); null != er; er = logReader.read())
+        for (var er = logReader.ReadEventSafe(); null != er; er = logReader.ReadEventSafe())
           l.Add(er.TimeCreated);
 
         sw.Stop();
@@ -816,7 +795,7 @@ Kernel-General 12 - up
         var sw = new Stopwatch();
         sw.Start();
         var i = 0;
-        for (var er = logReader.read(); null != er; er = logReader.read()) i++;
+        for (var er = logReader.ReadEventSafe(); null != er; er = logReader.ReadEventSafe()) i++;
 
         sw.Stop();
         Console.WriteLine("{0,-33} - {1,22} = {2,-22}   (took: {3})", queryString, logName, i, sw.Elapsed);
@@ -842,7 +821,7 @@ Kernel-General 12 - up
         var sw = new Stopwatch();
         sw.Start();
         var i = 0;
-        for (var er = logReader.read(); null != er; er = logReader.read()) i++;
+        for (var er = logReader.ReadEventSafe(); null != er; er = logReader.ReadEventSafe()) i++;
 
         sw.Stop();
         Console.WriteLine("{0,-22} - {1,22} = {2,-22}   (took: {3})", td, logName, i, sw.Elapsed);
@@ -911,7 +890,7 @@ Kernel-General 12 - up
         var sw = new Stopwatch();
         sw.Start();
         start = DateTime.MinValue;
-        for (var er = logReader.read(); null != er; er = logReader.read())
+        for (var er = logReader.ReadEventSafe(); null != er; er = logReader.ReadEventSafe())
         {
           if (start == DateTime.MinValue && er.TimeCreated != null)
             start = (DateTime)er.TimeCreated;
@@ -934,7 +913,7 @@ Kernel-General 12 - up
 
         if (!/*VerHelper.*/IsVIP) return -1; // let go ctrl-alt-del
 
-        var dailyEvents = AsLink.EvLogHelper.GetAllUpDnEvents(DateTime.Today.AddDays(-daysback), DateTime.Now);
+        var dailyEvents = AsLink.EvLogHelper.GetAllEventsOfInterest(DateTime.Today.AddDays(-daysback), DateTime.Now);
         return dailyEvents.Count > 0 ? await Db.EventLog.DbLogHelper.UpdateDbWithPotentiallyNewEvents(dailyEvents, Environment.MachineName, msg) : -2;
       }
       catch (Exception ex) { ex.Log(); }

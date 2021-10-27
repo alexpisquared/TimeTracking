@@ -77,7 +77,7 @@ namespace Db.EventLog
       //,,Trace.WriteLine("");
       return _PcLogics;
     }
-    public static SortedList<DateTime, int> GetAllUpDnEvents(DateTime a, DateTime b, string pcname)
+    public static SortedList<DateTime, int> GetAllEventsOfInterest(DateTime a, DateTime b, string pcname)
     {
       if (_dict.ContainsKey((a, b, pcname))) return _dict[(a, b, pcname)];
 

@@ -6,7 +6,7 @@ using System.Security.Principal;
 namespace AsLink
 {
   [Obsolete(@"Use C:\g\AAV.Shared\Src\AsLink\PlatformNeutral\EvLogHelperBase.cs")]
-  public static partial class EvLogHelper
+  public static partial class EvLogHelper_
   {
     const string _app = "Application", _sec = "Security", _sys = "System", _aavSource = "AavSource", _aavLogName = "AavNewLog";
     public static string CheckCreateLogChannel(string src = _aavSource, string log = _aavLogName) // which one is the latest
