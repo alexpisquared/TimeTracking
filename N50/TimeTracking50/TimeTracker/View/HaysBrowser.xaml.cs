@@ -1,5 +1,5 @@
 ﻿using Db.TimeTrack.DbModel;
-using mshtml;
+//using mshtml;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,23 +22,23 @@ namespace TimeTracker.View
 
     void login()
     {
-      var d = (HTMLDocument)wb1.Document; //dynamic d = wb1.Document;
+      var d = wb1.Document; //dynamic d = wb1.Document;
 
-      d.getElementById("ASPxRoundPanel3_loginControl_m_UserName").innerText = _settings.Invoicee.WebUsername;
-      d.getElementById("ASPxRoundPanel3_loginControl_m_Password").innerText = _settings.Invoicee.WebPassword;
+      //d.getElementById("ASPxRoundPanel3_loginControl_m_UserName").innerText = _settings.Invoicee.WebUsername;
+      //d.getElementById("ASPxRoundPanel3_loginControl_m_Password").innerText = _settings.Invoicee.WebPassword;
 
-      object obj = d.getElementById("ASPxRoundPanel3_loginControl_btnLogin");
-      obj.GetType().GetMethod("click").Invoke(obj, new object[0]);
+      //object obj = d.getElementById("ASPxRoundPanel3_loginControl_btnLogin");
+      //obj.GetType().GetMethod("click").Invoke(obj, new object[0]);
 
-      b1.IsEnabled = false;
+      //b1.IsEnabled = false;
 
-      //var firstMatchingSubmit = (from input in d.getElementsByTagName("input")
-      //													 where input.GetAttribute("type") == "submit" && input.GetAttribute("value") == "Sign out"
-      //													 select input).FirstOrDefault();
-      //if (firstMatchingSubmit != null)
-      //	firstMatchingSubmit.RaiseEvent("click");
+      ////var firstMatchingSubmit = (from input in d.getElementsByTagName("input")
+      ////													 where input.GetAttribute("type") == "submit" && input.GetAttribute("value") == "Sign out"
+      ////													 select input).FirstOrDefault();
+      ////if (firstMatchingSubmit != null)
+      ////	firstMatchingSubmit.RaiseEvent("click");
 
-      //d.forms.item.InvokeMember("submit");
+      ////d.forms.item.InvokeMember("submit");
     }
 
     void btnLogin_Click(object sender, RoutedEventArgs e) => login();

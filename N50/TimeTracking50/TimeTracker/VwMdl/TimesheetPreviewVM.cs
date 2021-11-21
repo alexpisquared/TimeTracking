@@ -112,7 +112,7 @@ namespace TimeTracker
     void dbLoad()
     {
       _db = A0DbContext.Create();
-      CurVer = VerHelper.CurVerStr(".Net 5.0");
+      CurVer = VerHelper.CurVerStr(".Net 6.0");
       var id1 =
       Invoicer = _db.Invoicers.FirstOrDefault(r => r.Id == Settings.CurrentInvoicerId);
       Invoicee = _db.Invoicees.FirstOrDefault(r => r.Id == Settings.CurrentInvoiceeId);

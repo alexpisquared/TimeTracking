@@ -5,7 +5,9 @@
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
-		<WebBrowser Name="wb1" Source="https://time.hays.ca/WebTS/WebTSLogin.aspx?company=HAYS" Margin="3" Navigated="wb1_Navigated" />
+    <!--
+    <WebBrowser Name="wb1" Source="https://time.hays.ca/WebTS/WebTSLogin.aspx?company=HAYS" Margin="3" Navigated="wb1_Navigated" />-->
+    <WebBrowser Name="wb1" Source="https://google.com" Margin="3" Navigated="wb1_Navigated" />
 
 		<StackPanel Grid.Row="1" Orientation="Horizontal">
 			<Button Name="b1" IsEnabled="True"  Margin="3" Content="_Login"         Click="btnLogin_Click" IsDefault="True" />

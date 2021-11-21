@@ -37,7 +37,7 @@ namespace TimeTracker.View
 
       Closing += onClosing;
       DataContext = this;
-      CurVer.Text = $"{_db.ServerDatabase()}   {VerHelper.CurVerStr(".Net 5.0")}";
+      CurVer.Text = $"{_db.ServerDatabase()}   {VerHelper.CurVerStr(".Net 6.0")}";
 
       //AppSettings.RestoreSizePosition(this, Settings.Default.PeyPVw);
     }
