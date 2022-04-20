@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using TimeTracker.AsLink;
 using TimeTracker.View;
 
 namespace TimeTracker
@@ -31,9 +32,9 @@ namespace TimeTracker
         ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
 #if !!TDD
-      TimeTracker.Common.Emailer.PerpAndShow("trgEmail", "subj", "body", "hardcopy");
+        HolidayProcessor.Test();
 
-      //TimeTracker.Common.HolidayProcessor.Test();
+      //TimeTracker.Common.Emailer.PerpAndShow("trgEmail", "subj", "body", "hardcopy");
       //var exitCode = Emailer.PerpAndShow("pigida@live.com", "test: subj", "test: body", @"C:\temp\path.txt");
       //TimeTrackDbCtx_Code1st_DbInitializer.DbIni();   // NO GO at Wk&Hm????????????????
       //TimeTrackDbCtx_Simple__DbInitializer.DbIni();		// OK    at Wk&Hm... but wrong dbx
