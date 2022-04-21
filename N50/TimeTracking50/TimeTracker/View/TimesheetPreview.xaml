@@ -24,7 +24,7 @@
             <Grid                        Width="1635" Height="2089" >
                 <Canvas x:Name="PrintArea" Width="1635" Height="2089" >
                     <Canvas.Background>
-                        <ImageBrush ImageSource="/TimeTracker;component/Assets/ROSS - Timesheet.png" Stretch="Uniform"/>
+                        <ImageBrush ImageSource="/View/ROSS - Timesheet.png" Stretch="Uniform"/>
                     </Canvas.Background>
                     <Canvas.Resources>
                         <Style TargetType="TextBlock" >

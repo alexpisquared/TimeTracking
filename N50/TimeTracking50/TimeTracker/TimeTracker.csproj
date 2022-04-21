@@ -12,7 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\ROSS - Timesheet.png" />
     <None Remove="Dollar.ico" />
+    <None Remove="View\ROSS - Timesheet.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,7 +64,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\ROSS - Timesheet.png" />
     <Resource Include="Dollar.ico" />
+    <Resource Include="View\ROSS - Timesheet.png" />
   </ItemGroup>
 
   <ItemGroup>
