@@ -91,16 +91,16 @@ public static class Emailer
     return false;
   }
 
-  public static (int exitCode, string errMsg) PerpAndShow(string trgEmail, string subj, string body, string? hardcopy = null)
+  public static (int exitCode, string errMsg) PerpAndShow(string trgEmail, string subj, string body, string? attachmentFilename = null)
   {
     var exitCode = 0;
     var report = "";
     try
     {
       var psi = new ProcessStartInfo("OUTLOOK.EXE",
-        hardcopy == null ?
+        attachmentFilename == null ?
         $"/c ipm.note /m \"{trgEmail}?v=1&subject={subj}&body={body}\"" :
-        $"/c ipm.note /m \"{trgEmail}?v=1&subject={subj}&body={body}\" /a \"{hardcopy}\""
+        $"/c ipm.note /m \"{trgEmail}?v=1&subject={subj}&body={body}\" /a \"{attachmentFilename}\""
         ) //Feb 2020: '?v=1' from https://answers.microsoft.com/en-us/msoffice/forum/all/outlook-command-line-parameters-stopped-working/7abe60b2-be29-4426-bf17-f23e1de9f04b
       {
         UseShellExecute = true, // to pick up OUT LOOK.exe from the path!!!
@@ -119,23 +119,23 @@ public static class Emailer
     }
     catch (Win32Exception ex)
     {
-      new FallbackEditor($"{trgEmail}\n{subj}\n{hardcopy}\n{body}").Show();
+      new FallbackEditor($"{trgEmail}\n{subj}\n{attachmentFilename}\n{body}").Show();
       ex.Log();
 
-      //fallbackAction(trgEmail, subj, body, hardcopy);
+      //fallbackAction(trgEmail, subj, body, attachmentFilename);
 
       return (-1, ex.Message);
     }
     catch (Exception ex) { ex.Log(); throw; }
   }
 
-  static void fallbackAction(string trgEmail, string subj, string body, string hardcopy)
+  static void fallbackAction(string trgEmail, string subj, string body, string attachmentFilename)
   {
     try
     {
       var workingDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"0\Ltd\Invoicing");
       var tempFile = Path.Combine(workingDirectory, "EmailNotSent.txt");
-      File.WriteAllText(tempFile, $"{trgEmail}\n{subj}\n{hardcopy}\n{body}");
+      File.WriteAllText(tempFile, $"{trgEmail}\n{subj}\n{attachmentFilename}\n{body}");
       var psi = new ProcessStartInfo("NOTEPAD.EXE", tempFile)
       {
         UseShellExecute = true, // to pick up OUTLOOK.exe from the path!!!
