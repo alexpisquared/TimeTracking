@@ -1,21 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net.Mail;
-using System.Net.Mime;
-using System.Threading.Tasks;
-using System.Windows;
-using AAV.Sys.Ext;
-using AAV.Sys.Helpers;
-using TimeTracker.View;
-
-namespace TimeTracker.Common;
+﻿namespace TimeTracker.Common;
 
 public static class Emailer
 {
-  public static async Task<bool> SmtpSend(string fromEmail, string trgEmail, string msgSubject, string msgBody, string[] attachedFilenames = null, string signatureImage = null)
+  public static async Task<bool> SmtpSend(string fromEmail, string trgEmail, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null)
   {
     try
     {

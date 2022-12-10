@@ -29,8 +29,8 @@ namespace TimeTracker.View
         switch (e.Key)
         {
           case Key.Escape: Close(); break;
-          case Key.Left: movePayPrd(-1); break;
-          case Key.Right: movePayPrd(+1); break;
+          case Key.Left: MovePayPrd(-1); break;
+          case Key.Right: MovePayPrd(+1); break;
         }
       };
 
@@ -49,7 +49,7 @@ namespace TimeTracker.View
       if (Invoice == null)
       {
         _db.TimePerDays.Load();
-        movePayPrd(0);
+        MovePayPrd(0);
       }
 
       showStatus();
@@ -193,23 +193,23 @@ namespace TimeTracker.View
 
       showStatus();
     }
-    void prevPrd_Click(object sender, RoutedEventArgs e) => movePayPrd(-1);
-    void nextPrd_Click(object sender, RoutedEventArgs e) => movePayPrd(+1);     //void btnUnderConstr_Click(object sender, RoutedEventArgs e) { MessageBox.Show("The feature is under contruction\n\nPlease come back soon", ((Button)sender).Content.ToString().Replace("_", "")); }
+    void prevPrd_Click(object sender, RoutedEventArgs e) => MovePayPrd(-1);
+    void nextPrd_Click(object sender, RoutedEventArgs e) => MovePayPrd(+1);     //void btnUnderConstr_Click(object sender, RoutedEventArgs e) { MessageBox.Show("The feature is under contruction\n\nPlease come back soon", ((Button)sender).Content.ToString().Replace("_", "")); }
     void onNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
     {
       try
       {
         var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), e.Uri.OriginalString);
-        Process.Start(new ProcessStartInfo(dir)); 
-        
+        Process.Start(new ProcessStartInfo(dir));
+
         e.Handled = true;
       }
       catch (Exception ex) { ex.Pop(); }
     }
 
-    void movePayPrd(int dd)
+    void MovePayPrd(int dd)
     {
-      Invoice ivc;
+      Invoice? ivc;
       var idx = InvoiceNo;
       var max = _db.Invoices.Max(r => r.Id);
       do
@@ -247,8 +247,8 @@ $"\n{(Invoice.IsSubmitted ? "Submitted!!! " : "Not Submitted")} - {_db.Entry(Inv
       ip.GrdTotal = ip.AmountHR * (ip.DSettngS.HstPercent * .01m + 1m);
     }
 
-    Invoicer _invoiceR;         /**/ public Invoicer InvoiceR { get => _invoiceR ?? (_db.Invoicers.FirstOrDefault(r => r.Id == DSettngS.CurrentInvoicerId)); set => _invoiceR = value; }
-    Invoicee _invoiceE;         /**/ public Invoicee InvoiceE { get => _invoiceE ?? (_db.Invoicees.FirstOrDefault(r => r.Id == DSettngS.CurrentInvoiceeId)); set => _invoiceE = value; }
+    Invoicer _invoiceR;         /**/ public Invoicer InvoiceR { get => _invoiceR ?? (_db.Invoicers.FirstOrDefault(r => r.Id == DSettngS.CurrentInvoicerId)) ?? throw new ArgumentNullException("@@@@@@@@@@@@@@@@"); set => _invoiceR = value; }
+    Invoicee _invoiceE;         /**/ public Invoicee InvoiceE { get => _invoiceE ?? (_db.Invoicees.FirstOrDefault(r => r.Id == DSettngS.CurrentInvoiceeId)) ?? throw new ArgumentNullException("@@@@@@@@@@@@@@@@"); set => _invoiceE = value; }
     DefaultSetting _settingS;   /**/ public DefaultSetting DSettngS { get => _settingS ?? (_settingS = _db.DefaultSettings.FirstOrDefault()); set => _settingS = value; }
 
     //public static readonly DependencyProperty InvoiceeProperty = DependencyProperty.Register("Invoicee", typeof(Invoicee), typeof(InvoicePreview), new PropertyMetadata(null)); public Invoicee Invoicee { get { return (Invoicee)GetValue(InvoiceeProperty); } set { SetValue(InvoiceeProperty, value); } }

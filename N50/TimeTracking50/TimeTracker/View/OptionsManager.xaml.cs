@@ -39,17 +39,9 @@ namespace TimeTracker.View
     public string InfoMsg { get { return (string)GetValue(InfoMsgProperty); } set { SetValue(InfoMsgProperty, value); } }
     public static readonly DependencyProperty InfoMsgProperty = DependencyProperty.Register("InfoMsg", typeof(string), typeof(OptionsManager), new PropertyMetadata(null));
 
-    void dataCorrection()
-    {
-      //var src = ((CollectionViewSource)(this.FindResource("timeIntervalViewSource")));
-      //if (src == null || src.View == null)
-      //foreach (var r in ((System.Windows.Data.CollectionView)(timeDg1.DataContext)).SourceCollection) rowCorrection(r);
-      //else
-      //	foreach (var r in src.View) rowCorrection(r);
-    }
     void correctAndSaveToDb()
     {
-      try { dataCorrection(); InfoMsg = $"{ctx.SaveChanges()} rows saved"; }
+      try { InfoMsg = $"{ctx.SaveChanges()} rows saved"; }
       catch (DbEntityValidationException ex)
       {
         foreach (var er in ex.EntityValidationErrors)
@@ -175,7 +167,7 @@ namespace TimeTracker.View
 
     static void PasswordChanged(object sender, RoutedEventArgs e)
     {
-      PasswordBox passwordBox = sender as PasswordBox;
+      PasswordBox passwordBox = sender as PasswordBox ?? throw new ArgumentNullException("@@@@@@@@@@@@@@@@");
       SetIsUpdating(passwordBox, true);
       SetPassword(passwordBox, passwordBox.Password);
       SetIsUpdating(passwordBox, false);
