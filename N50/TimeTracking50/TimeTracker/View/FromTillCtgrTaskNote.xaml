@@ -117,7 +117,7 @@
 
         <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0" >
           <TextBlock Text="123" Foreground="#2ef" x:Name="CurVer" FontSize="10"/>
-          <Button Click="on___"	Margin="2" Content="X" FontFamily="Arial" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Right" Height="22" Width="22" Foreground="#d00" ToolTip="Close" />
+          <Button Click="OnClose"	Margin="2" Content="X" FontFamily="Arial" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Right" Height="22" Width="22" Foreground="#d00" ToolTip="Close" />
         </StackPanel>
       </Grid>
       <Grid Grid.Row="1" Background="{DynamicResource TopMenuBrush}" Grid.ColumnSpan="12" />

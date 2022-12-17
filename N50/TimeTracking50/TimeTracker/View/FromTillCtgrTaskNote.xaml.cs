@@ -443,6 +443,11 @@ namespace TimeTracker.View
         movePayPrd(-1);
       }
     }
+
+    void OnClose(object sender, RoutedEventArgs e)
+    {
+      Close();
+    }
   }
 }
 ///todo:
