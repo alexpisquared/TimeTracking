@@ -9,7 +9,7 @@ public partial class App : Application
 {
   public static DateTime Today = DateTime.Today;
   public static DateTime AppStartAt = DateTime.Now;
-  private static SpeechSynth? _synth = null; public static SpeechSynth Synth => _synth ??= new(new ConfigurationBuilder().AddUserSecrets<App>().Build()["AppSecrets:MagicNumber"] ?? throw new ArgumentNullException("###################"), true, CC.EnusAriaNeural.Voice);
+  private static SpeechSynth? _synth = null; public static SpeechSynth Synth => _synth ??= new(new ConfigurationBuilder().AddUserSecrets<App>().Build()["AppSecrets:MagicSpeech"] ?? throw new ArgumentNullException("###################"), true, CC.EnusAriaNeural.Voice);
   public static async Task SpeakAsync(string msg) => await Synth.SpeakExpressAsync(msg);
   public static void SpeakFaF(string msg) => Synth.SpeakExpressFAF(msg);
 
