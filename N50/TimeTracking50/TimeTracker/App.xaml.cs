@@ -1,62 +1,53 @@
-﻿using AAV.Sys.Helpers;
+﻿using System.Windows.Controls;
 using AAV.WPF.Ext;
-using AAV.WPF.Helpers;
-using SpeechSynthLib.Adapter;
-using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using TimeTracker.AsLink;
-using TimeTracker.View;
+using AmbienceLib;
+using Microsoft.Extensions.Configuration;
 
-namespace TimeTracker
+namespace TimeTracker;
+
+public partial class App : Application
 {
-  public partial class App : Application
-  {
-    public static DateTime Today = DateTime.Today;
-    public static DateTime AppStartAt = DateTime.Now;
-    static SpeechSynthesizer _synth = null; public static SpeechSynthesizer Synth { get { if (_synth == null) { _synth = new SpeechSynthesizer(); _synth.SpeakAsyncCancelAll(); _synth.Rate = 6; _synth.Volume = 25; /*_synth.SelectVoiceByHints(gender: VoiceGender.Female); */ } return _synth; } }
-    public static async Task SpeakAsync(string msg) => await Synth.SpeakAsync(msg);
-    public static void SpeakFaF(string msg) { Synth.SpeakAsyncCancelAll(); Synth.SpeakFaF(msg); }
+  public static DateTime Today = DateTime.Today;
+  public static DateTime AppStartAt = DateTime.Now;
+  private static SpeechSynth? _synth = null; public static SpeechSynth Synth => _synth ??= new(new ConfigurationBuilder().AddUserSecrets<App>().Build()["AppSecrets:MagicNumber"] ?? throw new ArgumentNullException("###################"), true, CC.EnusAriaNeural.Voice);
+  public static async Task SpeakAsync(string msg) => await Synth.SpeakExpressAsync(msg);
+  public static void SpeakFaF(string msg) => Synth.SpeakExpressFAF(msg);
 
-    protected override async void OnStartup(StartupEventArgs e)
+  protected override async void OnStartup(StartupEventArgs e)
+  {
+    try
     {
-      try
-      {
-        base.OnStartup(e);                                                                                                                                                                                                  // /**/ await Task.Delay(333);
-        Current.DispatcherUnhandledException += UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;                                                                                                              // /**/ await Task.Delay(333);
-        EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotFocusEvent, new RoutedEventHandler((s, re) => { (s as TextBox)?.SelectAll(); })); //tu: TextBox                                                     // /**/ await Task.Delay(333);
-        Tracer.SetupTracingOptions("TimeTracker", new TraceSwitch("OnlyUsedWhenInConfig", "This is the trace for all               messages... but who cares?   See ScrSvr for a model.") { Level = TraceLevel.Verbose });  // /**/ await Task.Delay(333);
-        ShutdownMode = ShutdownMode.OnExplicitShutdown;
+      base.OnStartup(e);                                                                                                                                                                                                  // /**/ await Task.Delay(333);
+      Current.DispatcherUnhandledException += AAV.WPF.Helpers.UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;                                                                                                              // /**/ await Task.Delay(333);
+      EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotFocusEvent, new RoutedEventHandler((s, re) => { (s as TextBox)?.SelectAll(); })); //tu: TextBox                                                     // /**/ await Task.Delay(333);
+      Tracer.SetupTracingOptions("TimeTracker", new TraceSwitch("OnlyUsedWhenInConfig", "This is the trace for all               messages... but who cares?   See ScrSvr for a model.") { Level = TraceLevel.Verbose });  // /**/ await Task.Delay(333);
+      ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
 #if !!TDD
-        HolidayProcessor.Test();
+      HolidayProcessor.Test();
 
-      //TimeTracker.Common.Emailer.PerpAndShow("trgEmail", "subj", "body", "hardcopy");
-      //var exitCode = Emailer.PerpAndShow("pigida@live.com", "test: subj", "test: body", @"C:\temp\path.txt");
-      //TimeTrackDbCtx_Code1st_DbInitializer.DbIni();   // NO GO at Wk&Hm????????????????
-      //TimeTrackDbCtx_Simple__DbInitializer.DbIni();		// OK    at Wk&Hm... but wrong dbx
+    //TimeTracker.Common.Emailer.PerpAndShow("trgEmail", "subj", "body", "hardcopy");
+    //var exitCode = Emailer.PerpAndShow("pigida@live.com", "test: subj", "test: body", @"C:\temp\path.txt");
+    //TimeTrackDbCtx_Code1st_DbInitializer.DbIni();   // NO GO at Wk&Hm????????????????
+    //TimeTrackDbCtx_Simple__DbInitializer.DbIni();		// OK    at Wk&Hm... but wrong dbx
 
 #if Ofc13_
-            var isSuccess = await Emailer.SmtpSend("alex.pigida@sciex.com", "alex.pigida@sciex.com", "Subj", "Body");
+          var isSuccess = await Emailer.SmtpSend("alex.pigida@sciex.com", "alex.pigida@sciex.com", "Subj", "Body");
 
-            var sender = new Form1();
-            sender.Start();
-            sender.SmtpSend("alex@there.com", "Subject ABC", "Body");
-            sender.Stop();
+          var sender = new Form1();
+          sender.Start();
+          sender.SmtpSend("alex@there.com", "Subject ABC", "Body");
+          sender.Stop();
 #endif
 #else
-        Bpr.BeepClk();
-        new MainSwitchboard(true, e.Args.ToList().Contains("-audible"), "-scheduler -audible").ShowDialog();
+      //Bpr.BeepClk();
+      new MainSwitchboard(true, e.Args.ToList().Contains("-audible"), "-scheduler -audible").ShowDialog();
 
-        Bpr.BeepEnd6();
-        App.Current.Shutdown();
+      //Bpr.BeepEnd6();
+      App.Current.Shutdown();
 #endif
-        await Task.Yield();
-      }
-      catch (Exception ex) { ex.Pop(); }
+      await Task.Yield();
     }
+    catch (Exception ex) { ex.Pop(); }
   }
 }
