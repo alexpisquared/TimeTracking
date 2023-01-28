@@ -3,7 +3,7 @@ public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
 {
   const int _zeroBasedBtnCnt = 4;
   bool _keepSaying;
-  public MainSwitchboard(bool checkNewEmail, bool keepSaying, string? msg = null)
+  public MainSwitchboard(bool keepSaying, string? msg = null)
   {
     InitializeComponent();
 
@@ -77,6 +77,6 @@ public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
     catch (Exception ex) { _ = ex.Log(); }
   }
   void pre() { _keepSaying = false; Hide(); }                                     //  ctrlPanelOnMarket.IsEnabled = false; WindowState = WindowState.Minimized; scrooves up focusing on the new window.   Hide(); - invokes Close */ }
-  void post() { Bpr.BeepClk(); _ = new MainSwitchboard(false, false).ShowDialog(); }  //  ctrlPanelOnMarket.IsEnabled = true;  WindowState = WindowState.Normal; Show(); }//Task.Factory.StartNew(() => Thread.Sleep(100)).ContinueWith(_ => { Close(); }, TaskScheduler.FromCurrentSynchronizationContext()); }
+  void post() { Bpr.BeepClk(); _ = new MainSwitchboard(false).ShowDialog(); }  //  ctrlPanelOnMarket.IsEnabled = true;  WindowState = WindowState.Normal; Show(); }//Task.Factory.StartNew(() => Thread.Sleep(100)).ContinueWith(_ => { Close(); }, TaskScheduler.FromCurrentSynchronizationContext()); }
   void wnd_Loaded(object sender, RoutedEventArgs e) => Bpr.BeepOk();
 }

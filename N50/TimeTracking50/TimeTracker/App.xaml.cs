@@ -41,7 +41,7 @@ public partial class App : Application
 #endif
 #else
       //Bpr.BeepClk();
-      new MainSwitchboard(true, e.Args.ToList().Contains("-audible"), "-scheduler -audible").ShowDialog();
+      new MainSwitchboard(e.Args.ToList().Contains("-audible"), "-scheduler -audible").ShowDialog();
 
       //Bpr.BeepEnd6();
       App.Current.Shutdown();
