@@ -44,7 +44,7 @@ public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
 
     DataContext = this;
   }
-  DefaultSetting? _settingS; public DefaultSetting DSettngS => _settingS ??= A0DbContext.Create().DefaultSettings.First(); 
+  DefaultSetting? _settingS; public DefaultSetting DSettngS => _settingS ??= A0DbContext.Create().DefaultSettings.First();
   void setDf(int cb)
   {
     TS.IsDefault = PP.IsDefault = Ic.IsDefault = HR.IsDefault = AR.IsDefault = false;
