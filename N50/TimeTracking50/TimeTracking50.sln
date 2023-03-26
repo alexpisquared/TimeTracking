@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AAV.Common.UI", "AAV.Common
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvoiceCreator.PDF", "InvoiceCreator.PDF\InvoiceCreator.PDF.csproj", "{E32AED14-FAD1-4E79-B034-8B9943DE2DC6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AmbienceLib", "..\..\..\AAV.Shared\Src\Net.CI\Ambience\AmbienceLib.csproj", "{0FD3B591-1A10-4A1A-B443-D26114C4B933}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AmbienceLib", "..\..\..\AAV.Shared\Src\NetLts\Ambience\AmbienceLib.csproj", "{0FD3B591-1A10-4A1A-B443-D26114C4B933}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
