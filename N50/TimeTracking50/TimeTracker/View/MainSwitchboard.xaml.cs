@@ -9,7 +9,7 @@ public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
 
     _keepSaying = keepSaying;
 
-    Title = $"Time Tracker - {VerHelper.CurVerStr(".Net 7.0")}";
+    Title = $"Time Tracker - {VerHelper.CurVerStr()}";
 
     KeyDown += (s, e) =>
     {
@@ -40,7 +40,7 @@ public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
       });
     };
 
-    CurVer.Text = $"{A0DbContext.Create().ServerDatabase()}\n{VerHelper.CurVerStr(".Net 7.0")}";
+    CurVer.Text = $"{A0DbContext.Create().ServerDatabase()}\n{VerHelper.CurVerStr()}";
 
     DataContext = this;
   }
@@ -72,11 +72,12 @@ public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
     try
     {
       var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), e.Uri.OriginalString);
-      _ = Process.Start(new ProcessStartInfo(dir)); e.Handled = true;
+      _ = Process.Start(new ProcessStartInfo(dir) { UseShellExecute = true });
+      e.Handled = true;
     }
     catch (Exception ex) { _ = ex.Log(); }
   }
   void pre() { _keepSaying = false; Hide(); }                                     //  ctrlPanelOnMarket.IsEnabled = false; WindowState = WindowState.Minimized; scrooves up focusing on the new window.   Hide(); - invokes Close */ }
-  void post() { Bpr.BeepClk(); _ = new MainSwitchboard(false).ShowDialog(); }  //  ctrlPanelOnMarket.IsEnabled = true;  WindowState = WindowState.Normal; Show(); }//Task.Factory.StartNew(() => Thread.Sleep(100)).ContinueWith(_ => { Close(); }, TaskScheduler.FromCurrentSynchronizationContext()); }
+  void post() { Bpr.Click(); _ = new MainSwitchboard(false).ShowDialog(); }  //  ctrlPanelOnMarket.IsEnabled = true;  WindowState = WindowState.Normal; Show(); }//Task.Factory.StartNew(() => Thread.Sleep(100)).ContinueWith(_ => { Close(); }, TaskScheduler.FromCurrentSynchronizationContext()); }
   void wnd_Loaded(object sender, RoutedEventArgs e) => Bpr.BeepOk();
 }

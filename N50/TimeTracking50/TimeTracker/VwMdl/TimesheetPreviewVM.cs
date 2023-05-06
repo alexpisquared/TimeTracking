@@ -112,7 +112,7 @@ namespace TimeTracker
     void dbLoad()
     {
       _db = A0DbContext.Create();
-      CurVer = VerHelper.CurVerStr(".Net 7.0");
+      CurVer = VerHelper.CurVerStr();
       Invoicer = _db.Invoicers.FirstOrDefault(r => r.Id == Settings.CurrentInvoicerId)?? throw new ArgumentNullException("@@@@@@@@@@@@@@@@");
       Invoicee = _db.Invoicees.FirstOrDefault(r => r.Id == Settings.CurrentInvoiceeId) ?? throw new ArgumentNullException("@@@@@@@@@@@@@@@@");
     }
@@ -285,19 +285,19 @@ namespace TimeTracker
     }
 
     void onDbQuit() { _skipDbSave = true; CloseAppCmd.Execute(null); }
-    void onDbSave() { IsBusy = true; Bpr.BeepClk(); Appender = InfoMsg = _db.TrySaveReport().report; App.SpeakFaF(InfoMsg); IsBusy = false; }
+    void onDbSave() { IsBusy = true; Bpr.Click(); Appender = InfoMsg = _db.TrySaveReport().report; App.SpeakFaF(InfoMsg); IsBusy = false; }
     void onMovePrd(int sevenDays)
     {
       IsBusy = true;
       if (sevenDays > 0 && _today > App.AppStartAt)
       {
         canDbSave = false;
-        Bpr.BeepNo(); //         App.Synth.SpeakAsync("No!");
+        Bpr.No(); //         App.Synth.SpeakAsync("No!");
       }
       else
       {
         canDbSave = true;
-        Bpr.BeepClk();
+        Bpr.Click();
         _today = _today.AddDays(sevenDays);
         setWeeklyDefaultHours(_today);
 

@@ -196,7 +196,7 @@ namespace TimeTracker.View
       try
       {
         var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), e.Uri.OriginalString);
-        Process.Start(new ProcessStartInfo(dir));
+        _ = Process.Start(new ProcessStartInfo(dir) { UseShellExecute = true });
 
         e.Handled = true;
       }
@@ -216,7 +216,7 @@ namespace TimeTracker.View
 
       if (ivc == null)
       {
-        Bpr.BeepNo();
+        Bpr.No();
         return;
       }
 

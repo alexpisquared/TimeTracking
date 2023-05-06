@@ -40,7 +40,7 @@ public partial class App : Application
           sender.Stop();
 #endif
 #else
-      //Bpr.BeepClk();
+      //Bpr.Click();
       new MainSwitchboard(e.Args.ToList().Contains("-audible"), "-scheduler -audible").ShowDialog();
 
       //Bpr.BeepEnd6();
