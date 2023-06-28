@@ -1,5 +1,4 @@
-﻿using AAV.Sys.Ext;
-using AAV.WPF.Ext;
+﻿using StandardLib.Extensions;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -95,7 +94,7 @@ namespace AsLink
           Add1stLast(a, b, lst, path);
         }
       }
-      catch (Exception ex) { ex.Pop(); }
+      catch (Exception ex) { ex.Log(); }
 
       return lst;
     }

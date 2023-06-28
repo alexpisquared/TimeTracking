@@ -5,7 +5,7 @@ using Db.EventLog.DbModel;
 using AsLink;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using AAV.Sys.Ext;
+using StandardLib.Extensions;
 
 namespace Db.EventLog.Ext
 {
