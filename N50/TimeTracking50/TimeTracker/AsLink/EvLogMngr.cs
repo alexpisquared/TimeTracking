@@ -13,6 +13,7 @@ namespace AsLink
 {
   public static partial class EvLogHelper //2021-09: let's keep this one evolving as is 
   {
+    const string _app = "Application", _sec = "Security", _sys = "System", _aavSource = "AavSource", _aavLogName = "AavNewLog";
     const int _ssrUp = 7101, _ssrDn = 7102, _bootUp_12 = 12, _bootDn_13 = 13, _syTime_01 = 1; // when waking from hibernation: 12 is nowhere to be seen, 1 is there.
 
     static readonly string[] _paths = new[] { _app, _sys };
