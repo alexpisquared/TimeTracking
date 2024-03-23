@@ -1,10 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using AAV.Sys.Ext;
-using PdfSharp.Drawing;
-using PdfSharp.Pdf;
-
-namespace InvoiceCreator.PDF;
+﻿namespace InvoiceCreator.PDF;
 
 public class InvoiceMaker
 {
@@ -142,11 +136,8 @@ public class InvoiceMaker
   }
 }
 /*
-Banking Details
-
-Account Name
-           Bank:TD Canada Trust
-    Branch code:03212
- Account Number:5999741
-DesigantionNumber:7919
+                Bank: TD Canada Trust
+         Branch code: 03212
+      Account Number: 5999741
+  Designation Number: 7919
 */
