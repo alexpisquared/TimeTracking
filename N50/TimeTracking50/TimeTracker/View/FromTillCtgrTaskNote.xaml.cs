@@ -1,12 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity.Core;
-using System.Windows.Data;
-using Db.EventLog.Ext;
-using TimeTracker.AsLink;
-using static AsLink.EvLogHelper;
-
-namespace TimeTracker.View;
-
+﻿namespace TimeTracker.View;
 public partial class FromTillCtgrTaskNote : AAV.WPF.Base.WindowBase
 {
   A0DbContext _db = A0DbContext.Create();
@@ -28,7 +20,7 @@ public partial class FromTillCtgrTaskNote : AAV.WPF.Base.WindowBase
 
     Closing += onClosing;
     DataContext = this;
-    CurVer.Text = $"{_db.ServerDatabase()}   {VerHelper.CurVerStr()}";
+    CurVer.Text = $"{_db.ServerDatabase()}   {AAV.Sys.Helpers.VerHelper.CurVerStr()}";
 
     //AppSettings.RestoreSizePosition(this, Settings.Default.PeyPVw);
   }
@@ -305,7 +297,7 @@ public partial class FromTillCtgrTaskNote : AAV.WPF.Base.WindowBase
       }
     }
     catch (Exception ex) { _ = MessageBox.Show(ex.ToString()); } // if (Debugger.IsAttached) Debugger.Break(); 
-    finally { Cursor = Cursors.Arrow; ctrlPnl1.IsEnabled = ctrlPnl2.IsEnabled = true; Bpr.BeepOk(); }
+    finally { Cursor = Cursors.Arrow; ctrlPnl1.IsEnabled = ctrlPnl2.IsEnabled = true; new Bpr().Click(); }
   }
   void onClosing(object s, System.ComponentModel.CancelEventArgs e) => InfoMessg = DbSaveOr(_db, e);
 

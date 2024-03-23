@@ -4,5 +4,6 @@
 
 2022-12-17 - Adjusted for Botsford (no timesheet folder opening)
 
-2023-01-27 - Done://todo: change scheduler to use published ver (still using the Release folder)
+2023-01-27 - Done: change scheduler to use published ver (still using the Release folder)
 
+2024-03-23 - Phasing out old shared libs in favor of new ones (StandardLib)

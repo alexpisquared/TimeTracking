@@ -28,7 +28,7 @@ public partial class InvoicePreview : AAV.WPF.Base.WindowBase
     AppSettings.RestoreSizePosition(this, Properties.Settings.Default.InvcVw);
 
     IsVis = Visibility.Collapsed;
-    BlurRdus = VerHelper.IsMyHomePC ? 0 : 11;
+    BlurRdus = AAV.Sys.Helpers.VerHelper.IsMyHomePC ? 0 : 11;
   }
 
   void onLoaded(object sender, RoutedEventArgs e)
@@ -207,7 +207,7 @@ public partial class InvoicePreview : AAV.WPF.Base.WindowBase
 
     if (ivc == null)
     {
-      Bpr.No();
+      new Bpr().No();
       return;
     }
 

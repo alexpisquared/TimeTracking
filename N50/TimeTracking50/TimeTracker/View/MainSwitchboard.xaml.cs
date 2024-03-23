@@ -1,8 +1,4 @@
-﻿using Db.EventLog.Ext;
-using TimeTracker.AsLink;
-using TimeTracker.VwMdl;
-
-namespace TimeTracker.View;
+﻿namespace TimeTracker.View;
 public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
 {
   const int _zeroBasedBtnCnt = 4;
@@ -13,7 +9,7 @@ public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
 
     _keepSaying = keepSaying;
 
-    Title = $"Time Tracker - {VerHelper.CurVerStr()}";
+    Title = $"Time Tracker - {AAV.Sys.Helpers.VerHelper.CurVerStr()}";
 
     KeyDown += (s, e) =>
     {
@@ -44,7 +40,7 @@ public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
       });
     };
 
-    CurVer.Text = $"{A0DbContext.Create().ServerDatabase()}\n{VerHelper.CurVerStr()}";
+    CurVer.Text = $"{A0DbContext.Create().ServerDatabase()}\n{AAV.Sys.Helpers.VerHelper.CurVerStr()}";
 
     DataContext = this;
   }
@@ -62,13 +58,11 @@ public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
       case 4: AR.IsDefault = true; break;
     }
   }
-  protected override void OnClosed(EventArgs e) => base.OnClosed(e);
-  void onClose(object? s, RoutedEventArgs? e) { Close(); Application.Current.Shutdown(); }
   void onTS(object s, RoutedEventArgs e) { pre(); _ = BindableBaseViewModel.ShowModalMvvm(new TimesheetPreviewVM(true), new TimeTracker.View.TimesheetPreview()); post(); }      //new TimeTracker.View.TimesheetPreview().ShowDialog();
   void onPP(object s, RoutedEventArgs e) { pre(); _ = new FromTillCtgrTaskNote().ShowDialog(); post(); }
   void onIc(object s, RoutedEventArgs e) { pre(); _ = new InvoicePreview(A0DbContext.Create()).ShowDialog(); post(); }
-  void onHR(object s, RoutedEventArgs e) { pre(); { _ = MessageBox.Show("The feature is under contruction\n\nPlease come back soon", ((Button)s).Content.ToString()?.Replace("_", ""), MessageBoxButton.OK, MessageBoxImage.Information); } post(); }
-  void onAR(object s, RoutedEventArgs e) { pre(); { _ = MessageBox.Show("The feature is under contruction\n\nPlease come back soon", ((Button)s).Content.ToString()?.Replace("_", ""), MessageBoxButton.OK, MessageBoxImage.Information); } post(); }
+  void onHR(object s, RoutedEventArgs e) { pre(); _ = MessageBox.Show("The feature is under contruction\n\nPlease come back soon", ((Button)s).Content.ToString()?.Replace("_", ""), MessageBoxButton.OK, MessageBoxImage.Information); post(); }
+  void onAR(object s, RoutedEventArgs e) { pre(); _ = MessageBox.Show("The feature is under contruction\n\nPlease come back soon", ((Button)s).Content.ToString()?.Replace("_", ""), MessageBoxButton.OK, MessageBoxImage.Information); post(); }
   void onST(object s, RoutedEventArgs e) { pre(); _ = new OptionsManager().ShowDialog(); post(); }
   void onDI(object s, RoutedEventArgs e) { pre(); TimeTrackDbCtx_Code1st_DbInitializer.DbIni(); post(); }      // NO GO at Wk&Hm????????????????                                                      //TimeTrackDbCtx_Simple__DbInitializer.DbIni();		// OK at Wk&Hm... but wrong dbx
   void onNavigate(object s, System.Windows.Navigation.RequestNavigateEventArgs e)
@@ -81,7 +75,8 @@ public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
     }
     catch (Exception ex) { _ = ex.Log(); }
   }
+  async void onClose(object? s, RoutedEventArgs? e) { Hide(); await new Bpr().AppFinishAsync(); Close(); Application.Current.Shutdown(); }
   void pre() { _keepSaying = false; Hide(); }                                     //  ctrlPanelOnMarket.IsEnabled = false; WindowState = WindowState.Minimized; scrooves up focusing on the new window.   Hide(); - invokes Close */ }
-  void post() { Bpr.Click(); _ = new MainSwitchboard(false).ShowDialog(); }  //  ctrlPanelOnMarket.IsEnabled = true;  WindowState = WindowState.Normal; Show(); }//Task.Factory.StartNew(() => Thread.Sleep(100)).ContinueWith(_ => { Close(); }, TaskScheduler.FromCurrentSynchronizationContext()); }
-  void wnd_Loaded(object sender, RoutedEventArgs e) => Bpr.BeepOk();
+  void post() { new Bpr().Click(); _ = new MainSwitchboard(false).ShowDialog(); }  //  ctrlPanelOnMarket.IsEnabled = true;  WindowState = WindowState.Normal; Show(); }//Task.Factory.StartNew(() => Thread.Sleep(100)).ContinueWith(_ => { Close(); }, TaskScheduler.FromCurrentSynchronizationContext()); }
+  void wnd_Loaded(object sender, RoutedEventArgs e) => new Bpr().AppStart();
 }

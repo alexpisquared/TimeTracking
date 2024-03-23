@@ -1,11 +1,4 @@
-﻿using System.Windows.Controls;
-using AAV.WPF.Ext;
-using AmbienceLib;
-using Microsoft.Extensions.Configuration;
-using static AmbienceLib.SpeechSynth;
-
-namespace TimeTracker;
-
+﻿namespace TimeTracker;
 public partial class App : Application
 {
   public static DateTime Today = DateTime.Today;
@@ -21,7 +14,7 @@ public partial class App : Application
       base.OnStartup(e);                                                                                                                                                                                                  // /**/ await Task.Delay(333);
       Current.DispatcherUnhandledException += AAV.WPF.Helpers.UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;                                                                                                              // /**/ await Task.Delay(333);
       EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotFocusEvent, new RoutedEventHandler((s, re) => { (s as TextBox)?.SelectAll(); })); //tu: TextBox                                                     // /**/ await Task.Delay(333);
-      Tracer.SetupTracingOptions("TimeTracker", new TraceSwitch("OnlyUsedWhenInConfig", "This is the trace for all               messages... but who cares?   See ScrSvr for a model.") { Level = TraceLevel.Verbose });  // /**/ await Task.Delay(333);
+      AAV.Sys.Helpers.Tracer.SetupTracingOptions("TimeTracker", new TraceSwitch("OnlyUsedWhenInConfig", "This is the trace for all               messages... but who cares?   See ScrSvr for a model.") { Level = TraceLevel.Verbose });  // /**/ await Task.Delay(333);
       ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
 #if !!TDD

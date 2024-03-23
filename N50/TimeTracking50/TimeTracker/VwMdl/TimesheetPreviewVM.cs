@@ -101,7 +101,7 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
   void dbLoad()
   {
     _db = A0DbContext.Create();
-    CurVer = VerHelper.CurVerStr();
+    CurVer = AAV.Sys.Helpers.VerHelper.CurVerStr();
     Invoicer = _db.Invoicers.FirstOrDefault(r => r.Id == Settings.CurrentInvoicerId) ?? throw new ArgumentNullException("@@@@@@@@@@@@@@@@");
     Invoicee = _db.Invoicees.FirstOrDefault(r => r.Id == Settings.CurrentInvoiceeId) ?? throw new ArgumentNullException("@@@@@@@@@@@@@@@@");
   }

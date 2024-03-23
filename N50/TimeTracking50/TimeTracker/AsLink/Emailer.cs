@@ -61,7 +61,7 @@ public static class Emailer
         var mailClient = new SmtpClient
         {
           UseDefaultCredentials = true,
-          Host = VerHelper.IsMyHomePC ? "mail.aei.ca" : "192.168.116.48" //todo: does it scale to any other mail server? (ap: 2022-04-21)
+          Host = AAV.Sys.Helpers.VerHelper.IsMyHomePC ? "mail.aei.ca" : "192.168.116.48" //todo: does it scale to any other mail server? (ap: 2022-04-21)
         };
 #endif
 
