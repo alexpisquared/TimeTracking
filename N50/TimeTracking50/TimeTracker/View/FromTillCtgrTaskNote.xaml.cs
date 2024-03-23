@@ -219,9 +219,10 @@ namespace TimeTracker.View
       {
 #if DEBUG
         if (createDb)
+        {
           TimeTrackDbCtx_Code1st_DbInitializer.DbIni();//.DropCreateDb();
-        App.SpeakAsync("DB creation is for Debug mode only (to preserve the existing data)");
-#else
+          App.SpeakFaF("DB creation attempt has been ran; it is for Debug mode only (to preserve the existing data)");
+        }
 #endif
 
         await _db.Invoices.LoadAsync();

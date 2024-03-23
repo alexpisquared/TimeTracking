@@ -107,8 +107,7 @@
         <TextBox Grid.Column="1"  Grid.Row="4" Text="{Binding InvoiceEmailBody, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" AcceptsReturn="True" Height="99" TextWrapping="Wrap"  />
 
         <Label Content="Pay Period Mode:" Grid.Column="0"  Grid.Row="5" />
-        <ComboBox Grid.Column="1"                          Grid.Row="5" DisplayMemberPath="Name"  Height="Auto" ItemsSource="{Binding Source={StaticResource lkuPayPeriodModeViewSource}}"   SelectedValuePath="Id" SelectedValue="{Binding PayPeriodMode}" 
-                  SelectionChanged="ComboBox_SelectionChanged">
+        <ComboBox Grid.Column="1"                          Grid.Row="5" DisplayMemberPath="Name"  Height="Auto" ItemsSource="{Binding Source={StaticResource lkuPayPeriodModeViewSource}}"   SelectedValuePath="Id" SelectedValue="{Binding PayPeriodMode}" SelectionChanged="PayPeriodChanged">
           <ComboBox.ItemsPanel>
             <ItemsPanelTemplate>
               <VirtualizingStackPanel/>
@@ -137,7 +136,7 @@
         <Label Content="WebPassword:" Grid.Column="0" Grid.Row="13" />
         <PasswordBox Grid.Column="1"                  Grid.Row="13" w:PasswordHelper.Attach="True" w:PasswordHelper.Password="{Binding WebPassword, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="3" />
 
-        <Label Content="Notes:" Grid.Column="0"       Grid.Row="14" />
+        <Label Content="Notes:" Grid.Column="0"       Grid.Row="14" VerticalAlignment="Top" />
         <TextBox Grid.Column="1"                      Grid.Row="14" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
 
       </Grid>
@@ -181,7 +180,7 @@
         <TextBox  Grid.Column="1"  Grid.Row="5" Text="{Binding InvoiceSubFolder, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
         <Label Content="Lunch Start Hour:" Grid.Column="0"  Grid.Row="6" />
         <TextBox  Grid.Column="1"  Grid.Row="6" Text="{Binding LunchStartHour, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
-        <Label Content="Notes:" Grid.Column="0"  Grid.Row="7" />
+        <Label Content="Notes:" Grid.Column="0"  Grid.Row="7" VerticalAlignment="Top" />
         <TextBox  Grid.Column="1"  Grid.Row="7" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
       </Grid>
 

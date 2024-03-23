@@ -62,7 +62,7 @@
           </Style>
         </Grid.Resources>
 
-        <TextBlock Text="123 12sdasdsa asdasasds" Foreground="#888" x:Name="CurVer" FontSize="10" VerticalAlignment="Top" HorizontalAlignment="Right" TextAlignment="Right" Margin="0 0 26 0" />
+        <TextBlock Text="123 12sdasdsa asdasasds" Foreground="#08f" x:Name="CurVer" FontSize="10" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" Margin="0 0 6 0" />
 
         <Button    Grid.Row="1" Content="_Pay Period"     Click="onPP" x:Name="PP" Foreground="#0c3" />
         <Button    Grid.Row="2" Content="_Timesheet"      Click="onTS" x:Name="TS" Foreground="#0bf" />
@@ -78,7 +78,7 @@
 
       </Grid>
 
-      <Button Click="onClose"	Margin="6" Content="X" FontFamily="Arial" FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Right" Height="22" Width="22" Foreground="#d00" ToolTip="Close" />
+      <Button Click="onClose"	Margin="3" Content="X" FontFamily="Arial" FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Right" Height="22" Width="22" ToolTip="Close" BorderThickness="0" Background="Transparent" Foreground="#d00" />
 
     </Grid>
   </Border>
