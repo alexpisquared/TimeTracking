@@ -113,7 +113,7 @@
               <Label     Grid.Row="0" Grid.Column="1" Content="HOURS"      HorizontalAlignment="Center" />
               <Label     Grid.Row="0" Grid.Column="2" Content="RATE"       HorizontalAlignment="Center" />
               <Label     Grid.Row="0" Grid.Column="3" Content="AMOUNT" Margin="0,0,6,0" />
-              <TextBlock Grid.Row="1" Grid.Column="0" Text=" Software development services" Height="16" Margin="6,5,6,4" />
+              <TextBlock Grid.Row="1" Grid.Column="0" Text=" Software engineering services" Height="16" Margin="6,5,6,4" />
               <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding PayPrdHrs, FallbackValue=123.45, StringFormat=\{0:N2\}}" HorizontalAlignment="Center" Height="16" />
 
               <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Invoice.Invoicee.CorpRate, FallbackValue=123.45, StringFormat=\{0:c\}}" HorizontalAlignment="Center" Height="16"   Visibility="{Binding IsVis}"  />

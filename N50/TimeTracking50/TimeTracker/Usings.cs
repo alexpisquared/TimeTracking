@@ -26,3 +26,4 @@ global using StandardLib.Extensions;
 global using TimeTracker.Common;
 global using TimeTracker.Properties;
 global using TimeTracker.View;
+global using System.Media;
