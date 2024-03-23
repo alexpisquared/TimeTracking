@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using StandardLib.Helpers;
 
-namespace Db.EventLog
+namespace Db.EventLog.Main
 {
   public class DbLogHelper
   {

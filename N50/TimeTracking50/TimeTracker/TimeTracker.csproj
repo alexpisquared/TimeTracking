@@ -53,7 +53,6 @@
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\EfDbHelperLib\EfDbHelperLib.csproj" />
     <ProjectReference Include="..\..\..\..\ScSv\Src\AlexPi.Scr\Db.EventLog\Db.EventLog.csproj" />
     <ProjectReference Include="..\AAV.Common.MVVM\AAV.Common.MVVM.csproj" />
-    <ProjectReference Include="..\AAV.Common.UI\AAV.Common.UI.csproj" />
     <ProjectReference Include="..\Db.TimeTrack\Db.TimeTrack.csproj" />
     <ProjectReference Include="..\InvoiceCreator.PDF\InvoiceCreator.PDF.csproj" />
   </ItemGroup>

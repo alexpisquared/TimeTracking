@@ -27,7 +27,7 @@ namespace Db.EventLog.DbModel
           : base("EventLogDb") {     // in the main sql instance 
 #else
     {
-      var dbfn = localdbpathfile ?? OneDrive.Folder($@"{DbLogHelper._dbSubP}LocalDb({Environment.MachineName}).mdf");
+      var dbfn = localdbpathfile ?? OneDrive.Folder($@"{Main.DbLogHelper._dbSubP}LocalDb({Environment.MachineName}).mdf");
 
       var dir = Path.GetDirectoryName(dbfn);
       if (!Directory.Exists(dir))
