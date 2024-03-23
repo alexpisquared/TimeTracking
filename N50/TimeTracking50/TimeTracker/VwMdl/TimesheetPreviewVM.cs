@@ -1,4 +1,4 @@
-﻿using AAV.Sys.Ext;
+﻿//using AAV.Sys.Ext;
 using AAV.Sys.Helpers;
 using AsLink;
 using Db.TimeTrack.DbModel;
@@ -12,6 +12,9 @@ using System.Windows;
 using System.Windows.Input;
 using TimeTracker.Common;
 using Bpr = AAV.Sys.Helpers.Bpr;
+
+using EF.DbHelper.Lib;
+using Db.EventLog.Ext;
 
 namespace TimeTracker
 {

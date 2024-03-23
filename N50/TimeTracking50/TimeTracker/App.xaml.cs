@@ -2,6 +2,7 @@
 using AAV.WPF.Ext;
 using AmbienceLib;
 using Microsoft.Extensions.Configuration;
+using static AmbienceLib.SpeechSynth;
 
 namespace TimeTracker;
 

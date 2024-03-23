@@ -1,4 +1,7 @@
-﻿namespace TimeTracker.View;
+﻿using EF.DbHelper.Lib;
+using Db.EventLog.Ext;
+
+namespace TimeTracker.View;
 public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
 {
   const int _zeroBasedBtnCnt = 4;

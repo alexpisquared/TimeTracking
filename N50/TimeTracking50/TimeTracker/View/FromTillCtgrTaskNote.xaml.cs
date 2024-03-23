@@ -14,6 +14,9 @@ using System.Windows.Input;
 using TimeTracker.AsLink;
 using TimeTracker.Common;
 using static AsLink.EvLogHelper;
+using EF.DbHelper.Lib;
+using EF.DbHelper.Lib;
+using Db.EventLog.Ext;
 
 namespace TimeTracker.View
 {

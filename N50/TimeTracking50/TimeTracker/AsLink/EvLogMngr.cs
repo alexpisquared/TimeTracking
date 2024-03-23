@@ -9,6 +9,11 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 
+using EF.DbHelper.Lib;
+using Db.EventLog.Ext;
+using Db.EventLog;
+using Db.EventLog.Main;
+
 namespace AsLink
 {
   public static partial class EvLogHelper //2021-09: let's keep this one evolving as is 
@@ -914,7 +919,7 @@ Kernel-General 12 - up
         if (!/*VerHelper.*/IsVIP) return -1; // let go ctrl-alt-del
 
         var dailyEvents = AsLink.EvLogHelper.GetAllEventsOfInterest(DateTime.Today.AddDays(-daysback), DateTime.Now);
-        return dailyEvents.Count > 0 ? await Db.EventLog.DbLogHelper.UpdateDbWithPotentiallyNewEvents(dailyEvents, Environment.MachineName, msg) : -2;
+        return dailyEvents.Count > 0 ? await Db.EventLog.Main.DbLogHelper.UpdateDbWithPotentiallyNewEvents(dailyEvents, Environment.MachineName, msg) : -2;
       }
       catch (Exception ex) { ex.Log(); }
       return -888;

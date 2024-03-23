@@ -58,15 +58,15 @@ namespace InvoiceCreator.PDF
         gfx.DrawEllipse(pen1, col1 + 00, h, rds, rds);
         gfx.DrawEllipse(pen1, col1 + 20, h, rds, rds);
         gfx.DrawEllipse(pen1, col1 + 40, h, rds, rds);
-        gfx.DrawString("INVOICE", new XFont(fontname, 36, XFontStyle.Regular), liteb, col9, 40, XStringFormats.TopRight);
+        gfx.DrawString("INVOICE", new XFont(fontname, 36, XFontStyleEx.Regular), liteb, col9, 40, XStringFormats.TopRight);
         h = 85d;
         gfx.DrawLine(litep, col1, h, col9, h);
 
-        var fontCoNm = new XFont(fontname, 16, XFontStyle.Regular);
-        var fontLabB = new XFont(fontname, 12, XFontStyle.Bold | XFontStyle.Underline);
-        var fontLabl = new XFont(fontname, 11, XFontStyle.Regular);
-        var fontValu = new XFont(fontname, 11, XFontStyle.Bold);
-        var fontNndl = new XFont(fontname, 11, XFontStyle.Underline);
+        var fontCoNm = new XFont(fontname, 16, XFontStyleEx.Regular);
+        var fontLabB = new XFont(fontname, 12, XFontStyleEx.Bold | XFontStyleEx.Underline);
+        var fontLabl = new XFont(fontname, 11, XFontStyleEx.Regular);
+        var fontValu = new XFont(fontname, 11, XFontStyleEx.Bold);
+        var fontNndl = new XFont(fontname, 11, XFontStyleEx.Underline);
 
         h = page.Height * .150;
         h += lineHeight2; gfx.DrawString("     Invoice #:   ", fontLabl, liteb, col2, h, XStringFormats.BaseLineRight); gfx.DrawString($"{invcNumber}          ", fontValu, darkb, col2, h, XStringFormats.BaseLineLeft);
@@ -133,7 +133,7 @@ namespace InvoiceCreator.PDF
 
     static void printLines(string coAdrs1, int lineHeight1, string fontname, XSolidBrush dark, XGraphics gfx, double x, double h)
     {
-      var font = new XFont(fontname, 11, XFontStyle.Regular);
+      var font = new XFont(fontname, 11, XFontStyleEx.Regular);
       foreach (var line in coAdrs1.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
       {
         h += lineHeight1; gfx.DrawString(line, font, dark, x, h, XStringFormats.BaseLineLeft);
