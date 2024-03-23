@@ -1,5 +1,5 @@
-﻿using EF.DbHelper.Lib;
-using Db.EventLog.Ext;
+﻿using Db.EventLog.Ext;
+using TimeTracker.VwMdl;
 
 namespace TimeTracker.View;
 public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
