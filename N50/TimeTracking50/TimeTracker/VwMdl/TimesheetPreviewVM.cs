@@ -1,7 +1,4 @@
-﻿using Db.EventLog.Ext;
-using Bpr = AAV.Sys.Helpers.Bpr;
-
-namespace TimeTracker.VwMdl;
+﻿namespace TimeTracker.VwMdl;
 
 internal class TimesheetPreviewVM : BindableBaseViewModel
 {
@@ -49,8 +46,7 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
     Bpr.Beep2of2();
   }
 
-  [Obsolete]
-  protected override Task? ClosingVM() { if (_skipDbSave) App.SpeakFaF("Skipped saving to DB."); else onDbSave(); return null; }
+  protected override async Task ClosingVM() { if (_skipDbSave) App.SpeakFaF("Skipped saving to DB."); else onDbSave(); await Task.Delay(99); }
   void setWeeklyDefaultHours(DateTime today)
   {
     //return; //todo: remove duplication on every period change clisk event: 
@@ -173,7 +169,7 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
 
   void onUnLock(object x)
   {
-    Bpr.BeepOk();
+   new Bpr().Click();
     _week.ToList().ForEach(r => r.IsLocked = false);
     InfoMsg = _db.GetDbChangesReport();
   }
@@ -278,19 +274,19 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
   void onDbQuit() { _skipDbSave = true; CloseAppCmd.Execute(null); }
 
   [Obsolete]
-  void onDbSave() { IsBusy = true; Bpr.Click(); Appender = InfoMsg = _db.TrySaveReport().report; App.SpeakFaF(InfoMsg); IsBusy = false; }
+  void onDbSave() { IsBusy = true; new Bpr().Click(); Appender = InfoMsg = _db.TrySaveReport().report; App.SpeakFaF(InfoMsg); IsBusy = false; }
   void onMovePrd(int sevenDays)
   {
     IsBusy = true;
     if (sevenDays > 0 && _today > App.AppStartAt)
     {
       canDbSave = false;
-      Bpr.No(); //         App.Synth.SpeakAsync("No!");
+      new Bpr().No(); //         App.Synth.SpeakAsync("No!");
     }
     else
     {
       canDbSave = true;
-      Bpr.Click();
+      new Bpr().Click();
       _today = _today.AddDays(sevenDays);
       setWeeklyDefaultHours(_today);
 

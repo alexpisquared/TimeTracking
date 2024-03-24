@@ -1,8 +1,12 @@
-﻿namespace InvoiceCreator.PDF;
+﻿using System.Threading.Tasks;
+
+namespace InvoiceCreator.PDF;
 
 public class InvoiceMaker
 {
   const bool _includeBank = false;
+  readonly PdfDocument pdf = new();
+
   public void PrepareInvoice(
     string coName1,
     string coAdrs1,
@@ -18,8 +22,7 @@ public class InvoiceMaker
     string sub_total,
     string taxRatePc,
     string salesTaxM,
-    string grandtotl,
-    string filename)
+    string grandtotl)
   {
     try
     {
@@ -32,10 +35,9 @@ public class InvoiceMaker
       var liteb = new XSolidBrush(lite);
       var litep = new XPen(lite);
 
-      var doc = new PdfDocument();
-      doc.Info.Title = "Created with PDFsharp";
+      pdf.Info.Title = "Created with PDFsharp";
 
-      var page = doc.AddPage();          // Create an empty page in this document.
+      var page = pdf.AddPage();          // Create an empty page in this document.
       var gfx = XGraphics.FromPdfPage(page);  // Get an XGraphics object for drawing on this page.
 
       var col1 = page.Width * .10;
@@ -100,6 +102,7 @@ public class InvoiceMaker
       h += lineHeight2; gfx.DrawLine(pen1, col1, h, col9, h);
       h += lineHeight2;
       h += lineHeight2;
+
       if (_includeBank)
       {
         gfx.DrawString("Bank Account Details", fontLabB, liteb, colA, h, XStringFormats.BaseLineLeft);                //gfx.DrawString($"{invcNumber}          ", fontValu, darkb, col2, h, XStringFormats.BaseLineLeft);
@@ -109,7 +112,6 @@ public class InvoiceMaker
       }
       else
       {
-        //gfx.DrawString("                    ", fontLabB, liteb, colA, h, XStringFormats.BaseLineLeft);                
         h += lineHeight2; gfx.DrawString("                  ", fontLabl, liteb, colB, h, XStringFormats.BaseLineRight); gfx.DrawString("               ", fontValu, darkb, colB, h, XStringFormats.BaseLineLeft);
         h += lineHeight2; gfx.DrawString("                  ", fontLabl, liteb, colB, h, XStringFormats.BaseLineRight); gfx.DrawString("               ", fontValu, darkb, colB, h, XStringFormats.BaseLineLeft);
         h += lineHeight2; gfx.DrawString("                  ", fontLabl, liteb, colB, h, XStringFormats.BaseLineRight); gfx.DrawString("               ", fontValu, darkb, colB, h, XStringFormats.BaseLineLeft);
@@ -117,13 +119,17 @@ public class InvoiceMaker
 
       h += lineHeight2;
       h += lineHeight2; gfx.DrawLine(pen1, col1, h, col9, h);
-
-      again:
-      try { doc.Save(filename); } catch (Exception ex) { Console.Write(ex.Message); System.Threading.Thread.Sleep(333); goto again; }
-
-      try { _ = Process.Start(@"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe", $"\"{filename}\""); } catch (Exception ex2) { _ = ex2.Log(filename); }
     }
     catch (Exception ex) { _ = ex.Log(); }
+  }
+
+  public async void SaveAndViewPdfFile(string pdfFilename)
+  {
+    for (int i = 0; i < 10; i++)
+      try { pdf.Save(pdfFilename); }
+      catch (Exception ex) { _ = ex.Log(pdfFilename); Console.Beep(333 + i * 10, i * 100); await Task.Delay(999); }
+
+    try { _ = Process.Start(@"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe", $"\"{pdfFilename}\""); } catch (Exception ex2) { _ = ex2.Log(pdfFilename); }
   }
 
   static void printLines(string coAdrs1, int lineHeight1, string fontname, XSolidBrush dark, XGraphics gfx, double x, double h)

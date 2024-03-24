@@ -32,3 +32,5 @@ global using TimeTracker.View;
 global using TimeTracker.VwMdl;
 global using static AmbienceLib.SpeechSynth;
 global using static AsLink.EvLogHelper;
+global using System.Text;
+global using System.Reflection;

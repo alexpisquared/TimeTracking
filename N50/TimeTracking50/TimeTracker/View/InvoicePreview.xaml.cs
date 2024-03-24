@@ -1,13 +1,9 @@
-﻿using System.Text;
-using AAV.WPF.Ext;
-using Db.EventLog.Ext;
-using TimeTracker.VwMdl;
-
-namespace TimeTracker.View;
-
+﻿namespace TimeTracker.View;
 public partial class InvoicePreview : AAV.WPF.Base.WindowBase
 {
   readonly A0DbContext _db;
+
+  [Obsolete]
   public InvoicePreview(A0DbContext db)
   {
     _db = db;
@@ -43,6 +39,8 @@ public partial class InvoicePreview : AAV.WPF.Base.WindowBase
 
     showStatus();
   }
+
+  [Obsolete]
   void onClosing(object sender, System.ComponentModel.CancelEventArgs e)
   {
     Properties.Settings.Default.InvcVw = AppSettings.SaveSizePosition(this, Properties.Settings.Default.InvcVw); Properties.Settings.Default.Save();
@@ -64,15 +62,14 @@ public partial class InvoicePreview : AAV.WPF.Base.WindowBase
         Directory.CreateDirectory(DSettngS.InvoiceSubFolder);
 
       //1.		Save a hardcopy to a file
-      var hardcopyPDF = TimesheetPreviewVM.InvoiceFilepathname(InvoiceNo.ToString(), (double)Invoice.TotalHours, DSettngS.InvoiceSubFolder, "Invoice #", "pdf");
+      var pdfFilename = TimesheetPreviewVM.InvoiceFilepathname(InvoiceNo.ToString(), (double)Invoice.TotalHours, DSettngS.InvoiceSubFolder, "Invoice #", "pdf");
 #if XPS
     var hardcopyXPS = TimesheetPreviewVM.InvoiceFilepathname(InvoiceNo.ToString(), (double)Invoice.TotalHours, DSettngS.InvoiceSubFolder, "Invoice #", "xps");
     await revealFor3secondsToGenerateXpsFile(hardcopyXPS);
       new XpsViewer(hardcopyXPS).ShowDialog();
 #endif
-
-      //concider : if (VerHelper.IsMyHomePC)
-      new InvoiceCreator.PDF.InvoiceMaker().PrepareInvoice(
+      var pm = new InvoiceCreator.PDF.InvoiceMaker();
+      pm.PrepareInvoice(
         DSettngS.Invoicer.CompanyName,
         DSettngS.Invoicer.AddressDetails,
         Invoice.Invoicee.CompanyName,
@@ -87,10 +84,15 @@ public partial class InvoicePreview : AAV.WPF.Base.WindowBase
         $"${Subtotal:N2}",
         $"{DSettngS.HstPercent:N0} %",
         $"${SalesTax:N2}",
-        $"${GrdTotal:N2}",
-        hardcopyPDF);
+        $"${GrdTotal:N2}");
+
+      pm.SaveAndViewPdfFile(pdfFilename);
 
       var times = generateTimeTrackReport(_db, PayPrdBgn, PayPrdEnd);
+
+      //2b.		Email a letter with the attachment to the current invoicee
+      var bodyInvoice = string.Format(InvoiceE.InvoiceEmailBody, Invoice.PeriodFrom, Invoice.PeriodUpTo, "invoice", "·") + times;
+      var (exitCode, errMsg) = Emailer.PerpAndShow(InvoiceE.InvoiceEmail, $"Invoice #{InvoiceNo} for the period {Invoice.PeriodFrom:MMMM d} - {Invoice.PeriodUpTo:MMMM d} ", bodyInvoice, pdfFilename); //DayFri.Note += string.Format("\n (timesheet {0} to {1} on {2:MMMd HH:mm})", exitCode == 0 ? "sent" : "sending failed", Invoicee.TimesheetEmail, App.AppStartAt);
 
       //2a.		Email a letter with the attachment to the current Timesheet approver
       if (!string.IsNullOrEmpty(InvoiceE.TimesheetEmail))
@@ -98,10 +100,6 @@ public partial class InvoicePreview : AAV.WPF.Base.WindowBase
         var bodyTimesheet = string.Format(InvoiceE.TimesheetEmailBody, Invoice.PeriodFrom, Invoice.PeriodUpTo, PayPrdHrs) + times;
         var (exitCode1, errMsg1) = Emailer.PerpAndShow(InvoiceE.TimesheetEmail, $"Alex Pigida – Approval of hours for the period from {Invoice.PeriodFrom:MMMM d, yyyy} through {Invoice.PeriodUpTo:MMMM d, yyyy}. ", bodyTimesheet);
       }
-
-      //2b.		Email a letter with the attachment to the current invoicee
-      var bodyInvoice = string.Format(InvoiceE.InvoiceEmailBody, Invoice.PeriodFrom, Invoice.PeriodUpTo, "invoice", "·") + times;
-      var (exitCode, errMsg) = Emailer.PerpAndShow(InvoiceE.InvoiceEmail, $"Invoice #{InvoiceNo} for the period {Invoice.PeriodFrom:MMMM d} - {Invoice.PeriodUpTo:MMMM d} ", bodyInvoice, hardcopyPDF); //DayFri.Note += string.Format("\n (timesheet {0} to {1} on {2:MMMd HH:mm})", exitCode == 0 ? "sent" : "sending failed", Invoicee.TimesheetEmail, App.AppStartAt);
 
       //try { Process.Start(new ProcessStartInfo("Explorer.exe", Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"CI\SL"))); } catch (Exception ex) { ex.Pop(); }
 
@@ -119,7 +117,59 @@ public partial class InvoicePreview : AAV.WPF.Base.WindowBase
     }
     catch (Exception ex) { ex.Pop(); }
   }
+  void onDel(object sender, RoutedEventArgs e)
+  {
+    foreach (var tpd in _db.TimePerDays.Local.Where(r => r.InvoiceId == Invoice.Id))
+      tpd.InvoiceId = null;
 
+    if (_db.Invoices.Any(r => r.Id == Invoice.Id))
+      _db.Invoices.Where(r => r.Id == Invoice.Id).ToList().ForEach(dl => _db.Entry(dl).State = EntityState.Deleted);
+
+    showStatus();
+  }
+  void onNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+  {
+    try
+    {
+      var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), e.Uri.OriginalString);
+      _ = Process.Start(new ProcessStartInfo(dir) { UseShellExecute = true });
+
+      e.Handled = true;
+    }
+    catch (Exception ex) { ex.Pop(); }
+  }
+  void prevPrd_Click(object sender, RoutedEventArgs e) => MovePayPrd(-1);
+  void nextPrd_Click(object sender, RoutedEventArgs e) => MovePayPrd(+1);     //void btnUnderConstr_Click(object sender, RoutedEventArgs e) { MessageBox.Show("The feature is under contruction\n\nPlease come back soon", ((Button)sender).Content.ToString().Replace("_", "")); }
+
+  void MovePayPrd(int dd)
+  {
+    Invoice? ivc;
+    var idx = InvoiceNo;
+    var max = _db.Invoices.Max(r => r.Id);
+    do
+    {
+      idx += dd;
+      ivc = _db.Invoices.FirstOrDefault(r => r.Id == idx);
+    } while (ivc == null && idx > 0 && idx < max);
+
+    if (ivc == null)
+    {
+      new Bpr().No();
+      return;
+    }
+
+    Invoice = ivc;
+    InvoiceNo = idx;
+    PayPrdHrs = Invoice.TotalHours;
+    PayPrdBgn = Invoice.PeriodFrom;
+    PayPrdEnd = Invoice.PeriodUpTo;
+    AmountHR = Subtotal = PayPrdHrs * Invoice.RateSubmitted;
+    SalesTax = AmountHR * DSettngS.HstPercent * .01m;
+    GrdTotal = AmountHR * ((DSettngS.HstPercent * .01m) + 1.0m);
+
+    showStatus();
+  }
+  void showStatus() => InfoMsg = _db.GetDbChangesReport(0) + (Invoice == null ? "\nNull!!!" : $"\n{(Invoice.IsSubmitted ? "Submitted!!! " : "Not Submitted")} - {_db.Entry(Invoice).State}");
   string generateTimeTrackReport(A0DbContext db, DateTime payPrdBgn, DateTime payPrdEnd)
   {
     var strBuilder = new StringBuilder();
@@ -159,7 +209,6 @@ public partial class InvoicePreview : AAV.WPF.Base.WindowBase
 
     return strBuilder.ToString();
   }
-
   async Task revealFor3secondsToGenerateXpsFile(string hardcopyXPS)
   {
     IsVis = Visibility.Visible;
@@ -168,64 +217,6 @@ public partial class InvoicePreview : AAV.WPF.Base.WindowBase
     XamlToXps.Export(new Uri(hardcopyXPS, UriKind.Absolute), PrintArea); //review XPS: FixedViewer.Document = new XpsDocument(filename, FileAccess.Read).GetFixedDocumentSequence();
     IsVis = Visibility.Collapsed;
   }
-
-  void onDel(object sender, RoutedEventArgs e)
-  {
-    foreach (var tpd in _db.TimePerDays.Local.Where(r => r.InvoiceId == Invoice.Id))
-      tpd.InvoiceId = null;
-
-    if (_db.Invoices.Any(r => r.Id == Invoice.Id))
-      _db.Invoices.Where(r => r.Id == Invoice.Id).ToList().ForEach(dl => _db.Entry(dl).State = EntityState.Deleted);
-
-    showStatus();
-  }
-  void prevPrd_Click(object sender, RoutedEventArgs e) => MovePayPrd(-1);
-  void nextPrd_Click(object sender, RoutedEventArgs e) => MovePayPrd(+1);     //void btnUnderConstr_Click(object sender, RoutedEventArgs e) { MessageBox.Show("The feature is under contruction\n\nPlease come back soon", ((Button)sender).Content.ToString().Replace("_", "")); }
-  void onNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
-  {
-    try
-    {
-      var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), e.Uri.OriginalString);
-      _ = Process.Start(new ProcessStartInfo(dir) { UseShellExecute = true });
-
-      e.Handled = true;
-    }
-    catch (Exception ex) { ex.Pop(); }
-  }
-
-  [Obsolete]
-  void MovePayPrd(int dd)
-  {
-    Invoice? ivc;
-    var idx = InvoiceNo;
-    var max = _db.Invoices.Max(r => r.Id);
-    do
-    {
-      idx += dd;
-      ivc = _db.Invoices.FirstOrDefault(r => r.Id == idx);
-    } while (ivc == null && idx > 0 && idx < max);
-
-    if (ivc == null)
-    {
-      new Bpr().No();
-      return;
-    }
-
-    Invoice = ivc;
-    InvoiceNo = idx;
-    PayPrdHrs = Invoice.TotalHours;
-    PayPrdBgn = Invoice.PeriodFrom;
-    PayPrdEnd = Invoice.PeriodUpTo;
-    AmountHR = Subtotal = PayPrdHrs * Invoice.RateSubmitted;
-    SalesTax = AmountHR * DSettngS.HstPercent * .01m;
-    GrdTotal = AmountHR * ((DSettngS.HstPercent * .01m) + 1.0m);
-
-    showStatus();
-  }
-
-  void showStatus() => InfoMsg = _db.GetDbChangesReport(0) + (Invoice == null ? "\nNull!!!" :
-$"\n{(Invoice.IsSubmitted ? "Submitted!!! " : "Not Submitted")} - {_db.Entry(Invoice).State}");
-
   static void recalcPPH(DependencyObject d, DependencyPropertyChangedEventArgs e)
   {
     var ip = d as InvoicePreview;
@@ -234,9 +225,9 @@ $"\n{(Invoice.IsSubmitted ? "Submitted!!! " : "Not Submitted")} - {_db.Entry(Inv
     ip.GrdTotal = ip.AmountHR * ((ip.DSettngS.HstPercent * .01m) + 1m);
   }
 
-  Invoicer _invoiceR;         /**/ public Invoicer InvoiceR { get => _invoiceR ?? (_db.Invoicers.FirstOrDefault(r => r.Id == DSettngS.CurrentInvoicerId)) ?? throw new ArgumentNullException("@@@@@@@@@@@@@@@@"); set => _invoiceR = value; }
-  Invoicee _invoiceE;         /**/ public Invoicee InvoiceE { get => _invoiceE ?? (_db.Invoicees.FirstOrDefault(r => r.Id == DSettngS.CurrentInvoiceeId)) ?? throw new ArgumentNullException("@@@@@@@@@@@@@@@@"); set => _invoiceE = value; }
-  DefaultSetting _settingS;   /**/ public DefaultSetting DSettngS { get => _settingS ??= _db.DefaultSettings.FirstOrDefault(); set => _settingS = value; }
+  Invoicer? _invoiceR;         /**/ public Invoicer InvoiceR { get => _invoiceR ?? (_db.Invoicers.FirstOrDefault(r => r.Id == DSettngS.CurrentInvoicerId)) ?? throw new ArgumentNullException("@@@@@@@@@@@@@@@@"); set => _invoiceR = value; }
+  Invoicee? _invoiceE;         /**/ public Invoicee InvoiceE { get => _invoiceE ?? (_db.Invoicees.FirstOrDefault(r => r.Id == DSettngS.CurrentInvoiceeId)) ?? throw new ArgumentNullException("@@@@@@@@@@@@@@@@"); set => _invoiceE = value; }
+  DefaultSetting? _settingS;   /**/ public DefaultSetting DSettngS { get => _settingS ??= _db.DefaultSettings.FirstOrDefault(); set => _settingS = value; }
 
   //public static readonly DependencyProperty InvoiceeProperty = DependencyProperty.Register("Invoicee", typeof(Invoicee), typeof(InvoicePreview), new PropertyMetadata(null)); public Invoicee Invoicee { get { return (Invoicee)GetValue(InvoiceeProperty); } set { SetValue(InvoiceeProperty, value); } }
   //public static readonly DependencyProperty InvoicerProperty = DependencyProperty.Register("Invoicer", typeof(Invoicer), typeof(InvoicePreview), new PropertyMetadata(null)); public Invoicer Invoicer { get { return (Invoicer)GetValue(InvoicerProperty); } set { SetValue(InvoicerProperty, value); } }
