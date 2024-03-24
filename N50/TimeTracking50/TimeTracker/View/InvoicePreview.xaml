@@ -1,4 +1,4 @@
-﻿<lnk:WindowBase xmlns:lnk="clr-namespace:AAV.WPF.Base;assembly=AAV.WPF" x:Name="wnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" Width="750" Height="880" x:Class="TimeTracker.View.InvoicePreview" Title="InvoicePreview" WindowStartupLocation="Manual"
+﻿<lnk:WindowBase xmlns:lnk="clr-namespace:AAV.WPF.Base;assembly=AAV.WPF" x:Name="wnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dbmodel="clr-namespace:Db.TimeTrack.DbModel;assembly=Db.TimeTrack" d:DataContext="{d:DesignInstance Type=dbmodel:TimePerDay}" mc:Ignorable="d" Width="750" Height="880" x:Class="TimeTracker.View.InvoicePreview" Title="InvoicePreview" WindowStartupLocation="Manual"
 				WindowStyle="None" AllowsTransparency="True" Background="#01000000" ResizeMode="CanResizeWithGrip" >
   <lnk:WindowBase.Resources>
     <Style TargetType="{x:Type TextBlock}" >
@@ -72,7 +72,7 @@
               <StackPanel Grid.Column="1" Grid.Row="4" >
                 <Rectangle Height="3" Width="1" />
                 <TextBlock Text="{Binding Invoice.Invoicee.CompanyName, FallbackValue=FallbackValue}"  FontSize="12" FontWeight="Bold" Height="18" Width="235"/>
-                <TextBlock Text="{Binding Invoice.Invoicee.AddressDetails, FallbackValue=FallbackValue c/o Accounts Payable &#xA;402 - 1500 Don Mills Rd &#xA;North York ON M3B 3K4}" />
+                <TextBlock Text="{Binding Invoice.Invoicee.AddressDetails, FallbackValue='FallbackValue c/o Accounts Payable &#10;402 - 1500 Don Mills Rd &#10;North York ON M3B 3K4'}" />
               </StackPanel>
             </Grid>
 
@@ -210,11 +210,11 @@
             </StackPanel>
 
             <ScrollViewer MinHeight="70" VerticalScrollBarVisibility="Auto">
-              <TextBlock Text="{Binding Invoice.Notes, FallbackValue=abc&#xA;efg&#xA;efg}" FontSize="9" Foreground="#fff" Margin="6 0" FontWeight="SemiBold" VerticalAlignment="Top" />
+              <TextBlock Text="{Binding Invoice.Notes, FallbackValue='abc &#10;efg&#10;efg'}" FontSize="9" Foreground="#fff" Margin="6 0" FontWeight="SemiBold" VerticalAlignment="Top" />
             </ScrollViewer>
 
             <ScrollViewer MinHeight="70" VerticalScrollBarVisibility="Auto">
-              <TextBlock Text="{Binding InfoMsg, FallbackValue=abc&#xA;efg&#xA;efg}" FontSize="9" Foreground="#bdf" Margin="6 0" VerticalAlignment="Top" />
+              <TextBlock Text="{Binding InfoMsg, FallbackValue='abc &#10;efg&#10;efg'}" FontSize="9" Foreground="#bdf" Margin="6 0" VerticalAlignment="Top" />
             </ScrollViewer>
           </StackPanel>
         </Border>

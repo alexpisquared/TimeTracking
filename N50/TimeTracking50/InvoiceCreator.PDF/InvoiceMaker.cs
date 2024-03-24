@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace InvoiceCreator.PDF;
+﻿namespace InvoiceCreator.PDF;
 
 public class InvoiceMaker
 {
@@ -125,9 +123,8 @@ public class InvoiceMaker
 
   public async void SaveAndViewPdfFile(string pdfFilename)
   {
-    for (int i = 0; i < 10; i++)
-      try { pdf.Save(pdfFilename); }
-      catch (Exception ex) { _ = ex.Log(pdfFilename); Console.Beep(333 + i * 10, i * 100); await Task.Delay(999); }
+    for (var i = 0; i < 10; i++)
+      try { pdf.Save(pdfFilename); } catch (Exception ex) { _ = ex.Log(pdfFilename); Console.Beep(333 + (i * 10), i * 100); await Task.Delay(999); }
 
     try { _ = Process.Start(@"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe", $"\"{pdfFilename}\""); } catch (Exception ex2) { _ = ex2.Log(pdfFilename); }
   }

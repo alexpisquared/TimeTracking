@@ -40,7 +40,7 @@ namespace MVVM.Common
     protected static bool _cancelClosing = false;
     public static void CloseEvent(Window view, BindableBaseViewModel vwMdl)
     {
-      async void handler(object sender, EventArgs e)
+      async void handler(object? sender, EventArgs e)
       {
         await vwMdl.ClosingVM();
         if (_cancelClosing) return;
@@ -56,7 +56,7 @@ namespace MVVM.Common
               await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => view.Close()));
           }
         }
-        catch (Exception ex) { Trace.WriteLine(ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name); if (Debugger.IsAttached) Debugger.Break(); }
+        catch (Exception ex) { Trace.WriteLine(ex.Message, System.Reflection.MethodInfo.GetCurrentMethod()?.Name); if (Debugger.IsAttached) Debugger.Break(); }
       } // When the ViewModel asks to be closed, close the window.
 
       vwMdl.RequestClose += handler;
@@ -79,7 +79,7 @@ namespace MVVM.Common
       //        await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => view.Close()));
       //    }
       //  }
-      //  catch (Exception ex) { Trace.WriteLine(ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name); if (Debugger.IsAttached) Debugger.Break(); }
+      //  catch (Exception ex) { Trace.WriteLine(ex.Message, System.Reflection.MethodInfo.GetCurrentMethod()?.Name); if (Debugger.IsAttached) Debugger.Break(); }
       //};
       //vwMdl.RequestClose += handler;
 
@@ -93,7 +93,7 @@ namespace MVVM.Common
       Task.Run(() => vMdl.AutoExec()); //			await vMdl.AutoExec();
       view.Show();
     }
-    public static bool? ShowModalMvvm(BindableBaseViewModel vMdl, Window view, Window owner = null)
+    public static bool? ShowModalMvvm(BindableBaseViewModel vMdl, Window view, Window? owner = null)
     {
       if (owner != null)
       {
@@ -114,7 +114,7 @@ namespace MVVM.Common
     }
 
 
-    public static bool? ShowModalMvvmAsync(BindableBaseViewModel vMdl, Window view, Window owner = null) // public static async Task<bool?> ShowModalMvvmAsync(BindableBaseViewModel vMdl, Window view, Window owner = null)
+    public static bool? ShowModalMvvmAsync(BindableBaseViewModel vMdl, Window view, Window? owner = null) // public static async Task<bool?> ShowModalMvvmAsync(BindableBaseViewModel vMdl, Window view, Window owner = null)
     {
       if (owner != null)
       {
@@ -144,7 +144,7 @@ namespace MVVM.Common
           Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => //todo: rejoin properly to the UI thread (Oct 2017)
           vMdl.AutoExec()));
       }
-      catch (Exception ex) { Trace.WriteLine(ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name); if (Debugger.IsAttached) Debugger.Break(); }
+      catch (Exception ex) { Trace.WriteLine(ex.Message, System.Reflection.MethodInfo.GetCurrentMethod()?.Name); if (Debugger.IsAttached) Debugger.Break(); }
     }
     static async Task autoexecAsyncSafe(BindableBaseViewModel vMdl)
     {
@@ -156,7 +156,7 @@ namespace MVVM.Common
           await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(async () => //todo: rejoin properly to the UI thread (Oct 2017)
           await vMdl.AutoExecAsync()));
       }
-      catch (Exception ex) { Trace.WriteLine(ex.Message, System.Reflection.MethodInfo.GetCurrentMethod().Name); if (Debugger.IsAttached) Debugger.Break(); }
+      catch (Exception ex) { Trace.WriteLine(ex.Message, System.Reflection.MethodInfo.GetCurrentMethod()?.Name); if (Debugger.IsAttached) Debugger.Break(); }
     }
 
     protected static async Task refreshUi() => await Application.Current.Dispatcher.BeginInvoke(new ThreadStart(() => refreshUiSynch()));

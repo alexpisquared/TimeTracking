@@ -15,7 +15,7 @@ public partial class OptionsManager : AAV.WPF.Base.WindowBase
     if (!string.IsNullOrEmpty(Settings.Default.OptnVw))
     {
       var stgs = Serializer.LoadFromString<AppSettings>(Settings.Default.OptnVw) as AppSettings;
-      if (stgs.Window2 != null)
+      if (stgs?.Window2 != null)
       {
         Top = stgs.Window2.windowTop;
         Left = stgs.Window2.windowLeft;
@@ -63,7 +63,7 @@ public partial class OptionsManager : AAV.WPF.Base.WindowBase
     ((CollectionViewSource)this.FindResource("lkuJobCategoryViewSource")).Source = _dbxTimeTrack.lkuJobCategories.Local;
     ((CollectionViewSource)this.FindResource("lkuPayPeriodModeViewSource")).Source = _dbxTimeTrack.lkuPayPeriodModes.Local;
   }
-  void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e0)
+  void Window_Closing(object? sender, System.ComponentModel.CancelEventArgs e0)
   {
     try
     {

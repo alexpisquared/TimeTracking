@@ -16,6 +16,7 @@ public static class PasswordHelper
   static void OnPasswordPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
   {
     var passwordBox = sender as PasswordBox;
+    ArgumentNullException.ThrowIfNull(passwordBox, "@213");
     passwordBox.PasswordChanged -= PasswordChanged;
 
     if (!GetIsUpdating(passwordBox))

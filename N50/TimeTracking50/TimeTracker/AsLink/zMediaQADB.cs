@@ -17,7 +17,7 @@ namespace MediaQA.MVVM2.Models
 
 	public class TimeTrackDbCtx_Simple : DbContext
 	{
-		public DbSet<MediaInfo> MediaInfos { get; set; }
+		public DbSet<MediaInfo>? MediaInfos { get; set; }
 		void foo() { }
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{

@@ -2,7 +2,8 @@
 
 internal class TimesheetPreviewVM : BindableBaseViewModel
 {
-  A0DbContext _db;
+  readonly Bpr _bpr = new();
+  A0DbContext? _db;
   readonly Stopwatch _sw = Stopwatch.StartNew();
   DateTime _today = DateTime.Today;
   readonly TimePerDay[] _week = new TimePerDay[7];
@@ -73,7 +74,7 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
     var h1 = 8.0;
     var we = 0.0;
     var jc = Settings.DefaultJobCategoryId;
-    var nt = _db.lkuJobCategories.Find(jc).Description;
+    var nt = _db?.lkuJobCategories.Find(jc).Description;
     var d = 0;
     _week[d++] = DaySat = getCreateTimePerDay(DaySatDate, h1, we, jc, nt);
     _week[d++] = DaySun = getCreateTimePerDay(DaySunDate, h1, we, jc, nt);
@@ -128,7 +129,7 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
 
   Invoicer _invoicer;         /**/ public Invoicer Invoicer { get => _invoicer; set => Set(ref _invoicer, value); }
   Invoicee _invoicee;         /**/ public Invoicee Invoicee { get => _invoicee; set => Set(ref _invoicee, value); }
-  DefaultSetting? _stg = null; /**/ public DefaultSetting Settings => _stg ??= _db.DefaultSettings.FirstOrDefault();
+  DefaultSetting? _stg = null; /**/ public DefaultSetting Settings => _stg ??= _db?.DefaultSettings?.FirstOrDefault();
 
   TimePerDay _DaySat;         /**/ public TimePerDay DaySat { get => _DaySat; set => Set(ref _DaySat, value); }
   TimePerDay _DaySun;         /**/ public TimePerDay DaySun { get => _DaySun; set => Set(ref _DaySun, value); }
@@ -169,9 +170,9 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
 
   void onUnLock(object x)
   {
-   new Bpr().Click();
+   _bpr.Click();
     _week.ToList().ForEach(r => r.IsLocked = false);
-    InfoMsg = _db.GetDbChangesReport();
+    InfoMsg = _db?.GetDbChangesReport();
   }
 
   void onOldOrgA(object x) => new FromTillCtgrTaskNote().ShowDialog(); //Old/Org.
@@ -274,19 +275,19 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
   void onDbQuit() { _skipDbSave = true; CloseAppCmd.Execute(null); }
 
   [Obsolete]
-  void onDbSave() { IsBusy = true; new Bpr().Click(); Appender = InfoMsg = _db.TrySaveReport().report; App.SpeakFaF(InfoMsg); IsBusy = false; }
+  void onDbSave() { IsBusy = true; _bpr.Click(); Appender = InfoMsg = _db.TrySaveReport().report; App.SpeakFaF(InfoMsg); IsBusy = false; }
   void onMovePrd(int sevenDays)
   {
     IsBusy = true;
     if (sevenDays > 0 && _today > App.AppStartAt)
     {
       canDbSave = false;
-      new Bpr().No(); //         App.Synth.SpeakAsync("No!");
+      _bpr.No(); //         App.Synth.SpeakAsync("No!");
     }
     else
     {
       canDbSave = true;
-      new Bpr().Click();
+      _bpr.Click();
       _today = _today.AddDays(sevenDays);
       setWeeklyDefaultHours(_today);
 

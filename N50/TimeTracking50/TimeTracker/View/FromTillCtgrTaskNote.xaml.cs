@@ -3,6 +3,7 @@ public partial class FromTillCtgrTaskNote : AAV.WPF.Base.WindowBase
 {
   A0DbContext _db = A0DbContext.Create();
   public const string _svcs = "Software engineering services.";
+  readonly Bpr _bpr = new();
 
   public FromTillCtgrTaskNote()
   {
@@ -70,7 +71,7 @@ public partial class FromTillCtgrTaskNote : AAV.WPF.Base.WindowBase
     if (isFwd == 0) // on app start:
     {
       var lastINvoicedDay = _db.TimePerDays.Local.Where(r => r.InvoiceId != null).Max(r => r.WorkedOn);
-      PayPrdBgn = lastINvoicedDay < InvoiceE.StartDate ? InvoiceE.StartDate.AddDays(InvoiceE.PayPeriodStart) : PayPrdBgn = lastINvoicedDay.AddDays(1);  // if first time for the invocee
+      PayPrdBgn = lastINvoicedDay < InvoiceE?.StartDate ? InvoiceE.StartDate.AddDays(InvoiceE.PayPeriodStart) : PayPrdBgn = lastINvoicedDay.AddDays(1);  // if first time for the invocee
     }
     else
       PayPrdBgn = PayPrdBgn.AddDays(isFwd > 0 ? InvoiceE.PayPeriodLength : -InvoiceE.PayPeriodLength);
@@ -170,7 +171,7 @@ public partial class FromTillCtgrTaskNote : AAV.WPF.Base.WindowBase
     };
     return newTimePerDay;
   }
-  static TimePerDay inferNewDayAsync(DateTime trgWkDay, string jobCategoryId)
+  static TimePerDay? inferNewDayAsync(DateTime trgWkDay, string jobCategoryId)
   {
     TimePerDay? rv = null;
     _ = Task<TimePerDay>.Factory.StartNew(() =>
@@ -297,9 +298,9 @@ public partial class FromTillCtgrTaskNote : AAV.WPF.Base.WindowBase
       }
     }
     catch (Exception ex) { _ = MessageBox.Show(ex.ToString()); } // if (Debugger.IsAttached) Debugger.Break(); 
-    finally { Cursor = Cursors.Arrow; ctrlPnl1.IsEnabled = ctrlPnl2.IsEnabled = true; new Bpr().Click(); }
+    finally { Cursor = Cursors.Arrow; ctrlPnl1.IsEnabled = ctrlPnl2.IsEnabled = true; _bpr.Click(); }
   }
-  void onClosing(object s, System.ComponentModel.CancelEventArgs e) => InfoMessg = DbSaveOr(_db, e);
+  void onClosing(object? s, System.ComponentModel.CancelEventArgs e) => InfoMessg = DbSaveOr(_db, e);
 
   [Obsolete]
   public static string DbSaveOr(A0DbContext _db, System.ComponentModel.CancelEventArgs e)
@@ -321,9 +322,9 @@ public partial class FromTillCtgrTaskNote : AAV.WPF.Base.WindowBase
     return "";
   }
 
-  Invoicer _invoiceR;         /**/ public Invoicer InvoiceR { get => _invoiceR ?? (_db.Invoicers.FirstOrDefault(r => r.Id == DSettngS.CurrentInvoicerId)); set => _invoiceR = value; }
-  Invoicee _invoiceE;         /**/ public Invoicee InvoiceE { get => _invoiceE ?? (_db.Invoicees.FirstOrDefault(r => r.Id == DSettngS.CurrentInvoiceeId)); set => _invoiceE = value; }
-  DefaultSetting _settingS;   /**/ public DefaultSetting DSettngS { get => _settingS ??= _db.DefaultSettings.FirstOrDefault(); set => _settingS = value; }
+  Invoicer? _invoiceR;         /**/ public Invoicer? InvoiceR { get => _invoiceR ?? (_db.Invoicers.FirstOrDefault(r => r.Id == DSettngS.CurrentInvoicerId)); set => _invoiceR = value; }
+  Invoicee? _invoiceE;         /**/ public Invoicee? InvoiceE { get => _invoiceE ?? (_db.Invoicees.FirstOrDefault(r => r.Id == DSettngS.CurrentInvoiceeId)); set => _invoiceE = value; }
+  DefaultSetting? _settingS;   /**/ public DefaultSetting? DSettngS { get => _settingS ??= _db.DefaultSettings.FirstOrDefault(); set => _settingS = value; }
 
   void onInvoice(object s, RoutedEventArgs e)
   {

@@ -2,6 +2,7 @@
 public partial class InvoicePreview : AAV.WPF.Base.WindowBase
 {
   readonly A0DbContext _db;
+  readonly Bpr _bpr = new();
 
   [Obsolete]
   public InvoicePreview(A0DbContext db)
@@ -154,7 +155,7 @@ public partial class InvoicePreview : AAV.WPF.Base.WindowBase
 
     if (ivc == null)
     {
-      new Bpr().No();
+      _bpr.No();
       return;
     }
 
@@ -220,6 +221,7 @@ public partial class InvoicePreview : AAV.WPF.Base.WindowBase
   static void recalcPPH(DependencyObject d, DependencyPropertyChangedEventArgs e)
   {
     var ip = d as InvoicePreview;
+    ArgumentNullException.ThrowIfNull(ip, "@@@###");
     ip.AmountHR = ip.Subtotal = ip.PayPrdHrs * ip.InvoiceE.CorpRate;
     ip.SalesTax = ip.AmountHR * ip.DSettngS.HstPercent * .01m;
     ip.GrdTotal = ip.AmountHR * ((ip.DSettngS.HstPercent * .01m) + 1m);

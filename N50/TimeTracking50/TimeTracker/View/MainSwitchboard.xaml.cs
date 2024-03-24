@@ -2,6 +2,7 @@
 public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
 {
   const int _zeroBasedBtnCnt = 4;
+  readonly Bpr _bpr = new();
   bool _keepSaying;
   public MainSwitchboard(bool keepSaying, string? msg = null)
   {
@@ -75,8 +76,8 @@ public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
     }
     catch (Exception ex) { _ = ex.Log(); }
   }
-  async void onClose(object? s, RoutedEventArgs? e) { Hide(); await new Bpr().AppFinishAsync(); Close(); Application.Current.Shutdown(); }
+  async void onClose(object? s, RoutedEventArgs? e) { Hide(); await _bpr.AppFinishAsync(); Close(); Application.Current.Shutdown(); }
   void pre() { _keepSaying = false; Hide(); }                                     //  ctrlPanelOnMarket.IsEnabled = false; WindowState = WindowState.Minimized; scrooves up focusing on the new window.   Hide(); - invokes Close */ }
-  void post() { new Bpr().Click(); _ = new MainSwitchboard(false).ShowDialog(); }  //  ctrlPanelOnMarket.IsEnabled = true;  WindowState = WindowState.Normal; Show(); }//Task.Factory.StartNew(() => Thread.Sleep(100)).ContinueWith(_ => { Close(); }, TaskScheduler.FromCurrentSynchronizationContext()); }
-  void wnd_Loaded(object sender, RoutedEventArgs e) => new Bpr().AppStart();
+  void post() { _bpr.Click(); _ = new MainSwitchboard(false).ShowDialog(); }  //  ctrlPanelOnMarket.IsEnabled = true;  WindowState = WindowState.Normal; Show(); }//Task.Factory.StartNew(() => Thread.Sleep(100)).ContinueWith(_ => { Close(); }, TaskScheduler.FromCurrentSynchronizationContext()); }
+  void wnd_Loaded(object sender, RoutedEventArgs e) => _bpr.AppStart();
 }
