@@ -1,9 +1,8 @@
 ﻿namespace InvoiceCreator.PDF;
-
 public class InvoiceMaker
 {
   const bool _includeBank = false;
-  readonly PdfDocument pdf = new();
+  readonly PdfDocument _pdfDoc = new();
 
   public void PrepareInvoice(
     string coName1,
@@ -33,9 +32,9 @@ public class InvoiceMaker
       var liteb = new XSolidBrush(lite);
       var litep = new XPen(lite);
 
-      pdf.Info.Title = "Created with PDFsharp";
+      _pdfDoc.Info.Title = "Created with PDFsharp";
 
-      var page = pdf.AddPage();          // Create an empty page in this document.
+      var page = _pdfDoc.AddPage();          // Create an empty page in this document.
       var gfx = XGraphics.FromPdfPage(page);  // Get an XGraphics object for drawing on this page.
 
       var col1 = page.Width * .10;
@@ -124,7 +123,7 @@ public class InvoiceMaker
   public async void SaveAndViewPdfFile(string pdfFilename)
   {
     for (var i = 0; i < 10; i++)
-      try { pdf.Save(pdfFilename); } catch (Exception ex) { _ = ex.Log(pdfFilename); Console.Beep(333 + (i * 10), i * 100); await Task.Delay(999); }
+      try { _pdfDoc.Save(pdfFilename); } catch (Exception ex) { _ = ex.Log(pdfFilename); Console.Beep(333 + (i * 10), i * 100); await Task.Delay(999); }
 
     try { _ = Process.Start(@"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe", $"\"{pdfFilename}\""); } catch (Exception ex2) { _ = ex2.Log(pdfFilename); }
   }

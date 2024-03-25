@@ -49,7 +49,7 @@ public partial class InvoicePreview : AAV.WPF.Base.WindowBase
     InfoMsg = FromTillCtgrTaskNote.DbSaveOr(_db, e);
     App.SpeakFaF(InfoMsg);
   }
-  async void onSubmit(object sender, RoutedEventArgs e)
+  async void OnCreateInvoice(object sender, RoutedEventArgs e)
   {
     try
     {

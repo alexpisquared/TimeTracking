@@ -195,7 +195,7 @@
               </Style>
             </StackPanel.Resources>
             <StackPanel   Orientation="Vertical"   >
-              <Button Content="{Binding Invoice.Invoicee.InvoiceEmail, FallbackValue=email@jlj.com}" Click="onSubmit" x:Name="btnInvoiceSubmit" IsDefault="True" ToolTip="Submits invoice: creates hardcopy, sends email, saves to db." FontWeight="SemiBold" Padding="4" Foreground="#075" />
+              <Button Content="{Binding Invoice.Invoicee.InvoiceEmail, FallbackValue=email@jlj.com}" Click="OnCreateInvoice" x:Name="btnInvoiceSubmit" IsDefault="True" ToolTip="Submits invoice: creates hardcopy, sends email, saves to db." FontWeight="SemiBold" Padding="4" Foreground="#075" />
               <StackPanel Orientation="Horizontal" >
 
                 <Button Content=" _,&lt;&lt; " Click="prevPrd_Click"  />
