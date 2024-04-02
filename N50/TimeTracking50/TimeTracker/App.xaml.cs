@@ -6,6 +6,7 @@ public partial class App : Application
   private static SpeechSynth? _synth = null; public static SpeechSynth Synth => _synth ??= new(new ConfigurationBuilder().AddUserSecrets<App>().Build()["AppSecrets:MagicSpeech"] ?? throw new ArgumentNullException("###################"), true, CC.EnusAriaNeural.Voice);
   public static async Task SpeakAsync(string msg) => await Synth.SpeakAsync(msg);
   public static void SpeakFaF(string msg) => Synth.SpeakFAF(msg);
+  public static void SpeakFree(string msg) => Synth.SpeakFree(msg);
 
   protected override async void OnStartup(StartupEventArgs e)
   {

@@ -32,7 +32,7 @@ public partial class OptionsManager : AAV.WPF.Base.WindowBase
     try
     {
       InfoMsg = $"{_dbxTimeTrack.SaveChanges()} rows saved";
-      App.SpeakFaF(InfoMsg);
+      App.SpeakFree(InfoMsg);
     }
     catch (DbEntityValidationException ex)
     {

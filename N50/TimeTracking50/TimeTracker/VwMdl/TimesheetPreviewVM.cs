@@ -275,7 +275,7 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
   void onDbQuit() { _skipDbSave = true; CloseAppCmd.Execute(null); }
 
   [Obsolete]
-  void onDbSave() { IsBusy = true; _bpr.Click(); Appender = InfoMsg = _db.TrySaveReport().report; App.SpeakFaF(InfoMsg); IsBusy = false; }
+  void onDbSave() { IsBusy = true; _bpr.Click(); Appender = InfoMsg = _db.TrySaveReport().report; App.SpeakFree(InfoMsg); IsBusy = false; }
   void onMovePrd(int sevenDays)
   {
     IsBusy = true;

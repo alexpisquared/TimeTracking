@@ -47,7 +47,7 @@ public partial class InvoicePreview : AAV.WPF.Base.WindowBase
     Properties.Settings.Default.InvcVw = AppSettings.SaveSizePosition(this, Properties.Settings.Default.InvcVw); Properties.Settings.Default.Save();
 
     InfoMsg = FromTillCtgrTaskNote.DbSaveOr(_db, e);
-    App.SpeakFaF(InfoMsg);
+    App.SpeakFree(InfoMsg);
   }
   async void OnCreateInvoice(object sender, RoutedEventArgs e)
   {
@@ -112,7 +112,7 @@ public partial class InvoicePreview : AAV.WPF.Base.WindowBase
         Invoice.Notes = Invoice.Notes[..(512 - 1)];
 
       InfoMsg = await _db.TrySaveReportAsync() + " rows saved";
-      App.SpeakFaF(InfoMsg);
+      App.SpeakFree(InfoMsg);
 
       Close();
     }
