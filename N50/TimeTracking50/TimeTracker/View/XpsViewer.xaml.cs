@@ -7,7 +7,7 @@ using System.Windows.Xps.Packaging;
 
 namespace TimeTracker.View
 {
-	public partial class XpsViewer //// : AAV.WPF.Base.WindowBase
+	public partial class XpsViewer 
 	{
 		public XpsViewer(string docFile)
 		{

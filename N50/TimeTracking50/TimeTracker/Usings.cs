@@ -16,7 +16,7 @@ global using System.Windows.Controls;
 global using System.Windows.Data;
 global using System.Windows.Input;
 global using System.Windows.Media;
-global using WpfUserControlLib.Extensions; //using AAV.WPF.Ext;
+global using WpfUserControlLib.Extensions; 
 global using AmbienceLib;
 global using AsLink;
 global using Db.EventLog.Ext;

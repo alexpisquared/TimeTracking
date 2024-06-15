@@ -1,5 +1,5 @@
 ﻿namespace TimeTracker.View;
-public partial class InvoicePreview // : AAV.WPF.Base.WindowBase
+public partial class InvoicePreview 
 {
   readonly A0DbContext _db;
   readonly Bpr _bpr = new();

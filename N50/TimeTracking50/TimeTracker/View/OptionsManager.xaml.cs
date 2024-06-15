@@ -3,7 +3,7 @@ using System.Windows.Data;
 
 namespace TimeTracker.View;
 
-public partial class OptionsManager // : AAV.WPF.Base.WindowBase
+public partial class OptionsManager 
 {
   public OptionsManager()
   {

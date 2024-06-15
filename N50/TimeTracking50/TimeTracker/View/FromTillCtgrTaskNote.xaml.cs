@@ -1,5 +1,5 @@
 ﻿namespace TimeTracker.View;
-public partial class FromTillCtgrTaskNote // // : AAV.WPF.Base.WindowBase
+public partial class FromTillCtgrTaskNote 
 {
   A0DbContext _db = A0DbContext.Create();
   public const string _svcs = "Software engineering services.";

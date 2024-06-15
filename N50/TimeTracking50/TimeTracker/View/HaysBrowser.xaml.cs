@@ -8,7 +8,7 @@ using System.Windows.Navigation;
 
 namespace TimeTracker.View
 {
-  public partial class HaysBrowser // : AAV.WPF.Base.WindowBase
+  public partial class HaysBrowser 
   {
     public HaysBrowser()
     {
