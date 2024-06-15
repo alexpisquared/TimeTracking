@@ -6,7 +6,7 @@ namespace TimeTracker.View
     /// <summary>
     /// Interaction logic for Window2.xaml
     /// </summary>
-    public partial class Window2 : AAV.WPF.Base.WindowBase
+    public partial class Window2 // : AAV.WPF.Base.WindowBase
     {
         public Window2()
         {

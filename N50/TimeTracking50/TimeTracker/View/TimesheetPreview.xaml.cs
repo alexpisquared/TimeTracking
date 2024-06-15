@@ -5,7 +5,7 @@ using TimeTracker.Properties;
 
 namespace TimeTracker.View
 {
-  public partial class TimesheetPreview : AAV.WPF.Base.WindowBase
+  public partial class TimesheetPreview // : AAV.WPF.Base.WindowBase
   {
     public TimesheetPreview()
     {

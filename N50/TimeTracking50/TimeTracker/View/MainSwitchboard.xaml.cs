@@ -1,5 +1,5 @@
 ﻿namespace TimeTracker.View;
-public partial class MainSwitchboard : AAV.WPF.Base.WindowBase
+public partial class MainSwitchboard // : AAV.WPF.Base.WindowBase
 {
   const int _zeroBasedBtnCnt = 4;
   readonly Bpr _bpr = new();
