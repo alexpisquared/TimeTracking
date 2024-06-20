@@ -1,5 +1,5 @@
 ﻿namespace TimeTracker.View;
-public partial class MainSwitchboard 
+public partial class MainSwitchboard
 {
   const int _zeroBasedBtnCnt = 4;
   readonly Bpr _bpr = new();
@@ -80,4 +80,10 @@ public partial class MainSwitchboard
   void pre() { _keepSaying = false; Hide(); }                                     //  ctrlPanelOnMarket.IsEnabled = false; WindowState = WindowState.Minimized; scrooves up focusing on the new window.   Hide(); - invokes Close */ }
   void post() { _bpr.Click(); _ = new MainSwitchboard(false).ShowDialog(); }  //  ctrlPanelOnMarket.IsEnabled = true;  WindowState = WindowState.Normal; Show(); }//Task.Factory.StartNew(() => Thread.Sleep(100)).ContinueWith(_ => { Close(); }, TaskScheduler.FromCurrentSynchronizationContext()); }
   void wnd_Loaded(object sender, RoutedEventArgs e) => _bpr.AppStart();
+
+  private void onThrow(object sender, RoutedEventArgs e)
+  {
+    var rv = int.Parse(DateTime.Now.ToString().Substring(5, 5));
+    throw new Exception("This is a test exception");
+  }
 }

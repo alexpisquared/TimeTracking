@@ -78,6 +78,7 @@
 
       </Grid>
 
+      <Button Click="onThrow"	Content="X" FontFamily="Arial" FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Left"  Height="26" Width="26" Margin="1" BorderThickness="0" Background="Transparent" Foreground="#00f" ToolTip="Test unhandled exception throwing/intercepting"/>
       <Button Click="onClose"	Content="X" FontFamily="Arial" FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Right" Height="26" Width="26" Margin="1" BorderThickness="0" Background="Transparent" Foreground="#d00" />
 
     </Grid>

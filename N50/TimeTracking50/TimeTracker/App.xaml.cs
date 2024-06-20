@@ -13,7 +13,8 @@ public partial class App : Application
     try
     {
       base.OnStartup(e);                                                                                                                                                                                                  // /**/ await Task.Delay(333);
-      Current.DispatcherUnhandledException += WpfUserControlLib.Helpers.UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;
+      Current.DispatcherUnhandledException += WpfUserControlLib.Helpers.UnhandledExceptionHndlrUI.OnCurrentDispatcherUnhandledException;
+
       EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotFocusEvent, new RoutedEventHandler((s, re) => { (s as TextBox)?.SelectAll(); })); //tu: TextBox                                                     // /**/ await Task.Delay(333);
       AAV.Sys.Helpers.Tracer.SetupTracingOptions("TimeTracker", new TraceSwitch("OnlyUsedWhenInConfig", "This is the trace for all               messages... but who cares?   See ScrSvr for a model.") { Level = TraceLevel.Verbose });  // /**/ await Task.Delay(333);
       ShutdownMode = ShutdownMode.OnExplicitShutdown;
