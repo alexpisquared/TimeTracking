@@ -280,7 +280,7 @@ public partial class FromTillCtgrTaskNote
     return newInvoice;
   }
 
-  [Obsolete]
+  // [Obsolete] :why Copilot decides to mark it such?
   async void Window_Loaded(object s, RoutedEventArgs e)
   {
     Cursor = Cursors.AppStarting;
@@ -302,7 +302,7 @@ public partial class FromTillCtgrTaskNote
   }
   void onClosing(object? s, System.ComponentModel.CancelEventArgs e) => InfoMessg = DbSaveOr(_db, e);
 
-  [Obsolete]
+  // [Obsolete] :why Copilot decides to mark it such?
   public static string DbSaveOr(A0DbContext _db, System.ComponentModel.CancelEventArgs e)
   {
     try
@@ -344,7 +344,7 @@ public partial class FromTillCtgrTaskNote
   }
   void onAddingNewItem(object s, AddingNewItemEventArgs e) => e.NewItem = inferNewDay(getFuzzyTrgWkDay(), _db.DefaultSettings.FirstOrDefault().DefaultJobCategoryId);
   void onDgSelctnChngd(object s, SelectionChangedEventArgs e) => recalcUnInvdHrs();
-  [Obsolete]
+  // [Obsolete] :why Copilot decides to mark it such?
   void onSavDb(object s, RoutedEventArgs e) => InfoMessg = _db.TrySaveReport().report;
   void onChkDb(object s, RoutedEventArgs e) => InfoMessg = _db.GetDbChangesReport();
   void onAdd8hrDays(object s, RoutedEventArgs e)

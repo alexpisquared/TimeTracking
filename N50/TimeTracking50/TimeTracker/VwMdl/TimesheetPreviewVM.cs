@@ -154,17 +154,17 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
   ICommand _OldOrgA; /**/ public ICommand OldOrgACmd => _OldOrgA ??= new RelayCommand(onOldOrgA, x => !IsBusy) { GestureKey = Key.I, GestureModifier = ModifierKeys.Control };
   ICommand _DbSave;  /**/
 
-  [Obsolete]
+  // [Obsolete] :why Copilot decides to mark it such?
   public ICommand DbSaveCmd => _DbSave ??= new RelayCommand(x => onDbSave(), x => canDbSave) { GestureKey = Key.S, GestureModifier = ModifierKeys.Control };
   ICommand _DbQuit;  /**/ public ICommand DbQuitCmd => _DbQuit ??= new RelayCommand(x => onDbQuit()) { GestureKey = Key.Q, GestureModifier = ModifierKeys.Control };
   ICommand _Print;   /**/ public ICommand PrintCmd => _Print ??= new RelayCommand(onPrint, x => !IsBusy) { GestureKey = Key.P, GestureModifier = ModifierKeys.Control };
   ICommand _Email;   /**/
 
-  [Obsolete]
+  // [Obsolete] :why Copilot decides to mark it such?
   public ICommand EmailCmd => _Email ??= new RelayCommand(onBlindEmail, x => !IsBusy) { GestureKey = Key.E, GestureModifier = ModifierKeys.Control };
   ICommand _Letter;  /**/
 
-  [Obsolete]
+  // [Obsolete] :why Copilot decides to mark it such?
   public ICommand LetterCmd => _Letter ??= new RelayCommand(onPrepAndShowLetter, x => !IsBusy) { GestureKey = Key.E, GestureModifier = ModifierKeys.Control };
   ICommand _UnLock;  /**/ public ICommand UnLockCmd => _UnLock ??= new RelayCommand(onUnLock, x => !IsBusy) { GestureKey = Key.U, GestureModifier = ModifierKeys.Control };
 
@@ -177,7 +177,7 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
 
   void onOldOrgA(object x) => new FromTillCtgrTaskNote().ShowDialog(); //Old/Org.
 
-  [Obsolete]
+  // [Obsolete] :why Copilot decides to mark it such?
   async void onBlindEmail(object printArea)
   {
     try
@@ -207,7 +207,7 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
     finally { IsBusy = false; Bpr.Beep2of2(); }
   }
 
-  [Obsolete]
+  // [Obsolete] :why Copilot decides to mark it such?
   void onPrepAndShowLetter(object printArea)
   {
     try
@@ -274,7 +274,7 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
 
   void onDbQuit() { _skipDbSave = true; CloseAppCmd.Execute(null); }
 
-  [Obsolete]
+  // [Obsolete] :why Copilot decides to mark it such?
   void onDbSave() { IsBusy = true; _bpr.Click(); Appender = InfoMsg = _db.TrySaveReport().report; App.SpeakFree(InfoMsg); IsBusy = false; }
   void onMovePrd(int sevenDays)
   {

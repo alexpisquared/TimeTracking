@@ -4,7 +4,7 @@ public partial class InvoicePreview
   readonly A0DbContext _db;
   readonly Bpr _bpr = new();
 
-  [Obsolete]
+  // [Obsolete] :why Copilot decides to mark it such?
   public InvoicePreview(A0DbContext db)
   {
     _db = db;
@@ -41,7 +41,7 @@ public partial class InvoicePreview
     showStatus();
   }
 
-  [Obsolete]
+  // [Obsolete] :why Copilot decides to mark it such?
   void onClosing(object sender, System.ComponentModel.CancelEventArgs e)
   {
     Properties.Settings.Default.InvcVw = AppSettings.SaveSizePosition(this, Properties.Settings.Default.InvcVw); Properties.Settings.Default.Save();

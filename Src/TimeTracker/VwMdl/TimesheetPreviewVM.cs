@@ -189,7 +189,7 @@ namespace TimeTracker
     void onOldOrgA(object x) => new TimeTracker.View.FromTillCtgrTaskNote().ShowDialog(); //Old/Org.
 
 
-    [Obsolete]
+    // [Obsolete] :why Copilot decides to mark it such?
     async void onBlindEmail(object printArea)
     {
       try
