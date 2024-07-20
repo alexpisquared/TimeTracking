@@ -107,7 +107,7 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
       if ((lst.Min(r => r.Key) - min).TotalSeconds > +30) // only if > 30 sec
         lst.Add(min, (int)EvOfIntFlag.Day1stAmbiguos);
       else
-        Debug.WriteLine("+???");
+        Debug.Write(" +??? ");
     }
 
     if (lst.Count < 1)
