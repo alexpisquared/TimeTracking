@@ -91,7 +91,7 @@ public class InvoiceMaker
       gfx.DrawString(total_ttl, fontValu, darkb, col9, h, XStringFormats.BaseLineRight);
 
       h += lineHeight2; gfx.DrawString("  Subtotal ", fontLabl, liteb, colM, h, XStringFormats.BaseLineRight); gfx.DrawString(sub_total, fontValu, darkb, col9, h, XStringFormats.BaseLineRight);
-      h += lineHeight2; gfx.DrawString("  Tax Rate ", fontLabl, liteb, colM, h, XStringFormats.BaseLineRight); gfx.DrawString(taxRatePc, fontValu, darkb, col9, h, XStringFormats.BaseLineRight);
+      h += lineHeight2; gfx.DrawString("       HST ", fontLabl, liteb, colM, h, XStringFormats.BaseLineRight); gfx.DrawString(taxRatePc, fontValu, darkb, col9, h, XStringFormats.BaseLineRight);
       h += lineHeight2; gfx.DrawString(" Sales Tax ", fontLabl, liteb, colM, h, XStringFormats.BaseLineRight); gfx.DrawString(salesTaxM, fontValu, darkb, col9, h, XStringFormats.BaseLineRight);
       h += lineHeight2; gfx.DrawString("     Other ", fontLabl, liteb, colM, h, XStringFormats.BaseLineRight);
       h += lineHeight2; gfx.DrawString("     Total ", fontLabl, liteb, colM, h, XStringFormats.BaseLineRight); gfx.DrawString(grandtotl, fontValu, darkb, col9, h, XStringFormats.BaseLineRight);
