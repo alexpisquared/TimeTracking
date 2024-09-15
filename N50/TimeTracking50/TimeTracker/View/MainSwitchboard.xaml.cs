@@ -34,7 +34,7 @@ public partial class MainSwitchboard
         while (_keepSaying)
         {
           await App.SpeakAsync(msg ?? "Never mind!");
-          await Task.Delay(15_000);
+          await Task.Delay(900_000);
         }
 
         await App.SpeakAsync("Well, hello?");
