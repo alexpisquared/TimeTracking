@@ -1,0 +1,61 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="BldRls" />
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="../../../AAV.Shared/Src/Net6.0/AAV.Sys/AAV.Sys.8.0.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/Ambience/AmbienceLib.csproj">
+    <BuildType Solution="BldRls|*" Project="Release" />
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/EfDbHelperLib/EfDbHelperLib.csproj">
+    <BuildType Solution="BldRls|*" Project="Debug" />
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/LibraryImportLib/LibraryImportLib.csproj">
+    <BuildType Solution="BldRls|*" Project="Debug" />
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/PhoneAreaCoder/PhoneAreaCoder.csproj">
+    <BuildType Solution="BldRls|*" Project="Debug" />
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/StandardContractsLib/StandardContractsLib.csproj">
+    <BuildType Solution="BldRls|*" Project="Debug" />
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/StandardLib/StandardLib.csproj">
+    <BuildType Solution="BldRls|*" Project="Debug" />
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/WpfUserControlLib/WpfUserControlLib.csproj">
+    <BuildType Solution="BldRls|*" Project="Debug" />
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../ScSv/Src/AlexPi.Scr/Db.EventLog/Db.EventLog.csproj">
+    <BuildType Solution="BldRls|*" Project="Debug" />
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../Util/Src/OpenVsOnTheCulpritLine/OpenVsOnTheCulpritLine.csproj">
+    <BuildType Solution="BldRls|*" Project="Debug" />
+  </Project>
+  <Project Path="AAV.Common.MVVM/AAV.Common.MVVM.csproj">
+    <BuildType Solution="BldRls|*" Project="Release" />
+  </Project>
+  <Project Path="Db.TimeTrack/Db.TimeTrack.csproj">
+    <BuildType Solution="BldRls|*" Project="Release" />
+  </Project>
+  <Project Path="InvoiceCreator.PDF/InvoiceCreator.PDF.csproj">
+    <BuildType Solution="BldRls|*" Project="Release" />
+  </Project>
+  <Project Path="TimeTracker/TimeTracker.csproj">
+    <BuildType Solution="BldRls|*" Project="Release" />
+  </Project>
+</Solution>
