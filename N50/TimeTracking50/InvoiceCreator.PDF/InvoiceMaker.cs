@@ -4,7 +4,7 @@ using PdfSharp.Fonts;
 namespace InvoiceCreator.PDF;
 public class InvoiceMaker
 {
-  const bool _includeBank = false;
+  const bool _includeBank = true;
   readonly PdfDocument _pdfDoc = new();
 
   public void PrepareInvoice(
