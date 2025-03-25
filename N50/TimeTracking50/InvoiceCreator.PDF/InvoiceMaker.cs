@@ -110,9 +110,10 @@ public class InvoiceMaker
       if (_includeBank)
       {
         gfx.DrawString("Bank Account Details", fontLabB, liteb, colA, h, XStringFormats.BaseLineLeft);                //gfx.DrawString($"{invcNumber}          ", fontValu, darkb, col2, h, XStringFormats.BaseLineLeft);
-        h += lineHeight2; gfx.DrawString("          Bank    ", fontLabl, liteb, colB, h, XStringFormats.BaseLineRight); gfx.DrawString("TD Canada Trust", fontValu, darkb, colB, h, XStringFormats.BaseLineLeft);
-        h += lineHeight2; gfx.DrawString("   Branch code    ", fontLabl, liteb, colB, h, XStringFormats.BaseLineRight); gfx.DrawString("03212          ", fontValu, darkb, colB, h, XStringFormats.BaseLineLeft);
-        h += lineHeight2; gfx.DrawString("Account Number    ", fontLabl, liteb, colB, h, XStringFormats.BaseLineRight); gfx.DrawString("5999741        ", fontValu, darkb, colB, h, XStringFormats.BaseLineLeft);
+        h += lineHeight2; gfx.DrawString("              Bank", fontLabl, liteb, colB, h, XStringFormats.BaseLineRight); gfx.DrawString("    TD Canada Trust", fontValu, darkb, colB, h, XStringFormats.BaseLineLeft);
+        h += lineHeight2; gfx.DrawString("    Transit Number", fontLabl, liteb, colB, h, XStringFormats.BaseLineRight); gfx.DrawString("    03212          ", fontValu, darkb, colB, h, XStringFormats.BaseLineLeft);
+        h += lineHeight2; gfx.DrawString("Institution Number", fontLabl, liteb, colB, h, XStringFormats.BaseLineRight); gfx.DrawString("    004            ", fontValu, darkb, colB, h, XStringFormats.BaseLineLeft);
+        h += lineHeight2; gfx.DrawString("    Account Number", fontLabl, liteb, colB, h, XStringFormats.BaseLineRight); gfx.DrawString("    5999741        ", fontValu, darkb, colB, h, XStringFormats.BaseLineLeft);
       }
       else
       {
