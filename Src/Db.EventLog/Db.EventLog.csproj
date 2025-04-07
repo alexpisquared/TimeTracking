@@ -94,7 +94,7 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\AAV.Shared\Src\Net6.0\AAV.Sys\AAV.Sys.csproj">
+    <ProjectReference Include="..\..\..\AAV.Shared\Src\Net6.0\AAV.Sys\AAV.Sys.8.0.csproj">
       <Project>{de491577-f6ba-45bf-b766-03b83fceaada}</Project>
       <Name>AAV.Sys</Name>
     </ProjectReference>
