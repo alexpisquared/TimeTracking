@@ -120,7 +120,6 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
         Debug.WriteLine("-???");
     }
   }
-*/
 
   static void Collect(SortedList<DateTime, EventOfInterestFlag> lst, string qry, EventOfInterestFlag evOfIntFlag)
   {
@@ -140,6 +139,7 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
       }
     }
   }
+*/
 
   static EventRecord? ReadEventSafe(this EventLogReader reader) { try { return reader.ReadEvent(); } catch (Exception ex) { _ = ex.Log(); return null; } }
 
