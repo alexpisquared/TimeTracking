@@ -7,6 +7,10 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="../../../AAV.ScrSvr/Src/AlexPi.Scr/Db.EventLog/Db.EventLog.csproj">
+    <BuildType Solution="BldRls|*" Project="Debug" />
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
   <Project Path="../../../AAV.Shared/Src/Net6.0/AAV.Sys/AAV.Sys.8.0.csproj">
     <Platform Solution="*|x64" Project="x64" />
   </Project>
@@ -36,10 +40,6 @@
     <Platform Solution="*|x64" Project="x64" />
   </Project>
   <Project Path="../../../AAV.Shared/Src/NetLts/WpfUserControlLib/WpfUserControlLib.csproj">
-    <BuildType Solution="BldRls|*" Project="Debug" />
-    <Platform Solution="*|x64" Project="x64" />
-  </Project>
-  <Project Path="../../../ScSv/Src/AlexPi.Scr/Db.EventLog/Db.EventLog.csproj">
     <BuildType Solution="BldRls|*" Project="Debug" />
     <Platform Solution="*|x64" Project="x64" />
   </Project>

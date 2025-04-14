@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.4" />
     <PackageReference Include="EntityFramework" Version="6.5.1" />
     <PackageReference Include="Fody" Version="6.9.2">
       <PrivateAssets>all</PrivateAssets>
@@ -51,7 +51,7 @@
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\Ambience\AmbienceLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\EfDbHelperLib\EfDbHelperLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\WpfUserControlLib\WpfUserControlLib.csproj" />
-    <ProjectReference Include="..\..\..\..\ScSv\Src\AlexPi.Scr\Db.EventLog\Db.EventLog.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.ScrSvr\Src\AlexPi.Scr\Db.EventLog\Db.EventLog.csproj" />
     <ProjectReference Include="..\AAV.Common.MVVM\AAV.Common.MVVM.csproj" />
     <ProjectReference Include="..\Db.TimeTrack\Db.TimeTrack.csproj" />
     <ProjectReference Include="..\InvoiceCreator.PDF\InvoiceCreator.PDF.csproj" />

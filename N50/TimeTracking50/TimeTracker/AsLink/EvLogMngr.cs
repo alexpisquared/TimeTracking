@@ -1,7 +1,8 @@
-﻿using System.Diagnostics.Eventing.Reader;
-using System.Reflection;
+﻿using Db.EventLog.Main;
 using Microsoft.Win32;
 using StandardLib.Extensions;
+using System.Diagnostics.Eventing.Reader;
+using System.Reflection;
 
 namespace AsLink;
 
@@ -11,30 +12,30 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
   const int _ssrUp = 7101, _ssrDn = 7102, _bootUp_12 = 12, _bootDn_13 = 13, _syTime_01 = 1; // when waking from hibernation: 12 is nowhere to be seen, 1 is there.
 
   static readonly string[] _paths = new[] { _app, _sys };
-
+  /*
   public static async Task<double> GetWkSpanForTheDay(DateTime trgDate)
   {
     double rv = 0;
-    await Task<SortedList<DateTime, int>>.Run(() => GetEoisForTheDay(trgDate)).ContinueWith(_ =>
+    await Task<SortedList<DateTime, EventOfInterestFlag>>.Run(() => GetEoisForTheDay(trgDate)).ContinueWith(_ =>
     {
       var eois = _.Result;
       if (eois.Any())
       {
-        if (eois.Count == 1)
+        if (eois.Count() == 1)
         {
           var start = eois.First().Key;
           if ((DateTime.Now - trgDate).TotalHours < 24) // if today
             rv = (DateTime.Now - start).TotalHours;
         }
-        else if (eois.Count > 1)
+        else if (eois.Count() > 1)
         {
           var finalEvent = eois.Last().Key;
           var lastScvrUp = DateTime.Now;
           lastScvrUp = (DateTime.Now - trgDate).TotalHours < 24
             ? DateTime.Now
             : (
-                        eois.Any(r => r.Value is ((int)EvOfIntFlag.ScreenSaverrUp) or ((int)EvOfIntFlag.ShutAndSleepDn)) ?
-                      eois.Where(r => r.Value is ((int)EvOfIntFlag.ScreenSaverrUp) or ((int)EvOfIntFlag.ShutAndSleepDn)).Last() : eois.Last()).Key;
+                        eois.Any(r => r.Value is (EvOfIntFlag.ScreenSaverrUp) or (EvOfIntFlag.ShutAndSleepDn)) ?
+                      eois.Where(r => r.Value is (EvOfIntFlag.ScreenSaverrUp) or (EvOfIntFlag.ShutAndSleepDn)).Last() : eois.Last()).Key;
 
           rv = ((lastScvrUp < finalEvent ? lastScvrUp : finalEvent) - eois.First().Key).TotalHours;
         }
@@ -69,18 +70,17 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
 
     return rv;
   }
-
-  public static SortedList<DateTime, int> GetEoisForTheDay(DateTime trgDate) => GetAllEventsOfInterest(trgDate, trgDate.AddDays(.999999));
-  public static SortedList<DateTime, int> GetAllEventsOfInterest(DateTime a, DateTime b)
+  public static SortedList<DateTime, EventOfInterestFlag> GetEoisForTheDay(DateTime trgDate) => GetAllEventsOfInterest(trgDate, trgDate.AddDays(.999999));
+  public static SortedList<DateTime, EventOfInterestFlag> GetAllEventsOfInterest(DateTime a, DateTime b)
   {
-    var lst = new SortedList<DateTime, int>();
+    var lst = new SortedList<DateTime, EventOfInterestFlag>();
 
     try
     {
-      Collect(lst, QryBootAndWakeUps(a, b), (int)EvOfIntFlag.BootAndWakeUps);
-      Collect(lst, QryShutAndSleepDn(a, b), (int)EvOfIntFlag.ShutAndSleepDn);
-      Collect(lst, QryScrSvr(_ssrDn, a, b), (int)EvOfIntFlag.ScreenSaverrDn);
-      Collect(lst, QryScrSvr(_ssrUp, a, b), (int)EvOfIntFlag.ScreenSaverrUp);
+      Collect(lst, QryBootAndWakeUps(a, b), EvOfIntFlag.BootAndWakeUps);
+      Collect(lst, QryShutAndSleepDn(a, b), EvOfIntFlag.ShutAndSleepDn);
+      Collect(lst, QryScrSvr(_ssrDn, a, b), EvOfIntFlag.ScreenSaverrDn);
+      Collect(lst, QryScrSvr(_ssrUp, a, b), EvOfIntFlag.ScreenSaverrUp);
 
       foreach (var path in _paths)
       {
@@ -92,10 +92,10 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
     return lst;
   }
 
-  static void Add1stLast(DateTime a, DateTime b, SortedList<DateTime, int> lst, string path)
-  {
-    //????????return; // no events found
-
+  static void Add1stLast(DateTime a, DateTime b, SortedList<DateTime, EventOfInterestFlag> lst, string path)
+  {                                                                   (int)
+    //????????return; // no events found                              (int)
+                                                                      (int)
     (var min, var max) = Get1rstLastEvents(qryAll(path, a, b));
     if (min == DateTime.MaxValue)
       return; // no events found
@@ -120,8 +120,9 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
         Debug.WriteLine("-???");
     }
   }
+*/
 
-  static void Collect(SortedList<DateTime, int> lst, string qry, int evOfIntFlag)
+  static void Collect(SortedList<DateTime, EventOfInterestFlag> lst, string qry, EventOfInterestFlag evOfIntFlag)
   {
     using var reader = GetEventLogReader(qry);
     for (var ev = reader.ReadEventSafe(); ev != null; ev = reader.ReadEventSafe())
@@ -891,20 +892,20 @@ Kernel-General 12 - up
 
   #endregion
 
-  public static async Task<int> UpdateEvLogToDb(int daysback, string msg) //todo: should not it be in the Db.EventLog project? (Jun2019)
-  {
-    try
-    {//Trace.WriteLine($"{DateTime.Now:yy.MM.dd HH:mm:ss.f} +{(DateTime.Now - App.Started):mm\\:ss\\.ff}    UpdateEvLogToDb(): {msg}");
+  //public static async Task<int> UpdateEvLogToDb(int daysback, string msg) //todo: should not it be in the Db.EventLog project? (Jun2019)
+  //{
+  //  try
+  //  {//Trace.WriteLine($"{DateTime.Now:yy.MM.dd HH:mm:ss.f} +{(DateTime.Now - App.Started):mm\\:ss\\.ff}    UpdateEvLogToDb(): {msg}");
 
-      if (!/*VerHelper.*/IsVIP) return -1; // let go ctrl-alt-del
+  //    if (!/*VerHelper.*/IsVIP) return -1; // let go ctrl-alt-del
 
-      var dailyEvents = AsLink.EvLogHelper.GetAllEventsOfInterest(DateTime.Today.AddDays(-daysback), DateTime.Now);
-      return dailyEvents.Count > 0 ? await Db.EventLog.Main.DbLogHelper.UpdateDbWithPotentiallyNewEvents(dailyEvents, Environment.MachineName, msg) : -2;
-    }
-    catch (Exception ex) { _ = ex.Log(); }
+  //    var dailyEvents = AsLink.EvLogHelper.GetAllEventsOfInterest(DateTime.Today.AddDays(-daysback), DateTime.Now);
+  //    return dailyEvents.Count > 0 ? await Db.EventLog.Main.DbLogHelper.UpdateDbWithPotentiallyNewEvents(dailyEvents, Environment.MachineName, msg) : -2;
+  //  }
+  //  catch (Exception ex) { _ = ex.Log(); }
 
-    return -888;
-  }
+  //  return -888;
+  //}
 
   public static bool IsVIP
   {
