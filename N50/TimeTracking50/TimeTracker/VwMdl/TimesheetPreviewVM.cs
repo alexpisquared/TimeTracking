@@ -20,7 +20,7 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
   protected override void AutoExec()
   {
     base.AutoExec();
-    Bpr.Beep1of2();
+    _bpr.Beep1of2();
 
     WinTitle = $"TimeTracker - {App.AppStartAt:ddd HH:mm}";
 
@@ -44,7 +44,7 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
     }
     catch (Exception ex) { _ = ex.Log(); Appender = "\r\nDownloads failed.\r\n" + ex.ToString(); }
 
-    Bpr.Beep2of2();
+    _bpr.Beep2of2();
   }
 
   protected override async Task ClosingVM() { if (_skipDbSave) App.SpeakFaF("Skipped saving to DB."); else onDbSave(); await Task.Delay(99); }
@@ -182,7 +182,7 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
   {
     try
     {
-      IsBusy = true; Bpr.Beep1of2();
+      IsBusy = true; _bpr.Beep1of2();
 
       App.SpeakFaF("Wait... Sending email could take a while...");
 
@@ -204,7 +204,7 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
       onDbSave();
     }
     catch (Exception ex) { _ = ex.Log(); Appender = "failed.\r\n" + ex.ToString(); }
-    finally { IsBusy = false; Bpr.Beep2of2(); }
+    finally { IsBusy = false; _bpr.Beep2of2(); }
   }
 
   // [Obsolete] :why Copilot decides to mark it such?
@@ -212,7 +212,7 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
   {
     try
     {
-      IsBusy = true; Bpr.Beep1of2();
+      IsBusy = true; _bpr.Beep1of2();
 
       _week.ToList().ForEach(r => r.IsLocked = true);
 
@@ -233,7 +233,7 @@ internal class TimesheetPreviewVM : BindableBaseViewModel
       onDbSave();
     }
     catch (Exception ex) { _ = ex.Log(); Appender = "failed.\r\n" + ex.ToString(); }
-    finally { IsBusy = false; Bpr.Beep2of2(); }
+    finally { IsBusy = false; _bpr.Beep2of2(); }
   }
 
   void onPrint(object printArea)

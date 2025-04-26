@@ -84,7 +84,8 @@ public static class Emailer
     var report = "";
     try
     {
-      var psi = new ProcessStartInfo("OUTLOOK.EXE",
+
+      var psi = new ProcessStartInfo("OUTLOOK.EXE", // in case of trouble, make sure to use this one:  "C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE"
         attachmentFilename == null ?
         $"/c ipm.note /m \"{trgEmail}?v=1&subject={subj}&body={body}\"" :
         $"/c ipm.note /m \"{trgEmail}?v=1&subject={subj}&body={body}\" /a \"{attachmentFilename}\""
