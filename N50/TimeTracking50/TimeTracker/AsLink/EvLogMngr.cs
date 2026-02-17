@@ -1,6 +1,4 @@
-﻿using Db.EventLog.Main;
-using Microsoft.Win32;
-using StandardLib.Extensions;
+﻿using Microsoft.Win32;
 using System.Diagnostics.Eventing.Reader;
 using System.Reflection;
 
@@ -146,9 +144,9 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
   static (DateTime min, DateTime max) Get1rstLastEvents(string qry)
   {
     var lst = new List<DateTime>();
-    using (var reader = GetEventLogReader(qry))
+    using (EventLogReader reader = GetEventLogReader(qry))
     {
-      for (var ev = reader.ReadEventSafe(); ev != null && ev.TimeCreated != null; ev = reader.ReadEventSafe())
+      for (EventRecord? ev = reader.ReadEventSafe(); ev != null && ev.TimeCreated != null; ev = reader.ReadEventSafe())
         lst.Add(ev.TimeCreated.Value);
     }
 
@@ -159,10 +157,10 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
 
   public static TimeSpan CurrentSessionDuration() // lengthy operation: 100 ms.
   {
-    var lastWakeTime = GetDaysLastWakeBoot(DateTime.Today);
-    var lastSsDnTime = GetDaysLastSsDnTime(DateTime.Today);
-    var lastSsUpTime = GetDaysLastSsUpTime(DateTime.Today);
-    var lastBootTime = GetDaysLastBootTime(DateTime.Today);
+    DateTime lastWakeTime = GetDaysLastWakeBoot(DateTime.Today);
+    DateTime lastSsDnTime = GetDaysLastSsDnTime(DateTime.Today);
+    DateTime lastSsUpTime = GetDaysLastSsUpTime(DateTime.Today);
+    DateTime lastBootTime = GetDaysLastBootTime(DateTime.Today);
 
     var lastUp = DateTime.FromOADate(Math.Max(lastBootTime.ToOADate(), Math.Max(lastWakeTime.ToOADate(), lastSsDnTime.ToOADate())));
 
@@ -198,14 +196,14 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
 
   public static DateTime GetDays1rstGenUp(DateTime hr00ofTheDate)
   {
-    var t = new[] { GetDays1rstBootTime(hr00ofTheDate), GetDays1rstSsDnTime(hr00ofTheDate), GetDays1rstWakeTime(hr00ofTheDate) };
+    DateTime[] t = new[] { GetDays1rstBootTime(hr00ofTheDate), GetDays1rstSsDnTime(hr00ofTheDate), GetDays1rstWakeTime(hr00ofTheDate) };
 
     if (t.Count(r => r == hr00ofTheDate) == 3) return hr00ofTheDate; // never off
-    var hr24ofTheDate = hr00ofTheDate.AddDays(1);
+    DateTime hr24ofTheDate = hr00ofTheDate.AddDays(1);
     if (t.Count(r => r == hr24ofTheDate) == 3) return hr24ofTheDate; // never on
 
-    var min = t.Where(r => r > hr00ofTheDate).Min();
-    var max = t.Where(r => r < hr24ofTheDate).Max();
+    DateTime min = t.Where(r => r > hr00ofTheDate).Min();
+    DateTime max = t.Where(r => r < hr24ofTheDate).Max();
 
     //if (ts == hr00ofTheDate && ti == hr00ofTheDate && tb == hr00ofTheDate) return hr00ofTheDate; // never off
 
@@ -220,11 +218,11 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
   }
   public static DateTime GetDays1rstGenDn(DateTime hr00ofTheDate)
   {
-    var ts = GetDaysLastSsUpTime(hr00ofTheDate);
-    var ti = GetDaysLastSleepTime(hr00ofTheDate);
+    DateTime ts = GetDaysLastSsUpTime(hr00ofTheDate);
+    DateTime ti = GetDaysLastSleepTime(hr00ofTheDate);
     if (ts == hr00ofTheDate && ti == hr00ofTheDate) return hr00ofTheDate; // never off
 
-    var hr24ofTheDate = hr00ofTheDate.AddDays(1);
+    DateTime hr24ofTheDate = hr00ofTheDate.AddDays(1);
     if (ts == hr24ofTheDate && ti == hr24ofTheDate) return hr24ofTheDate; // never on
 
     if (ts != hr00ofTheDate && ti != hr00ofTheDate) return DateTime.FromOADate(Math.Max(ts.ToOADate(), ti.ToOADate()));
@@ -237,8 +235,8 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
 
   public static DateTime GetDays1rstSsDnTime(DateTime hr00ofTheDate)
   {
-    var hr24ofTheDate = hr00ofTheDate.AddDays(1);
-    var rv = hr24ofTheDate;
+    DateTime hr24ofTheDate = hr00ofTheDate.AddDays(1);
+    DateTime rv = hr24ofTheDate;
     var apl1hr = $@"<QueryList><Query Id='0' Path='{_aavLogName}'><Select Path='{_aavLogName}'>*[System[Provider[@Name='{_aavSource}'] and (Level=4 or Level=0) and ( (EventID = {_ssrDn})  and TimeCreated[@SystemTime&gt;='{hr00ofTheDate.ToUniversalTime():o}'] and TimeCreated[@SystemTime&lt;='{hr24ofTheDate.ToUniversalTime():o}'] )]]</Select></Query></QueryList>";
     try
     {
@@ -253,8 +251,8 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
   }
   public static DateTime GetDays1rstWakeTime(DateTime hr00ofTheDate)
   {
-    var hr24ofTheDate = hr00ofTheDate.AddDays(1);
-    var rv = hr24ofTheDate;
+    DateTime hr24ofTheDate = hr00ofTheDate.AddDays(1);
+    DateTime rv = hr24ofTheDate;
     var sleeps = $@"<QueryList><Query Id='0' Path='System'><Select Path='System'>*[System[Provider[@Name='Microsoft-Windows-Power-Troubleshooter'] and TimeCreated[@SystemTime&gt;='{hr00ofTheDate.ToUniversalTime():o}'] and TimeCreated[@SystemTime&lt;='{hr24ofTheDate.ToUniversalTime():o}'] ]]</Select></Query></QueryList>";
 
     try
@@ -270,8 +268,8 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
   }
   public static DateTime GetDays1rstBootTime(DateTime hr00ofTheDate)
   {
-    var hr24ofTheDate = hr00ofTheDate.AddDays(1);
-    var rv = hr24ofTheDate;
+    DateTime hr24ofTheDate = hr00ofTheDate.AddDays(1);
+    DateTime rv = hr24ofTheDate;
     try
     {
       using var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, /*qryBootUpsOnly*/qryBootUpTmChg(hr00ofTheDate, hr24ofTheDate))); //sep 2018
@@ -285,8 +283,8 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
   }
   public static DateTime GetDaysLastBootTime(DateTime hr00ofTheDate, bool ignoreReboots = true)
   {
-    var hr24ofTheDate = hr00ofTheDate.AddDays(1);
-    var rv = hr00ofTheDate;
+    DateTime hr24ofTheDate = hr00ofTheDate.AddDays(1);
+    DateTime rv = hr00ofTheDate;
     try
     {
       using var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, qryBootUpsOnly(hr00ofTheDate, hr24ofTheDate)));
@@ -294,7 +292,7 @@ public static partial class EvLogHelper //2021-09: let's keep this one evolving 
       {
         if (!ignoreReboots)
         {
-          var bootUpTime = er.TimeCreated.Value;
+          DateTime bootUpTime = er.TimeCreated.Value;
           using var reader2 = new EventLogReader(new EventLogQuery("System", PathType.LogName, BootDnWithin5min(bootUpTime)));
           if ((EventLogRecord?)reader2.ReadEventSafe() != null) // this is a reboot - ignore it since it is not a session start.
             continue;
@@ -362,19 +360,20 @@ Kernel-General 12 - up
 
 */
 
-  static int _ssto = -1; public static int Ssto // ScreenSaveTimeOut 
+  public static int Ssto // ScreenSaveTimeOut 
   {
-    get {
-      if (_ssto < 0)
+    get
+    {
+      if (field < 0)
       {
         try
         {
           const string key = "ScreenSaveTimeOut";
-          if (_ssto == -1)
+          if (field == -1)
           {
-            if (!int.TryParse(Registry.GetValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", key, 299)?.ToString(), out _ssto) || _ssto == 299)
-              if (!int.TryParse(Registry.GetValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Control Panel\Desktop", key, 298)?.ToString(), out _ssto))
-                _ssto = 300;
+            if (!int.TryParse(Registry.GetValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", key, 299)?.ToString(), out field) || field == 299)
+              if (!int.TryParse(Registry.GetValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Control Panel\Desktop", key, 298)?.ToString(), out field))
+                field = 300;
 
             ////https://docs.microsoft.com/en-us/dotnet/api/microsoft.win32.registrykey.getvalue?view=netframework-4.8
             //var registryKey = Registry.CurrentUser.CreateSubKey(@"Software\Policies\Microsoft\Windows\Control Panel\Desktop"); // UnauthorizedAccessException: Access to the registry key 'HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Control Panel\Desktop' is denied.
@@ -382,12 +381,12 @@ Kernel-General 12 - up
             //Console.WriteLine("  Expanded: \"{0}\"", registryKey.GetValue(key));
           }
         }
-        catch (Exception ex) { _ = MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); _ssto = 299; }
+        catch (Exception ex) { _ = MessageBox.Show(ex.Message, MethodInfo.GetCurrentMethod()?.ToString()); field = 299; }
       }
 
-      return _ssto;
+      return field;
     }
-  }
+  } = -1;
 
   /*
    public static DateTime GetDays1rstSsUpTime(DateTime hr00ofTheDate)
@@ -434,8 +433,8 @@ Kernel-General 12 - up
 
   public static DateTime GetDaysLastWakeBoot(DateTime hr00ofTheDate)
   {
-    var hr24ofTheDate = hr00ofTheDate.AddDays(1);
-    var rv = hr00ofTheDate;
+    DateTime hr24ofTheDate = hr00ofTheDate.AddDays(1);
+    DateTime rv = hr00ofTheDate;
     var qry = QryBootAndWakeUps(hr00ofTheDate, hr24ofTheDate);
     try
     {
@@ -452,8 +451,8 @@ Kernel-General 12 - up
   {
     //sep 2019: if (hr00ofTheDate == DateTime.Today) return DateTime.Now;
 
-    var hr24ofTheDate = hr00ofTheDate.AddDays(1);
-    var rv = hr00ofTheDate;
+    DateTime hr24ofTheDate = hr00ofTheDate.AddDays(1);
+    DateTime rv = hr00ofTheDate;
 
     try
     {
@@ -468,8 +467,8 @@ Kernel-General 12 - up
   }
   public static DateTime GetDaysLastSsDnTime(DateTime hr00ofTheDate)
   {
-    var hr24ofTheDate = hr00ofTheDate.AddDays(1);
-    var rv = hr00ofTheDate;
+    DateTime hr24ofTheDate = hr00ofTheDate.AddDays(1);
+    DateTime rv = hr00ofTheDate;
     try
     {
       using var reader = new EventLogReader(new EventLogQuery(_aavLogName, PathType.LogName, QryScrSvr(_ssrDn, hr00ofTheDate, hr24ofTheDate)));
@@ -485,8 +484,8 @@ Kernel-General 12 - up
   {
     if (hr00ofTheDate == DateTime.Today) return DateTime.Now;
 
-    var hr24ofTheDate = hr00ofTheDate.AddDays(1);
-    var rv = hr00ofTheDate;
+    DateTime hr24ofTheDate = hr00ofTheDate.AddDays(1);
+    DateTime rv = hr00ofTheDate;
     var enteringSleep = $@"<QueryList><Query Id='0' Path='System'><Select Path='System'>*[System[(EventID=42 and TimeCreated[@SystemTime&gt;='{hr00ofTheDate.ToUniversalTime():o}'] and TimeCreated[@SystemTime&lt;='{hr24ofTheDate.ToUniversalTime():o}'] )]]</Select></Query></QueryList>";
     try
     {
@@ -505,7 +504,7 @@ Kernel-General 12 - up
     var sw = Stopwatch.StartNew();
     DateTime now = DateTime.Now, t1 = DateTime.MinValue, t2 = DateTime.MinValue;
     TimeSpan ttlDnTime = TimeSpan.FromTicks(0), ttlUpTime = TimeSpan.FromTicks(0), ttlIdleTm = TimeSpan.FromTicks(0);
-    var hr24ofTheDate = hr00ofTheDate.AddDays(1);
+    DateTime hr24ofTheDate = hr00ofTheDate.AddDays(1);
     var apl1hr = $@"<QueryList><Query Id='0' Path='{_aavLogName}'><Select Path='{_aavLogName}'>*[System[Provider[@Name='{_aavSource}'] and (Level=4 or Level=0) and ( (EventID &gt;= {_ssrUp} and EventID &lt;= {_ssrDn}) ) and TimeCreated[@SystemTime&gt;='{hr00ofTheDate.ToUniversalTime():o}']]]</Select></Query></QueryList>";
 
     var tssec = TimeSpan.FromSeconds(Ssto);
@@ -528,14 +527,14 @@ Kernel-General 12 - up
         {
           ttlIdleTm += tssec;
           t1 = er.TimeCreated.Value;
-          var dt = t2 == DateTime.MinValue ? t1 - hr00ofTheDate : t1 - t2;
+          TimeSpan dt = t2 == DateTime.MinValue ? t1 - hr00ofTheDate : t1 - t2;
           Debug.Write($"\r\n {er.TimeCreated:ddd HH:mm} -           :  dt: {dt,8:h\\:mm\\:ss}  ");
           ttlDnTime += dt;
         }
         else if (er.Id == _ssrDn)
         {
           t2 = er.TimeCreated.Value;
-          var dt = t1 == DateTime.MinValue ? t2 - hr00ofTheDate : t2 - t1;
+          TimeSpan dt = t1 == DateTime.MinValue ? t2 - hr00ofTheDate : t2 - t1;
           ttlUpTime += dt;
           Debug.Write($"\r\n           - {er.TimeCreated:ddd HH:mm} :  dt: {dt,8:h\\:mm\\:ss}  ");
         }
@@ -562,7 +561,7 @@ Kernel-General 12 - up
     var sw = Stopwatch.StartNew();
     DateTime now = DateTime.Now, prevWaken = DateTime.MinValue;
     var ttlwd = TimeSpan.FromTicks(0);
-    var hr24ofTheDate = hr00ofTheDate.AddDays(1);
+    DateTime hr24ofTheDate = hr00ofTheDate.AddDays(1);
     var sleeps = $@"<QueryList><Query Id='0' Path='System'><Select Path='System'>*[System[Provider[@Name='Microsoft-Windows-Power-Troubleshooter'] and TimeCreated[@SystemTime &gt;= '{hr00ofTheDate.ToUniversalTime():o}' ]]]</Select></Query></QueryList>";
 
     using (var reader = new EventLogReader(new EventLogQuery("System", PathType.LogName, sleeps)))
@@ -620,7 +619,7 @@ Kernel-General 12 - up
       {
         if (trg == DateTime.MinValue || trg > DateTime.Today) return DateTime.Now;
 
-        var rv = trg.Date.AddDays(1).AddMilliseconds(-1);
+        DateTime rv = trg.Date.AddDays(1).AddMilliseconds(-1);
 
         for (var i = _eventLog.Entries.Count - 1; i > 0; i--)
         {
@@ -689,7 +688,7 @@ Kernel-General 12 - up
       {
         if (trg == DateTime.MinValue || trg > DateTime.Today) return rv0;
 
-        var rv = trg.Date.AddDays(1).AddMilliseconds(-1);
+        DateTime rv = trg.Date.AddDays(1).AddMilliseconds(-1);
         var elog = new EventLog(evn);
 
         for (var i = elog.Entries.Count - 1; i > 0; i--)
@@ -728,14 +727,13 @@ Kernel-General 12 - up
       populateStartFinish(logReader);
     }
 
-    DateTime finish = DateTime.MinValue;
-
-    public DateTime DayFinish { get => finish; set => finish = value; }
+    public DateTime DayFinish { get; set; } = DateTime.MinValue;
     public DateTime DayStart { get; set; } = DateTime.MinValue;
 
     public static List<DateTime?> LastHour
     {
-      get {
+      get
+      {
         var l = new List<DateTime?>();
         for (var i = 0; i < 12; i++)
           l.Add(DateTime.Today.AddHours(i));
@@ -750,7 +748,7 @@ Kernel-General 12 - up
 
       var logReader = new EventLogReader(new EventLogQuery(logName, PathType.LogName, queryString));
       var l = new List<EventRecord>();
-      for (var er = logReader.ReadEventSafe(); null != er; er = logReader.ReadEventSafe())
+      for (EventRecord? er = logReader.ReadEventSafe(); null != er; er = logReader.ReadEventSafe())
         l.Add(er);
 
       sw.Stop();
@@ -766,7 +764,7 @@ Kernel-General 12 - up
       var logReader = new EventLogReader(new EventLogQuery(logName, PathType.LogName, queryString));
       var i = 0;
       var l = new List<DateTime?>();
-      for (var er = logReader.ReadEventSafe(); null != er; er = logReader.ReadEventSafe())
+      for (EventRecord? er = logReader.ReadEventSafe(); null != er; er = logReader.ReadEventSafe())
         l.Add(er.TimeCreated);
 
       sw.Stop();
@@ -781,7 +779,7 @@ Kernel-General 12 - up
       var sw = new Stopwatch();
       sw.Start();
       var i = 0;
-      for (var er = logReader.ReadEventSafe(); null != er; er = logReader.ReadEventSafe()) i++;
+      for (EventRecord? er = logReader.ReadEventSafe(); null != er; er = logReader.ReadEventSafe()) i++;
 
       sw.Stop();
       Console.WriteLine("{0,-33} - {1,22} = {2,-22}   (took: {3})", queryString, logName, i, sw.Elapsed);
@@ -807,7 +805,7 @@ Kernel-General 12 - up
       var sw = new Stopwatch();
       sw.Start();
       var i = 0;
-      for (var er = logReader.ReadEventSafe(); null != er; er = logReader.ReadEventSafe()) i++;
+      for (EventRecord? er = logReader.ReadEventSafe(); null != er; er = logReader.ReadEventSafe()) i++;
 
       sw.Stop();
       Console.WriteLine("{0,-22} - {1,22} = {2,-22}   (took: {3})", td, logName, i, sw.Elapsed);
@@ -876,17 +874,17 @@ Kernel-General 12 - up
       var sw = new Stopwatch();
       sw.Start();
       DayStart = DateTime.MinValue;
-      for (var er = logReader.ReadEventSafe(); null != er; er = logReader.ReadEventSafe())
+      for (EventRecord? er = logReader.ReadEventSafe(); null != er; er = logReader.ReadEventSafe())
       {
         if (DayStart == DateTime.MinValue && er.TimeCreated != null)
           DayStart = (DateTime)er.TimeCreated;
 
         if (er.TimeCreated != null)
-          finish = (DateTime)er.TimeCreated;
+          DayFinish = (DateTime)er.TimeCreated;
       }
 
       sw.Stop();
-      Console.WriteLine("{0} - {1} = {2,-22}   (took: {3})", DayStart, finish, finish - DayStart, sw.Elapsed);
+      Console.WriteLine("{0} - {1} = {2,-22}   (took: {3})", DayStart, DayFinish, DayFinish - DayStart, sw.Elapsed);
     }
   }
 
@@ -909,7 +907,8 @@ Kernel-General 12 - up
 
   public static bool IsVIP
   {
-    get {
+    get
+    {
       var un = Environment.UserName.ToLower();
       return un.Contains("zzz") || un.Contains("pigid") || un.Contains("lex");
     }
