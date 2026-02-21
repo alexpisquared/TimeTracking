@@ -25,7 +25,7 @@
     <Compile Include="..\..\..\..\AAV.Shared\Src\AsLink\PlatformNeutral\EvLogHelperBase.cs" Link="AsLink\EvLogHelperBase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.3" />
     <PackageReference Include="EntityFramework" Version="6.5.1" />
     <PackageReference Include="Fody" Version="6.9.3">
       <PrivateAssets>all</PrivateAssets>
